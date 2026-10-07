@@ -1,0 +1,13 @@
+{
+  "format": "snb-csv",
+  "original_file": "data/extractions/originals/snb-libor-target-lower.csv",
+  "original_sha256": "d47c2da11e3cc4994562f3ddbd90d0c756d5562911cb616fe2f01f067bfcc859",
+  "original_url": "https://data.snb.ch/api/cube/snbband/data/csv/en?dimSel=D0(UG)&fromDate=2000-01-03&toDate=2019-06-12",
+  "cube": "snbband",
+  "selection": {
+    "D0": "UG"
+  },
+  "changes_only": true,
+  "key": "snbband/UG/effective-changes",
+  "expected_count": 26
+}

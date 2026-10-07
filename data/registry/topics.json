@@ -32,7 +32,8 @@
         "cpi-inflation",
         "snb-policy-rate",
         "snb-historical-instruments",
-        "snb-policy-rate-annual"
+        "snb-policy-rate-annual",
+        "snb-libor-target-lower"
       ]
     },
     {
