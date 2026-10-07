@@ -46,6 +46,12 @@ if spec['format']=='xlsx':
    for i in range(spec['first_row'],spec['last_row']+1):
     period=cells.get(spec['period_column']+str(i));value=cells.get(spec['value_column']+str(i))
     if period is not None and value is not None:rows.append([period,spec['key'],value])
+elif spec['format']=='checked-table-csv':
+ source=list(csv.DictReader(data.decode('utf8').splitlines()))
+ if list(source[0])!=spec['columns']:raise ValueError('Checked table column identity mismatch')
+ for r in source:
+  value=r[spec['value_column']]
+  if value!='.':rows.append([r['year'],spec['key'],value])
 elif spec['format'] in ['snb-json','snb-csv']:
  if spec['format']=='snb-json':
   series=next(s for s in json.loads(data)['timeseries'] if s['metadata']['key']==spec['series_key'])

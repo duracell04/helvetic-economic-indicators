@@ -10,7 +10,7 @@ import {load,checksum} from '../scripts/lib/store.ts';
 import {auditedExtractImporter,extractSpecs} from '../scripts/lib/audited-extract.ts';
 const {registry,observations}=await load(process.cwd());
 for(const [id,spec] of Object.entries(extractSpecs)) {
- test(`${id}: reproduces every retained publisher value and immutable extraction`,async()=>{
+ test(`${id}: reproduces every retained audited-source value and immutable extraction`,async()=>{
   const recipe=JSON.parse(await readFile(`data/extractions/${id}.json`,'utf8'));
   const series=registry.series.find(s=>s.id===id)!;
   const snapshot=registry.snapshots.find(s=>s.source_id===spec.source && observations.some(o=>o.series_id===id && o.source_snapshot_ids.includes(s.id)))!;

@@ -86,3 +86,7 @@ Add 28 historical upper Libor target-bound events, preserving the separate instr
 ## 8 October 2026 — Ten-year Confederation spot rate
 
 Add 7,826 native-date ten-year Confederation spot-rate estimates, preserving historical sampling gaps and the 1998 availability boundary. [Audit](source-audit/confederation-10y.md).
+
+## 8 October 2026 — Historical SNB discount rate — year end
+
+Add 92 published year-end historical discount-rate readings, 1907–1998, in a separate instrument series. [Audit](source-audit/snb-discount-rate.md).
