@@ -620,6 +620,26 @@
         "attribution": "Swiss National Bank",
         "conditions": "The 2007 book permits reproducing its figures with attribution. A separate monthly companion must be identified and its applicable terms verified before import; no monthly source file has been retained."
       }
+    },
+    {
+      "id": "ffa-gmbf-auctions-candidate",
+      "publisher": "Federal Finance Administration",
+      "title": "Money-market debt register claims auction results",
+      "landing_url": "https://www.snb.ch/en/the-snb/mandates-goals/services-to-the-confederation/book-claims",
+      "data_url": "https://www.efv.admin.ch/dam/en/sd-web/d9FElh8dV0db/resultate-gmbf.xlsx",
+      "source_identifier": "resultate-gmbf.xlsx / three-month auction tranche / selection pending",
+      "audit_status": "candidate",
+      "definition": "Individual Confederation GMBF auction yields; source workbook contains several original maturities and auction dates.",
+      "coverage": null,
+      "revision_practice": "Retain the original source vintage and documented revisions before any import.",
+      "rights": {
+        "redistribution": "unknown",
+        "licence": null,
+        "evidence_url": "https://www.admin.ch/en/terms-and-conditions",
+        "reviewed_on": "2026-10-08",
+        "attribution": "Federal Finance Administration",
+        "conditions": "No dataset-specific public redistribution grant has been established. Candidate only; obtain applicable permission before publishing observations or source bytes."
+      }
     }
   ],
   "series": [
@@ -1003,12 +1023,11 @@
       "maturity": "3 months",
       "aggregation": "Preserve individual auctions and quotation convention.",
       "source_ids": [
-        "ffa",
-        "snb"
+        "ffa-gmbf-auctions-candidate"
       ],
-      "source_identifier": null,
+      "source_identifier": "resultate-gmbf.xlsx / three-month auction tranche / selection pending",
       "breaks": [],
-      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "usage_notes": "Candidate. Audit on 8 October 2026: Establish reuse permission for the exact FFA auction workbook, then audit the three-month tranche selection, event-date identity, quotation and duplicate-auction handling. No observations are published. See docs/source-audit/gmbf-3m.md.",
       "measurement": "yield",
       "price_basis": "not_applicable",
       "aggregation_kind": "native"

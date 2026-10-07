@@ -126,3 +126,7 @@ Remains candidate: Retrieve usable original FFA data and codelists; verify Confe
 ## 8 October 2026 — Historical long-term Confederation yield source audit
 
 Remains candidate: Locate and retrieve the original SNB monthly historical long-term yield table; verify its exact series identity, method transitions, native periods and source-specific reuse terms. [Audit](source-audit/confederation-long-yield.md).
+
+## 8 October 2026 — Three-month GMBF auction yield source audit
+
+Remains candidate: Establish reuse permission for the exact FFA auction workbook, then audit the three-month tranche selection, event-date identity, quotation and duplicate-auction handling. [Audit](source-audit/gmbf-3m.md).
