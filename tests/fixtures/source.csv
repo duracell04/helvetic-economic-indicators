@@ -1,0 +1,4 @@
+series_id,reference_period,value,source_snapshot_ids,publication_date,value_kind,revision_status
+example-output,2020,100,"[""input-placeholder""]",2022-02-01,observed,final
+example-output,2021,110,"[""input-placeholder""]",2022-02-01,observed,final
+example-output,2022,NA,"[""input-placeholder""]",2023-02-01,observed,final

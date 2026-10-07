@@ -1,0 +1,16 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { registry, href, manifest, topics } from '../../lib/catalogue';
+export function getStaticPaths() { return registry.series.map(series => ({ params: { id: series.id }, props: { series } })); }
+const { series } = Astro.props;
+const sources = registry.sources.filter(s => series.source_ids.includes(s.id));
+const topic = topics.find(t => t.series_ids.includes(series.id));
+const dataset = manifest.datasets.find(d => d.id === series.id);
+---
+<Layout title={series.title} description={series.definition}>
+  <section class="page-heading"><a class="back-link" href={href(`series/${topic ? `#topic-${topic.id}` : ""}`)}>← Series catalogue</a><div class="eyebrow">SERIES / {series.id}</div><h1 class="detail-title">{series.title}</h1><p>{series.definition}</p></section>
+  <aside class="notice"><span class="status-dot" aria-hidden="true"></span><div><strong>{series.data_class === 'synthetic' ? 'Synthetic demonstration — not Swiss historical observations' : series.verification === 'candidate' ? 'Awaiting source verification' : 'Definition verified'}</strong><p>{dataset ? `${dataset.observation_count} observations available.` : 'No public observations. Historical coverage has not been established for publication.'}</p></div></aside>
+  <section class="details"><h2>Statistical identity</h2><dl><dt>Unit</dt><dd>{series.unit.label}</dd><dt>Native frequency</dt><dd>{series.frequency}</dd><dt>Institutional coverage</dt><dd>{series.institutional_coverage}</dd><dt>Instrument</dt><dd>{series.instrument ?? 'Not applicable'}</dd><dt>Maturity</dt><dd>{series.maturity ?? 'Not applicable'}</dd><dt>Aggregation convention</dt><dd>{series.aggregation}</dd><dt>Historical breaks</dt><dd>{series.breaks.length ? series.breaks.map(b => `${b.period}: ${b.description}`).join('; ') : 'Audit pending; an empty register does not establish continuity.'}</dd><dt>Usage</dt><dd>{series.usage_notes}</dd></dl></section>
+  <section class="details"><h2>Source starting points</h2><div class="source-grid">{sources.map(source => <article><div class="eyebrow">{source.audit_status}</div><h3>{source.publisher}</h3><p>{source.definition}</p><p>Redistribution: <strong>{source.rights.redistribution}</strong></p><a href={source.data_url ?? source.landing_url}>Visit source ↗</a></article>)}</div><p class="muted">Landing pages are audit starting points. Exact dataset identifiers and rights evidence are required before publication.</p></section>
+  {dataset && <section class="details"><h2>Download observations</h2><a class="button" href={href(`data/${dataset.files.csv}`)} download>CSV ↓</a> <a href={href(`data/${dataset.files.json}`)} download>JSON ↓</a></section>}
+</Layout>

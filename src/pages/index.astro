@@ -1,0 +1,29 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { href } from '../lib/catalogue';
+---
+<Layout title="Economic atlas" atlas>
+  <header class="atlas-heading"><div><h1>Helvetic Economic Indicators</h1><p>Swiss economic history on one timeline. Combine, separate and rearrange the indicators.</p></div><span class="atlas-badge">Economic atlas<br />Annual view</span></header>
+  <div id="atlas" data-url={href('data/atlas.json')}>
+    <aside id="demo-banner" class="demo-banner" hidden>Synthetic demonstration — not Swiss historical observations</aside>
+    <div class="atlas-toolbar" aria-label="Chart composition controls">
+      <button id="add-indicator" class="primary">+ Add indicator</button>
+      <label>From <input id="start-year" type="number" min="1800" max="2199" value="1946" /></label>
+      <label>To <input id="end-year" type="number" min="1800" max="2199" value="2025" /></label>
+      <button id="reset-layout">Reset</button><button id="share-layout">Share ↗</button>
+    </div>
+    <div class="display-controls"><button id="toggle-events" aria-pressed="true">Event markers</button><button id="toggle-intervals" aria-pressed="true">Shaded intervals</button><button id="toggle-raw" aria-pressed="false">Original-value labels</button><p>Axes fit the displayed years.</p></div>
+    <div class="inspect-controls"><label for="inspect-year">Inspect year</label><input id="inspect-year" type="range" min="1946" max="2025" value="1960" /><output id="year-label">Hover or tap a year</output><button id="release-year" disabled>Release year</button></div>
+    <p id="atlas-status" role="status" aria-live="polite"></p>
+    <section id="empty-atlas" class="empty-atlas" hidden><h2>Your timeline is ready.</h2><p>Add an available annual indicator to start. Production charts will appear when verified observations are published.</p></section>
+    <div id="panels"></div>
+    <p class="atlas-help">⇧ Combine with the panel above · ⇩ Separate into a new panel · ↑↓ Move a panel. Hover or tap to inspect; click to pin. Arrow keys move through years. Dotted: reconstructed · Dashed: forecast · Hollow markers: provisional · Squares: revised · Triangles: definition breaks.</p>
+    <aside id="readout" class="readout" aria-label="Selected year observations" hidden></aside>
+    <noscript><p>Enable JavaScript to compose and inspect charts. Series definitions remain available in the catalogue.</p></noscript>
+  </div>
+  <dialog id="indicator-dialog"><div class="dialog-header"><h2>Add an indicator</h2><button data-close aria-label="Close indicator selector">×</button></div><input id="indicator-search" type="search" placeholder="Search indicators or topics" aria-label="Search indicators" /><label class="add-target">Add to <select id="add-target"></select></label><div id="indicator-list"></div></dialog>
+  <dialog id="comparison-dialog"><div class="dialog-header"><h2 id="comparison-title">Compare indicators</h2><button data-close aria-label="Close comparison">×</button></div><p id="comparison-description"></p><label id="comparison-base">Common base year <input id="comparison-year" type="number" min="1800" max="2199" value="1960" /></label><div class="dialog-actions"><button id="approve-comparison" class="primary">Combine</button><button id="keep-separate">Keep separate</button></div></dialog>
+  <dialog id="info-dialog"><div class="dialog-header"><span>Indicator information</span><button data-close aria-label="Close indicator information">×</button></div><div id="info-content"></div></dialog>
+  <dialog id="share-dialog"><div class="dialog-header"><h2>Share this arrangement</h2><button data-close aria-label="Close share dialog">×</button></div><p id="share-message"></p><input id="share-link" readonly aria-label="Share link" /><p class="muted">Links from the synthetic preview require the same demo data to be available. Production and demo layouts are kept separate.</p></dialog>
+  <script>import '../atlas/client';</script>
+</Layout>

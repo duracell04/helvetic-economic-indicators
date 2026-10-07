@@ -1,0 +1,26 @@
+---
+import '../styles/global.css';
+import { href } from '../lib/catalogue';
+interface Props { title: string; description?: string; atlas?: boolean; }
+const { title, description = 'An auditable foundation for Swiss economic history. Explore series definitions, sources and methodology.' } = Astro.props;
+const navigation = [['Overview', ''], ['Series', 'series/'], ['Methodology', 'methodology/'], ['Downloads', 'downloads/']];
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title} · Helvetic Economic Indicators</title>
+    <link rel="icon" type="image/svg+xml" href={href('favicon.svg')} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    {!Astro.props.atlas && <header class="masthead">
+      <a class="brand" href={href()} aria-label="Helvetic Economic Indicators home"><span class="cross" aria-hidden="true">+</span><span>Helvetic<br /><small>Economic Indicators</small></span></a>
+      <nav aria-label="Main navigation">{navigation.map(([label, route]) => <a href={href(route)} aria-current={Astro.url.pathname.replace(/\/$/, '') === href(route).replace(/\/$/, '') ? 'page' : undefined}>{label}</a>)}</nav>
+    </header>}
+    <main id="main" tabindex="-1"><slot /></main>
+    <footer><a href={href()}>Helvetic Economic Indicators</a><nav aria-label="Supporting information"><a href={href('series/')}>Indicators & topics</a> · <a href={href('methodology/')}>Methodology</a> · <a href={href('downloads/')}>Data</a></nav></footer>
+  </body>
+</html>

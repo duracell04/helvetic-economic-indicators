@@ -1,0 +1,844 @@
+{
+  "schema_version": "2.0.0",
+  "sources": [
+    {
+      "id": "fso",
+      "publisher": "Federal Statistical Office",
+      "title": "Output, population, consumer prices and ILO unemployment",
+      "landing_url": "https://www.bfs.admin.ch/",
+      "data_url": null,
+      "source_identifier": null,
+      "audit_status": "candidate",
+      "definition": "Output, population, consumer prices and ILO unemployment",
+      "coverage": null,
+      "revision_practice": null,
+      "rights": {
+        "redistribution": "unknown",
+        "licence": null,
+        "evidence_url": null,
+        "reviewed_on": null,
+        "attribution": null,
+        "conditions": "Exact dataset and redistribution terms must be audited before import or publication."
+      }
+    },
+    {
+      "id": "seco",
+      "publisher": "State Secretariat for Economic Affairs",
+      "title": "National accounts and registered unemployment",
+      "landing_url": "https://www.seco.admin.ch/",
+      "data_url": null,
+      "source_identifier": null,
+      "audit_status": "candidate",
+      "definition": "National accounts and registered unemployment",
+      "coverage": null,
+      "revision_practice": null,
+      "rights": {
+        "redistribution": "unknown",
+        "licence": null,
+        "evidence_url": null,
+        "reviewed_on": null,
+        "attribution": null,
+        "conditions": "Exact dataset and redistribution terms must be audited before import or publication."
+      }
+    },
+    {
+      "id": "snb",
+      "publisher": "Swiss National Bank",
+      "title": "Monetary-policy instruments and Confederation yields",
+      "landing_url": "https://data.snb.ch/",
+      "data_url": null,
+      "source_identifier": null,
+      "audit_status": "candidate",
+      "definition": "Monetary-policy instruments and Confederation yields",
+      "coverage": null,
+      "revision_practice": null,
+      "rights": {
+        "redistribution": "unknown",
+        "licence": null,
+        "evidence_url": null,
+        "reviewed_on": null,
+        "attribution": null,
+        "conditions": "Exact dataset and redistribution terms must be audited before import or publication."
+      }
+    },
+    {
+      "id": "ffa",
+      "publisher": "Federal Finance Administration",
+      "title": "Public debt, financing instruments and fiscal statistics",
+      "landing_url": "https://www.efv.admin.ch/",
+      "data_url": null,
+      "source_identifier": null,
+      "audit_status": "candidate",
+      "definition": "Public debt, financing instruments and fiscal statistics",
+      "coverage": null,
+      "revision_practice": null,
+      "rights": {
+        "redistribution": "unknown",
+        "licence": null,
+        "evidence_url": null,
+        "reviewed_on": null,
+        "attribution": null,
+        "conditions": "Exact dataset and redistribution terms must be audited before import or publication."
+      }
+    },
+    {
+      "id": "history",
+      "publisher": "Historical Statistics of Switzerland",
+      "title": "Historical reconstructions with original definitions",
+      "landing_url": "https://hsso.ch/",
+      "data_url": null,
+      "source_identifier": null,
+      "audit_status": "candidate",
+      "definition": "Historical reconstructions with original definitions",
+      "coverage": null,
+      "revision_practice": null,
+      "rights": {
+        "redistribution": "unknown",
+        "licence": null,
+        "evidence_url": null,
+        "reviewed_on": null,
+        "attribution": null,
+        "conditions": "Exact dataset and redistribution terms must be audited before import or publication."
+      }
+    },
+    {
+      "id": "six",
+      "publisher": "SIX",
+      "title": "SMI price and SMIC total-return indices",
+      "landing_url": "https://www.six-group.com/",
+      "data_url": null,
+      "source_identifier": null,
+      "audit_status": "candidate",
+      "definition": "SMI price and SMIC total-return indices",
+      "coverage": null,
+      "revision_practice": null,
+      "rights": {
+        "redistribution": "unknown",
+        "licence": null,
+        "evidence_url": null,
+        "reviewed_on": null,
+        "attribution": null,
+        "conditions": "Exact dataset and redistribution terms must be audited before import or publication."
+      }
+    }
+  ],
+  "series": [
+    {
+      "id": "real-gdp-per-capita",
+      "title": "Real GDP per capita",
+      "verification": "candidate",
+      "data_class": "real",
+      "definition": "Output per person using a documented real GDP measure and a compatible population denominator.",
+      "unit": {
+        "code": "currency",
+        "label": "Volume measure per person",
+        "dimension": "CHF/person",
+        "scale": 1
+      },
+      "frequency": "annual",
+      "institutional_coverage": "Swiss resident population",
+      "instrument": null,
+      "maturity": null,
+      "aggregation": "Preserve the source volume methodology and population convention.",
+      "source_ids": [
+        "fso",
+        "history"
+      ],
+      "source_identifier": null,
+      "breaks": [],
+      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "measurement": "level",
+      "price_basis": "real",
+      "aggregation_kind": "sum"
+    },
+    {
+      "id": "population",
+      "title": "Population",
+      "verification": "candidate",
+      "data_class": "real",
+      "definition": "Resident population with the reference date and population concept fixed in the source audit.",
+      "unit": {
+        "code": "count",
+        "label": "Persons",
+        "dimension": "persons",
+        "scale": 1
+      },
+      "frequency": "annual",
+      "institutional_coverage": "Swiss resident population",
+      "instrument": null,
+      "maturity": null,
+      "aggregation": "Reference-date level; do not silently substitute annual-average population.",
+      "source_ids": [
+        "fso",
+        "history"
+      ],
+      "source_identifier": null,
+      "breaks": [],
+      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "measurement": "level",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "end_of_period"
+    },
+    {
+      "id": "real-gdp",
+      "title": "Real GDP",
+      "verification": "candidate",
+      "data_class": "real",
+      "definition": "Output measured in volumes; preserve price basis and reconstruction methodology.",
+      "unit": {
+        "code": "currency",
+        "label": "Volume measure",
+        "dimension": "CHF",
+        "scale": 1
+      },
+      "frequency": "annual",
+      "institutional_coverage": "Swiss domestic economy",
+      "instrument": null,
+      "maturity": null,
+      "aggregation": "Preserve official annual volume measure.",
+      "source_ids": [
+        "fso",
+        "seco",
+        "history"
+      ],
+      "source_identifier": null,
+      "breaks": [],
+      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "measurement": "level",
+      "price_basis": "real",
+      "aggregation_kind": "sum"
+    },
+    {
+      "id": "real-gdp-growth",
+      "title": "Real GDP growth",
+      "verification": "candidate",
+      "data_class": "real",
+      "definition": "Annual change in a verified real GDP series; sports-event adjustments must have distinct series identities.",
+      "unit": {
+        "code": "percent",
+        "label": "Percent",
+        "dimension": "percent",
+        "scale": 1
+      },
+      "frequency": "annual",
+      "institutional_coverage": "Swiss domestic economy",
+      "instrument": null,
+      "maturity": null,
+      "aggregation": "Annual change; calculation and source measure pending audit.",
+      "source_ids": [
+        "seco",
+        "history"
+      ],
+      "source_identifier": null,
+      "breaks": [],
+      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "measurement": "growth",
+      "price_basis": "real",
+      "aggregation_kind": "annual_change"
+    },
+    {
+      "id": "registered-unemployment",
+      "title": "Registered unemployment",
+      "verification": "candidate",
+      "data_class": "real",
+      "definition": "Register-based unemployment rate with denominator and methodological changes recorded.",
+      "unit": {
+        "code": "percent",
+        "label": "Percent",
+        "dimension": "percent",
+        "scale": 1
+      },
+      "frequency": "monthly",
+      "institutional_coverage": "SECO registered labour force",
+      "instrument": null,
+      "maturity": null,
+      "aggregation": "Native monthly readings; annual means require a separate derived series.",
+      "source_ids": [
+        "seco"
+      ],
+      "source_identifier": null,
+      "breaks": [],
+      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "measurement": "rate",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "native"
+    },
+    {
+      "id": "ilo-unemployment",
+      "title": "ILO unemployment",
+      "verification": "candidate",
+      "data_class": "real",
+      "definition": "Survey-based unemployment rate kept separate from registered unemployment.",
+      "unit": {
+        "code": "percent",
+        "label": "Percent",
+        "dimension": "percent",
+        "scale": 1
+      },
+      "frequency": "quarterly",
+      "institutional_coverage": "FSO survey labour force",
+      "instrument": null,
+      "maturity": null,
+      "aggregation": "Preserve survey frequency and source adjustment convention.",
+      "source_ids": [
+        "fso"
+      ],
+      "source_identifier": null,
+      "breaks": [],
+      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "measurement": "rate",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "native"
+    },
+    {
+      "id": "cpi",
+      "title": "Consumer price index",
+      "verification": "candidate",
+      "data_class": "real",
+      "definition": "Consumer price index levels with source base and basket revisions documented.",
+      "unit": {
+        "code": "index",
+        "label": "Source CPI index",
+        "dimension": "cpi-index",
+        "scale": 1
+      },
+      "frequency": "monthly",
+      "institutional_coverage": "Swiss household consumption basket",
+      "instrument": null,
+      "maturity": null,
+      "aggregation": "Native monthly index levels.",
+      "source_ids": [
+        "fso"
+      ],
+      "source_identifier": null,
+      "breaks": [],
+      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "measurement": "level",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "native"
+    },
+    {
+      "id": "cpi-inflation",
+      "title": "Annual CPI inflation",
+      "verification": "candidate",
+      "data_class": "real",
+      "definition": "Change between annual-average CPI index levels, once the underlying source is verified.",
+      "unit": {
+        "code": "percent",
+        "label": "Percent",
+        "dimension": "percent",
+        "scale": 1
+      },
+      "frequency": "annual",
+      "institutional_coverage": "Swiss household consumption basket",
+      "instrument": null,
+      "maturity": null,
+      "aggregation": "100 \u00d7 (annual-average CPI / previous annual-average CPI \u2212 1).",
+      "source_ids": [
+        "fso"
+      ],
+      "source_identifier": null,
+      "breaks": [],
+      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "measurement": "rate",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "annual_change"
+    },
+    {
+      "id": "snb-policy-rate",
+      "title": "SNB policy rate",
+      "verification": "candidate",
+      "data_class": "real",
+      "definition": "Administered policy-rate observations at effective change dates, distinct from earlier instruments.",
+      "unit": {
+        "code": "percent",
+        "label": "Percent",
+        "dimension": "percent",
+        "scale": 1
+      },
+      "frequency": "event",
+      "institutional_coverage": "Swiss monetary-policy framework",
+      "instrument": "SNB policy rate",
+      "maturity": null,
+      "aggregation": "Preserve effective-date changes; annual calendar-day weighting is a separate derivation.",
+      "source_ids": [
+        "snb"
+      ],
+      "source_identifier": null,
+      "breaks": [],
+      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "measurement": "rate",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "native"
+    },
+    {
+      "id": "snb-historical-instruments",
+      "title": "Historical SNB instruments",
+      "verification": "candidate",
+      "data_class": "real",
+      "definition": "Candidate catalogue entry to be split into instrument-specific series after source audit.",
+      "unit": {
+        "code": "percent",
+        "label": "Percent",
+        "dimension": "percent",
+        "scale": 1
+      },
+      "frequency": "event",
+      "institutional_coverage": "Historical Swiss monetary-policy frameworks",
+      "instrument": "To be split during audit",
+      "maturity": null,
+      "aggregation": "Do not splice discount rates, Libor target ranges and policy rates.",
+      "source_ids": [
+        "snb",
+        "history"
+      ],
+      "source_identifier": null,
+      "breaks": [],
+      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "measurement": "rate",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "native"
+    },
+    {
+      "id": "confederation-long-yield",
+      "title": "Historical long-term Confederation yield",
+      "verification": "candidate",
+      "data_class": "real",
+      "definition": "Historical yield concept retaining its original methodology, distinct from a fixed-maturity spot rate.",
+      "unit": {
+        "code": "percent",
+        "label": "Percent",
+        "dimension": "percent",
+        "scale": 1
+      },
+      "frequency": "monthly",
+      "institutional_coverage": "Swiss Confederation",
+      "instrument": "Original historical bond measure",
+      "maturity": "Source-defined",
+      "aggregation": "Preserve original observation convention.",
+      "source_ids": [
+        "snb",
+        "history"
+      ],
+      "source_identifier": null,
+      "breaks": [],
+      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "measurement": "yield",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "native"
+    },
+    {
+      "id": "confederation-10y",
+      "title": "Ten-year Confederation spot rate",
+      "verification": "candidate",
+      "data_class": "real",
+      "definition": "Maturity-specific fitted spot rate with verified quotation and source-table history.",
+      "unit": {
+        "code": "percent",
+        "label": "Percent",
+        "dimension": "percent",
+        "scale": 1
+      },
+      "frequency": "daily",
+      "institutional_coverage": "Swiss Confederation",
+      "instrument": "Confederation spot rate",
+      "maturity": "10 years",
+      "aggregation": "Daily observations; document source replacements before annual aggregation.",
+      "source_ids": [
+        "snb"
+      ],
+      "source_identifier": null,
+      "breaks": [],
+      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "measurement": "yield",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "native"
+    },
+    {
+      "id": "gmbf-3m",
+      "title": "Three-month GMBF auction yield",
+      "verification": "candidate",
+      "data_class": "real",
+      "definition": "Auction yield of short-term government financing instruments, separate from interbank rates.",
+      "unit": {
+        "code": "percent",
+        "label": "Percent",
+        "dimension": "percent",
+        "scale": 1
+      },
+      "frequency": "event",
+      "institutional_coverage": "Swiss Confederation",
+      "instrument": "GMBF",
+      "maturity": "3 months",
+      "aggregation": "Preserve individual auctions and quotation convention.",
+      "source_ids": [
+        "ffa",
+        "snb"
+      ],
+      "source_identifier": null,
+      "breaks": [],
+      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "measurement": "yield",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "native"
+    },
+    {
+      "id": "general-government-debt",
+      "title": "General-government gross debt",
+      "verification": "candidate",
+      "data_class": "real",
+      "definition": "Gross debt with the exact statistical definition and consolidation coverage recorded.",
+      "unit": {
+        "code": "currency",
+        "label": "CHF, scale pending audit",
+        "dimension": "CHF",
+        "scale": 1
+      },
+      "frequency": "annual",
+      "institutional_coverage": "Consolidated Swiss general government",
+      "instrument": null,
+      "maturity": null,
+      "aggregation": "Annual stock; Maastricht and broader liabilities require separate identities.",
+      "source_ids": [
+        "ffa",
+        "history"
+      ],
+      "source_identifier": null,
+      "breaks": [],
+      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "measurement": "level",
+      "price_basis": "nominal",
+      "aggregation_kind": "end_of_period"
+    },
+    {
+      "id": "confederation-debt",
+      "title": "Confederation gross debt",
+      "verification": "candidate",
+      "data_class": "real",
+      "definition": "Federal gross debt with valuation and statistical definition preserved.",
+      "unit": {
+        "code": "currency",
+        "label": "CHF, scale pending audit",
+        "dimension": "CHF",
+        "scale": 1
+      },
+      "frequency": "annual",
+      "institutional_coverage": "Swiss Confederation",
+      "instrument": null,
+      "maturity": null,
+      "aggregation": "Annual stock; do not substitute general-government debt.",
+      "source_ids": [
+        "ffa",
+        "history"
+      ],
+      "source_identifier": null,
+      "breaks": [],
+      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "measurement": "level",
+      "price_basis": "nominal",
+      "aggregation_kind": "end_of_period"
+    },
+    {
+      "id": "nominal-gdp",
+      "title": "Nominal GDP",
+      "verification": "candidate",
+      "data_class": "real",
+      "definition": "Current-price GDP denominator for compatible debt-to-GDP calculations.",
+      "unit": {
+        "code": "currency",
+        "label": "CHF, scale pending audit",
+        "dimension": "CHF",
+        "scale": 1
+      },
+      "frequency": "annual",
+      "institutional_coverage": "Swiss domestic economy",
+      "instrument": null,
+      "maturity": null,
+      "aggregation": "Preserve annual source vintage and units.",
+      "source_ids": [
+        "fso",
+        "seco"
+      ],
+      "source_identifier": null,
+      "breaks": [],
+      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "measurement": "level",
+      "price_basis": "nominal",
+      "aggregation_kind": "sum"
+    },
+    {
+      "id": "smi",
+      "title": "SMI price-return index",
+      "verification": "candidate",
+      "data_class": "real",
+      "definition": "Price index candidate; exact historical dataset and redistribution rights awaiting audit.",
+      "unit": {
+        "code": "index",
+        "label": "Source index points",
+        "dimension": "smi-index",
+        "scale": 1
+      },
+      "frequency": "daily",
+      "institutional_coverage": "SMI constituent equities",
+      "instrument": "SMI",
+      "maturity": null,
+      "aggregation": "Preserve trading-date closes; annual endpoint returns are separate derived series.",
+      "source_ids": [
+        "six"
+      ],
+      "source_identifier": null,
+      "breaks": [],
+      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "measurement": "level",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "native"
+    },
+    {
+      "id": "smic",
+      "title": "SMIC total-return index",
+      "verification": "candidate",
+      "data_class": "real",
+      "definition": "Total-return index candidate with dividend treatment and redistribution terms awaiting audit.",
+      "unit": {
+        "code": "index",
+        "label": "Source index points",
+        "dimension": "smic-index",
+        "scale": 1
+      },
+      "frequency": "daily",
+      "institutional_coverage": "SMI constituent equities",
+      "instrument": "SMIC",
+      "maturity": null,
+      "aggregation": "Align endpoints with SMI before comparing annual returns.",
+      "source_ids": [
+        "six"
+      ],
+      "source_identifier": null,
+      "breaks": [],
+      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "measurement": "level",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "native"
+    },
+    {
+      "id": "registered-unemployment-annual",
+      "title": "Annual registered unemployment",
+      "verification": "candidate",
+      "data_class": "real",
+      "definition": "Proposed annual companion to registered-unemployment. Exact preparation convention requires source audit.",
+      "unit": {
+        "code": "percent",
+        "label": "Percent",
+        "dimension": "percent",
+        "scale": 1
+      },
+      "frequency": "annual",
+      "institutional_coverage": "SECO registered labour force",
+      "instrument": null,
+      "maturity": null,
+      "aggregation": "Annual convention to be verified: annual average",
+      "source_ids": [
+        "seco"
+      ],
+      "source_identifier": null,
+      "breaks": [],
+      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "measurement": "rate",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "annual_average"
+    },
+    {
+      "id": "snb-policy-rate-annual",
+      "title": "Annual SNB policy rate",
+      "verification": "candidate",
+      "data_class": "real",
+      "definition": "Proposed annual companion to snb-policy-rate. Exact preparation convention requires source audit.",
+      "unit": {
+        "code": "percent",
+        "label": "Percent",
+        "dimension": "percent",
+        "scale": 1
+      },
+      "frequency": "annual",
+      "institutional_coverage": "Swiss monetary-policy framework",
+      "instrument": "SNB policy rate",
+      "maturity": null,
+      "aggregation": "Annual convention to be verified: annual average",
+      "source_ids": [
+        "snb"
+      ],
+      "source_identifier": null,
+      "breaks": [],
+      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "measurement": "rate",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "annual_average"
+    },
+    {
+      "id": "confederation-10y-annual",
+      "title": "Annual ten-year Confederation yield",
+      "verification": "candidate",
+      "data_class": "real",
+      "definition": "Proposed annual companion to confederation-10y. Exact preparation convention requires source audit.",
+      "unit": {
+        "code": "percent",
+        "label": "Percent",
+        "dimension": "percent",
+        "scale": 1
+      },
+      "frequency": "annual",
+      "institutional_coverage": "Swiss Confederation",
+      "instrument": "Confederation spot rate",
+      "maturity": "10 years",
+      "aggregation": "Annual convention to be verified: annual average",
+      "source_ids": [
+        "snb"
+      ],
+      "source_identifier": null,
+      "breaks": [],
+      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "measurement": "rate",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "annual_average"
+    },
+    {
+      "id": "gmbf-3m-annual",
+      "title": "Annual three-month GMBF yield",
+      "verification": "candidate",
+      "data_class": "real",
+      "definition": "Proposed annual companion to gmbf-3m. Exact preparation convention requires source audit.",
+      "unit": {
+        "code": "percent",
+        "label": "Percent",
+        "dimension": "percent",
+        "scale": 1
+      },
+      "frequency": "annual",
+      "institutional_coverage": "Swiss Confederation",
+      "instrument": "GMBF",
+      "maturity": "3 months",
+      "aggregation": "Annual convention to be verified: annual average",
+      "source_ids": [
+        "ffa",
+        "snb"
+      ],
+      "source_identifier": null,
+      "breaks": [],
+      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "measurement": "yield",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "annual_average"
+    },
+    {
+      "id": "general-government-debt-ratio",
+      "title": "General-government debt / GDP",
+      "verification": "candidate",
+      "data_class": "real",
+      "definition": "Proposed annual companion to general-government-debt. Exact preparation convention requires source audit.",
+      "unit": {
+        "code": "percent",
+        "label": "Percent",
+        "dimension": "percent",
+        "scale": 1
+      },
+      "frequency": "annual",
+      "institutional_coverage": "Consolidated Swiss general government",
+      "instrument": null,
+      "maturity": null,
+      "aggregation": "Annual convention to be verified: end of period",
+      "source_ids": [
+        "ffa",
+        "history"
+      ],
+      "source_identifier": null,
+      "breaks": [],
+      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "measurement": "rate",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "end_of_period"
+    },
+    {
+      "id": "confederation-debt-ratio",
+      "title": "Confederation debt / GDP",
+      "verification": "candidate",
+      "data_class": "real",
+      "definition": "Proposed annual companion to confederation-debt. Exact preparation convention requires source audit.",
+      "unit": {
+        "code": "percent",
+        "label": "Percent",
+        "dimension": "percent",
+        "scale": 1
+      },
+      "frequency": "annual",
+      "institutional_coverage": "Swiss Confederation",
+      "instrument": null,
+      "maturity": null,
+      "aggregation": "Annual convention to be verified: end of period",
+      "source_ids": [
+        "ffa",
+        "history"
+      ],
+      "source_identifier": null,
+      "breaks": [],
+      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "measurement": "rate",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "end_of_period"
+    },
+    {
+      "id": "smi-annual-return",
+      "title": "SMI annual price return",
+      "verification": "candidate",
+      "data_class": "real",
+      "definition": "Proposed annual companion to smi. Exact preparation convention requires source audit.",
+      "unit": {
+        "code": "percent",
+        "label": "Percent",
+        "dimension": "percent",
+        "scale": 1
+      },
+      "frequency": "annual",
+      "institutional_coverage": "SMI constituent equities",
+      "instrument": "SMI",
+      "maturity": null,
+      "aggregation": "Annual convention to be verified: annual change",
+      "source_ids": [
+        "six"
+      ],
+      "source_identifier": null,
+      "breaks": [],
+      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "measurement": "return",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "annual_change"
+    },
+    {
+      "id": "smic-annual-return",
+      "title": "SMIC annual total return",
+      "verification": "candidate",
+      "data_class": "real",
+      "definition": "Proposed annual companion to smic. Exact preparation convention requires source audit.",
+      "unit": {
+        "code": "percent",
+        "label": "Percent",
+        "dimension": "percent",
+        "scale": 1
+      },
+      "frequency": "annual",
+      "institutional_coverage": "SMI constituent equities",
+      "instrument": "SMIC",
+      "maturity": null,
+      "aggregation": "Annual convention to be verified: annual change",
+      "source_ids": [
+        "six"
+      ],
+      "source_identifier": null,
+      "breaks": [],
+      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "measurement": "return",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "annual_change"
+    }
+  ],
+  "snapshots": []
+}

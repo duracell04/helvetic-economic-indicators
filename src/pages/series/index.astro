@@ -1,0 +1,9 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { topics, registry, href } from '../../lib/catalogue';
+---
+<Layout title="Indicators and topics">
+<section class="page-heading"><div class="eyebrow">INDICATORS & TOPICS</div><h1 class="detail-title">Explore the definitions.</h1><p>Indicators belong to any number of topics and chart arrangements. Candidate definitions await source verification.</p></section>
+<nav class="topic-nav" aria-label="Topics">{topics.map(t => <a href={`#topic-${t.id}`}>{t.title}</a>)}</nav>
+{topics.map(topic => <section id={`topic-${topic.id}`} class="catalogue-section"><div class="catalogue-title"><div><h2>{topic.title}</h2><p>{topic.description}</p></div></div><div class="series-list">{topic.series_ids.map(id => registry.series.find(s => s.id === id)!).map(s => <article><div><a class="series-name" href={href(`series/${s.id}/`)}>{s.title} ↗</a><p>{s.definition}</p></div><div class="series-meta"><span>{s.frequency}</span><span>{s.unit.label}</span><span class="badge">{s.data_class === 'synthetic' ? 'Synthetic example' : s.verification === 'candidate' ? 'Awaiting verification' : 'Verified definition'}</span></div></article>)}</div></section>)}
+</Layout>

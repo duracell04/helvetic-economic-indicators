@@ -1,0 +1,9 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { manifest, href } from '../../lib/catalogue';
+---
+<Layout title="Downloads">
+  <section class="page-heading"><div class="eyebrow">OPEN DATA / DOWNLOADS</div><h1>Inspect the numbers.<br /><em>Keep the context.</em></h1><p>Published datasets will include their units, reference periods, source snapshots and observation statuses.</p></section>
+  {manifest.datasets.length === 0 ? <section class="empty-state"><span class="empty-number">0</span><div><h2>No datasets published yet.</h2><p>The source audit is the first milestone. Candidate series contain definitions only; synthetic examples remain in the development workflow.</p><a href={href('series/')}>Browse candidate definitions →</a></div></section> : <section class="series-list">{manifest.datasets.map(d => <article><div><h2>{d.title}</h2><p>{d.coverage.first}–{d.coverage.last} · {d.observation_count} observations</p></div><div><a href={href(`data/${d.files.csv}`)} download>CSV ↓</a> · <a href={href(`data/${d.files.json}`)} download>JSON ↓</a></div></article>)}</section>}
+  <section class="details"><h2>Publication manifest</h2><p>The machine-readable manifest lists available files, schema version, coverage, checksums and source terms. An empty dataset list is intentional in this foundation release.</p><a class="button secondary" href={href('data/manifest.json')} download>Download manifest <span aria-hidden="true">↓</span></a></section>
+</Layout>

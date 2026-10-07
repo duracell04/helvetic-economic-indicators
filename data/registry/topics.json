@@ -1,0 +1,73 @@
+{
+  "schema_version": "2.0.0",
+  "topics": [
+    {
+      "id": "output",
+      "title": "Output & population",
+      "description": "Output & population indicators, with definitions preserved.",
+      "series_ids": [
+        "real-gdp-per-capita",
+        "population",
+        "real-gdp"
+      ]
+    },
+    {
+      "id": "labour",
+      "title": "Business cycle & labour",
+      "description": "Business cycle & labour indicators, with definitions preserved.",
+      "series_ids": [
+        "real-gdp-growth",
+        "registered-unemployment",
+        "ilo-unemployment",
+        "registered-unemployment-annual"
+      ]
+    },
+    {
+      "id": "monetary",
+      "title": "Inflation & monetary policy",
+      "description": "Inflation & monetary policy indicators, with definitions preserved.",
+      "series_ids": [
+        "cpi",
+        "cpi-inflation",
+        "snb-policy-rate",
+        "snb-historical-instruments",
+        "snb-policy-rate-annual"
+      ]
+    },
+    {
+      "id": "financing",
+      "title": "Government financing",
+      "description": "Government financing indicators, with definitions preserved.",
+      "series_ids": [
+        "confederation-long-yield",
+        "confederation-10y",
+        "gmbf-3m",
+        "confederation-10y-annual",
+        "gmbf-3m-annual"
+      ]
+    },
+    {
+      "id": "public-finances",
+      "title": "Public finances",
+      "description": "Public finances indicators, with definitions preserved.",
+      "series_ids": [
+        "general-government-debt",
+        "confederation-debt",
+        "nominal-gdp",
+        "general-government-debt-ratio",
+        "confederation-debt-ratio"
+      ]
+    },
+    {
+      "id": "equities",
+      "title": "Equity markets",
+      "description": "Equity markets indicators, with definitions preserved.",
+      "series_ids": [
+        "smi",
+        "smic",
+        "smi-annual-return",
+        "smic-annual-return"
+      ]
+    }
+  ]
+}

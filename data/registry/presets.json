@@ -1,0 +1,170 @@
+{
+  "schema_version": "2.0.0",
+  "default_preset_id": "reference",
+  "presets": [
+    {
+      "id": "overview",
+      "title": "Six-panel overview",
+      "config": {
+        "version": "2.0.0",
+        "preset_id": "overview",
+        "start_year": 1946,
+        "end_year": 2025,
+        "panels": [
+          {
+            "id": "output",
+            "title": "Output & population",
+            "series_ids": [
+              "real-gdp-per-capita",
+              "population"
+            ],
+            "axis": {
+              "mode": "indexed",
+              "base_year": 1960
+            },
+            "conventions_acknowledged": true
+          },
+          {
+            "id": "labour",
+            "title": "Business cycle & labour",
+            "series_ids": [
+              "real-gdp-growth",
+              "registered-unemployment-annual"
+            ],
+            "axis": {
+              "mode": "native",
+              "base_year": null
+            },
+            "conventions_acknowledged": true
+          },
+          {
+            "id": "monetary",
+            "title": "Inflation & monetary policy",
+            "series_ids": [
+              "cpi-inflation",
+              "snb-policy-rate-annual"
+            ],
+            "axis": {
+              "mode": "native",
+              "base_year": null
+            },
+            "conventions_acknowledged": true
+          },
+          {
+            "id": "financing",
+            "title": "Government financing",
+            "series_ids": [
+              "confederation-10y-annual",
+              "gmbf-3m-annual"
+            ],
+            "axis": {
+              "mode": "native",
+              "base_year": null
+            },
+            "conventions_acknowledged": false
+          },
+          {
+            "id": "public-finances",
+            "title": "Public finances",
+            "series_ids": [
+              "general-government-debt-ratio",
+              "confederation-debt-ratio"
+            ],
+            "axis": {
+              "mode": "native",
+              "base_year": null
+            },
+            "conventions_acknowledged": false
+          },
+          {
+            "id": "equities",
+            "title": "Equity markets",
+            "series_ids": [
+              "smi-annual-return",
+              "smic-annual-return"
+            ],
+            "axis": {
+              "mode": "native",
+              "base_year": null
+            },
+            "conventions_acknowledged": false
+          }
+        ],
+        "show_events": true,
+        "show_intervals": true,
+        "show_raw": false,
+        "annotation_ids": []
+      }
+    },
+    {
+      "id": "reference",
+      "title": "Original macro layout",
+      "config": {
+        "version": "2.0.0",
+        "preset_id": "reference",
+        "start_year": 1946,
+        "end_year": 2025,
+        "panels": [
+          {
+            "id": "levels",
+            "title": "Long-run levels",
+            "series_ids": [
+              "real-gdp",
+              "real-gdp-per-capita",
+              "population"
+            ],
+            "axis": {
+              "mode": "indexed",
+              "base_year": 1960
+            },
+            "conventions_acknowledged": true
+          },
+          {
+            "id": "stability",
+            "title": "Macro stability",
+            "series_ids": [
+              "cpi-inflation",
+              "registered-unemployment-annual"
+            ],
+            "axis": {
+              "mode": "native",
+              "base_year": null
+            },
+            "conventions_acknowledged": true
+          },
+          {
+            "id": "policy",
+            "title": "Monetary policy",
+            "series_ids": [
+              "snb-policy-rate-annual"
+            ],
+            "axis": {
+              "mode": "native",
+              "base_year": null
+            },
+            "conventions_acknowledged": false
+          }
+        ],
+        "show_events": true,
+        "show_intervals": true,
+        "show_raw": false,
+        "annotation_ids": []
+      }
+    }
+  ],
+  "styles": {
+    "real-gdp": "#111111",
+    "real-gdp-per-capita": "#8b2f2f",
+    "population": "#667085",
+    "cpi-inflation": "#b45309",
+    "registered-unemployment-annual": "#2563eb",
+    "snb-policy-rate-annual": "#6b21a8",
+    "real-gdp-growth": "#111111",
+    "confederation-10y-annual": "#047857",
+    "gmbf-3m-annual": "#b45309",
+    "general-government-debt-ratio": "#334155",
+    "confederation-debt-ratio": "#9f1239",
+    "smi-annual-return": "#0f766e",
+    "smic-annual-return": "#6b21a8"
+  }
+}

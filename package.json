@@ -1,0 +1,48 @@
+{
+  "name": "helvetic-economic-indicators",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "npm run data:export && astro dev",
+    "data:import": "node --import tsx scripts/cli.ts import",
+    "data:validate": "node --import tsx scripts/cli.ts validate",
+    "data:derive": "node --import tsx scripts/cli.ts derive",
+    "data:export": "node --import tsx scripts/cli.ts export",
+    "data:diff": "node --import tsx scripts/cli.ts diff",
+    "demo": "node --import tsx scripts/demo.ts",
+    "test": "node --import tsx --test tests/*.test.ts",
+    "typecheck": "astro check && tsc --noEmit -p tsconfig.tools.json",
+    "build": "npm run data:export && astro build",
+    "check:site": "node --import tsx scripts/check-site.ts",
+    "check": "npm run data:validate && npm run check:registries && npm test && npm run typecheck && npm run build && npm run check:site",
+    "preview": "astro preview",
+    "dev:demo": "node --import tsx scripts/atlas-command.ts dev",
+    "build:demo": "node --import tsx scripts/atlas-command.ts build",
+    "preview:demo": "node --import tsx scripts/atlas-command.ts preview",
+    "check:registries": "node --import tsx scripts/validate-atlas.ts",
+    "test:browser": "playwright test",
+    "check:all": "npm run check && npm run build:demo && npm run test:browser"
+  },
+  "dependencies": {
+    "astro": "7.3.6",
+    "csv-parse": "7.0.3",
+    "csv-stringify": "6.9.0",
+    "d3-scale": "4.0.2",
+    "d3-shape": "3.2.0",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "@playwright/test": "1.63.0",
+    "@types/d3-scale": "4.0.9",
+    "@types/d3-shape": "3.2.0",
+    "@types/node": "26.6.4",
+    "tsx": "4.23.15",
+    "typescript": "6.0.3"
+  }
+}
