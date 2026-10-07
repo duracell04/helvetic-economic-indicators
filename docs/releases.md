@@ -46,3 +46,7 @@ No Swiss observations or historical reference claims are verified in this releas
 - Added the static catalogue, methodology and download shell and GitHub Pages workflows.
 
 No real observations, verified historical coverage, chart findings or unrestricted dataset licence are claimed.
+
+## 8 October 2026 — real GDP growth
+
+Add 77 published FSO real annual changes, 1949–2025, in a separate indicator commit. [Audit](source-audit/real-gdp-growth.md).

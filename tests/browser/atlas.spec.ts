@@ -157,3 +157,19 @@ test('demo storage cannot restore into production on the same origin',async({pag
  await page.route('**/data/atlas.json',route=>route.fulfill({json:production}));await page.reload();await expect(page.locator('#atlas')).toHaveAttribute('data-ready','true');await expect(page.locator('.chart-panel')).toHaveCount(3);await expect(page.locator('#demo-banner')).toBeHidden();await expect(page.locator('[data-indicator^="demo-"]')).toHaveCount(0);
  await page.unroute('**/data/atlas.json');await page.reload();await expect(page.locator('.chart-panel')).toHaveCount(4);
 });
+
+
+test('production published real growth is selectable with metadata and downloadable observations',async({page})=>{
+ const origin='http://127.0.0.1:4323/helvetic-economic-indicators/';
+ await page.goto(origin);await expect(page.locator('#atlas')).toHaveAttribute('data-ready','true');
+ await add(page,'Real GDP growth');
+ const growth=page.locator('.chart-panel').filter({has:page.locator('[data-indicator="real-gdp-growth"]')});
+ await expect(growth.locator('path[data-kind="reconstructed"]')).toBeVisible();
+ await expect(growth.locator('path[data-kind="observed"]')).toBeVisible();
+ await growth.locator('svg').focus();await growth.locator('svg').press('End');
+ await expect(page.locator('#readout .readout-row').filter({hasText:'Real GDP growth'})).toContainText('No observation');
+ await page.goto(`${origin}series/real-gdp-growth/`);await expect(page.locator('body')).toContainText('77 observations available.');
+ const rows=await (await page.request.get(`${origin}data/real-gdp-growth.json`)).json();
+ expect(rows).toHaveLength(77);expect(rows[0].value).toBe(-3.49393473432399);expect(rows.at(-1).value).toBe(1.60786486422242);
+ const dimensions=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,width:innerWidth}));expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.width);
+});
