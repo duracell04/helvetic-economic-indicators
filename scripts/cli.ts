@@ -2,7 +2,8 @@ import path from 'node:path';
 import { productionAtlas } from './lib/atlas-data.ts';
 import { readFile } from 'node:fs/promises';
 import { parseArgs } from 'node:util';
-import { importLocal } from './lib/importer.ts';
+import { importLocal, canonicalCsvImporter } from './lib/importer.ts';
+import { fsoGdpImporter } from './lib/fso-gdp.ts';
 import { validate, load, validateMetadata, exportPublic, atomicWrite, json } from './lib/store.ts';
 import { derive } from './lib/transforms.ts';
 import { readObservations, writeObservations } from './lib/csv.ts';
@@ -10,6 +11,7 @@ import { readObservations, writeObservations } from './lib/csv.ts';
 const { values, positionals } = parseArgs({ allowPositionals: true, options: {
   root: { type: 'string' }, file: { type: 'string' }, series: { type: 'string' }, source: { type: 'string' },
   'retrieved-on': { type: 'string' }, replace: { type: 'boolean' }, before: { type: 'string' }, after: { type: 'string' },
+  importer: { type: 'string' },
 } });
 const root = path.resolve(values.root ?? '.');
 function required(name: keyof typeof values): string {
@@ -26,7 +28,9 @@ try {
       break;
     }
     case 'import': {
-      const id = await importLocal({ root, file: path.resolve(required('file')), seriesId: required('series'), sourceId: required('source'), retrievedOn: required('retrieved-on'), replace: values.replace });
+      const importer = [canonicalCsvImporter, fsoGdpImporter].find(item => item.name === (values.importer ?? 'canonical-csv'));
+      if (!importer) throw new Error('Unknown importer. Use canonical-csv or fso-gdp.');
+      const id = await importLocal({ root, file: path.resolve(required('file')), seriesId: required('series'), sourceId: required('source'), retrievedOn: required('retrieved-on'), replace: values.replace, importer });
       console.log(`Imported immutable snapshot ${id}. Review registry and canonical changes before publication.`);
       break;
     }

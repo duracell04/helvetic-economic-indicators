@@ -260,6 +260,26 @@
         "attribution": "Source: International Monetary Fund, World Economic Outlook (April 2026), Switzerland, GGXWDG_NGDP; annual table distributed by ecolod / Team KitaSan via ecodb.net, https://en.ecolod.org/country/CHE/gov-debt-gdp.html. Accessed 2026-10-07; table extracted to CSV.",
         "conditions": "Preserve IMF and ecolod attribution, link CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) and identify extraction. Underlying IMF data-use conditions remain applicable; this educational atlas is non-commercial."
       }
+    },
+    {
+      "id": "fso-gdp-long-series",
+      "publisher": "Federal Statistical Office",
+      "title": "Gross domestic product, long time series (August 2026 vintage)",
+      "landing_url": "https://www.bfs.admin.ch/asset/en/ts-x-04.02.01.08",
+      "data_url": "https://dam-api.bfs.admin.ch/hub/api/dam/assets/36813569/master",
+      "source_identifier": "ts-x-04.02.01.08; asset 36813569; VARIABLE=B1GQ; UNIT_MEAS=MCHF",
+      "audit_status": "verified",
+      "definition": "Annual Swiss gross domestic product at current prices, in CHF millions. FSO long-series CSV published 25 August 2026; select B1GQ/MCHF. The file also contains nominal and real annual percentage changes, which are not imported by this addition.",
+      "coverage": "1948–2025; 1948–1994 retropolated historical reconstruction",
+      "revision_practice": "Fixed 25 August 2026 publication vintage. Pre-1995 data are retropolated using growth rates from older accounting systems (OECD 1952, ESA 1979, ESA 1995); methodological consistency across the full history is not guaranteed. The CSV uses normal status A for all selected values; normal does not imply that later publication vintages cannot revise the history. New vintages require new immutable snapshots and a reviewed replacement import.",
+      "rights": {
+        "redistribution": "permitted",
+        "licence": "FSO OPEN-BY",
+        "evidence_url": "https://www.bfs.admin.ch/bfs/en/home/bfs/bundesamt-statistik/nutzungsbedingungen.html",
+        "reviewed_on": "2026-10-08",
+        "attribution": "Federal Statistical Office (2026), Gross domestic product, long time series, ts-x-04.02.01.08, CSV asset 36813569, published 25 August 2026, accessed 7 October 2026.",
+        "conditions": "Open use with source attribution, as specified by the dataset OPEN-BY link and FSO terms. Preserve the historical reconstruction caveat and statistical definition. These observations retain their source terms; the software MIT licence does not apply."
+      }
     }
   ],
   "series": [
@@ -681,27 +701,31 @@
     {
       "id": "nominal-gdp",
       "title": "Nominal GDP",
-      "verification": "candidate",
+      "verification": "verified",
       "data_class": "real",
-      "definition": "Current-price GDP denominator for compatible debt-to-GDP calculations.",
+      "definition": "Annual Swiss gross domestic product at current prices, in CHF millions. The FSO long series covers 1948–2025; 1948–1994 values are retropolated reconstructions. This measure preserves price changes as well as output changes.",
       "unit": {
         "code": "currency",
-        "label": "CHF, scale pending audit",
+        "label": "CHF millions",
         "dimension": "CHF",
-        "scale": 1
+        "scale": 1000000
       },
       "frequency": "annual",
       "institutional_coverage": "Swiss domestic economy",
       "instrument": null,
       "maturity": null,
-      "aggregation": "Preserve annual source vintage and units.",
+      "aggregation": "Calendar-year current-price GDP from the published FSO annual series; values remain in CHF millions without rounding.",
       "source_ids": [
-        "fso",
-        "seco"
+        "fso-gdp-long-series"
       ],
-      "source_identifier": null,
-      "breaks": [],
-      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "source_identifier": "ts-x-04.02.01.08; B1GQ/MCHF; asset 36813569",
+      "breaks": [
+        {
+          "period": "1995",
+          "description": "End of the pre-1995 retropolated reconstruction based on older accounting systems. The publisher does not guarantee conceptual and methodological consistency over the whole long series."
+        }
+      ],
+      "usage_notes": "Current prices; distinguish from chain-linked real GDP. Coverage is 1948–2025: 1946–1947 and 2026 have no observations. The 1948–1994 history is reconstructed. Source flag A (normal) maps to final for this publication vintage; later releases may revise it. Attribution required under FSO OPEN-BY.",
       "measurement": "level",
       "price_basis": "nominal",
       "aggregation_kind": "sum"
@@ -1109,6 +1133,14 @@
       "sha256": "bdd660a99e12ad8f551f9a8741caa101b44e1d896e6544673c2d4b96e26f6f79",
       "file": "data/raw/ecolod-imf-swiss-gross-debt-2026-10-07-bdd660a99e12ad8f.csv",
       "source_url": "https://en.ecolod.org/country/CHE/gov-debt-gdp.html"
+    },
+    {
+      "id": "fso-gdp-long-series-2026-10-07-16c49f1313335a64",
+      "source_id": "fso-gdp-long-series",
+      "retrieved_on": "2026-10-07",
+      "sha256": "16c49f1313335a64a82dd01b00381633ab9edc2f3db72fb7c2b9487c2bbde042",
+      "file": "data/raw/fso-gdp-long-series-2026-10-07-16c49f1313335a64.csv",
+      "source_url": "https://dam-api.bfs.admin.ch/hub/api/dam/assets/36813569/master"
     }
   ]
 }

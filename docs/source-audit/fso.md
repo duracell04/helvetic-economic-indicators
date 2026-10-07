@@ -1,5 +1,7 @@
 # Federal Statistical Office: source audit
 
+The exact nominal GDP dataset is verified separately in the [GDP audit](gdp.md). The broad `fso` source below remains a candidate for the other datasets; its status is not a publisher-wide verification.
+
 Status: **candidate — not audited**. Start at [Federal Statistical Office](https://www.bfs.admin.ch/); this landing page is not an exact dataset citation or a redistribution grant.
 
 Candidate scope: Output, population, consumer prices and ILO unemployment.

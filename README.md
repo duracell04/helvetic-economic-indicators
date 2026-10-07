@@ -2,7 +2,7 @@
 
 A lightweight interactive atlas for exploring Swiss economic history on one synchronized timeline. Indicators, topics, calculations and chart arrangements are independent, versioned records. Astro, TypeScript and npm; static GitHub Pages hosting; no backend or database.
 
-**Production publishes verified Confederation yields, the 10Y − 3M spread and general government gross debt / GDP.** The long yield includes a labeled historical proxy for 1946–1954; 2026 yields are partial-year observations with different month coverage and no derived spread. Broad gross debt covers 1946–2026, with explicit source breaks and a 2026 IMF forecast; it is not the Maastricht ratio. See the [yield audit](docs/source-audit/yields.md) and [debt audit](docs/source-audit/debt.md). The local demonstration remains synthetic. The original `switzerland_macro_1946_2026.html` informed the warm colours, compact controls and synchronized inspection; its compiled observations and recession dates were not imported.
+**Production publishes verified nominal GDP, Confederation yields, the 10Y − 3M spread and general government gross debt / GDP.** The long yield includes a labeled historical proxy for 1946–1954; 2026 yields are partial-year observations with different month coverage and no derived spread. Broad gross debt covers 1946–2026, with explicit source breaks and a 2026 IMF forecast; it is not the Maastricht ratio. See the [yield audit](docs/source-audit/yields.md) and [debt audit](docs/source-audit/debt.md). Nominal GDP covers 1948–2025 in current CHF millions, with pre-1995 reconstructions identified; see the [GDP audit](docs/source-audit/gdp.md). The local demonstration remains synthetic. The original `switzerland_macro_1946_2026.html` informed the warm colours, compact controls and synchronized inspection; its compiled observations and recession dates were not imported.
 
 ## Start the interactive demonstration
 
@@ -38,7 +38,7 @@ npm run dev
 
 `check` validates provenance and registries, runs pipeline/calculation/composition tests, checks TypeScript, builds production, and verifies Pages paths and publication isolation. Browser tests run the built demo and production artifacts at ports 4322/4323 with desktop and phone viewports. `npm run check:all` runs both check suites (install the browser first).
 
-Production starts with government financing yields, their spread and broad public debt: 255 verified data points in four downloadable series. Other indicator definitions remain candidates. Only verified, redistributable real data may enter public downloads and the chart payload. Forecast and reconstructed points retain their explicit statuses. Builds fetch no live economic data. Historical debt data and adaptations use CC BY-NC-SA 4.0; modern debt data retain IMF and ecolod terms. These data do not inherit the MIT software licence.
+Production starts with government financing yields, their spread and broad public debt: 333 verified data points in five downloadable series, including nominal GDP available through **Add indicator** and the catalogue. Other indicator definitions remain candidates. Only verified, redistributable real data may enter public downloads and the chart payload. Forecast and reconstructed points retain their explicit statuses. Builds fetch no live economic data. Historical debt data and adaptations use CC BY-NC-SA 4.0; modern debt data retain IMF and ecolod terms. These data do not inherit the MIT software licence.
 
 ## Independent layers
 
@@ -78,7 +78,7 @@ The final `demo` command demonstrates the local importer in a separate ignored f
 
 ## Initial presets and later milestones
 
-The production default arrangement shows government yields, their spread and broad government gross debt / GDP in three separate panels. Reset returns to this arrangement. The local synthetic demonstration retains the original three-panel macro layout. The previous financing arrangement, original reference and six-panel overview remain in the registry for saved layouts and later data additions. The toolbar has no preset selector; visitors compose their own arrangement directly.
+The production default arrangement shows government yields, their spread and broad government gross debt / GDP in three separate panels. Add nominal GDP through **Add indicator**; its native display uses CHF millions, and its verified positive 1960 value supports explicit indexing. Reset returns to this arrangement. The local synthetic demonstration retains the original three-panel macro layout. The previous financing arrangement, original reference and six-panel overview remain in the registry for saved layouts and later data additions. The toolbar has no preset selector; visitors compose their own arrangement directly.
 
 Further verified Swiss-data acquisition, native-frequency charts, additional chart types and Relationships/correlation analysis remain later milestones.
 

@@ -1,5 +1,14 @@
 # Release notes
 
+## 2026-10-08 — Nominal GDP
+
+- Added 78 annual FSO current-price GDP values for 1948–2025 in CHF millions, preserving published numeric precision and original source bytes.
+- Documented the pre-1995 retropolation, marked historical values reconstructed and the 1995 methodological boundary, and left 1946–1947 and 2026 without GDP observations.
+- Recorded the exact August 2026 dataset, immutable checksum, normal source-status mapping and FSO OPEN-BY attribution terms. Other GDP identities remain separate candidates.
+- Added optional `--importer fso-gdp`, retaining `canonical-csv` as the default. Nominal GDP is selectable and downloadable; the existing production default layout is preserved.
+- Replaced production-wide fixed observation totals with scoped dataset checks so subsequent indicator additions do not invalidate the existing yield and debt tests.
+- Validation: source-row reproduction, importer rejection/atomicity and CLI compatibility checks, production GDP chart/indexing/gaps and downloads at desktop and phone sizes, plus the full `npm run check:all` suite.
+
 ## 2026-10-07 — General government gross debt / GDP
 
 - Published 81 annual ratios for 1946–2026 in their own production panel; the default now has yields, completed-year spreads and broad gross debt.
