@@ -371,9 +371,9 @@
     {
       "id": "real-gdp-growth",
       "title": "Real GDP growth",
-      "verification": "candidate",
+      "verification": "verified",
       "data_class": "real",
-      "definition": "Annual change in a verified real GDP series; sports-event adjustments must have distinct series identities.",
+      "definition": "Annual real change in GDP at prices of the preceding year, published by FSO. Distinct from nominal GDP change.",
       "unit": {
         "code": "percent",
         "label": "Percent",
@@ -384,14 +384,18 @@
       "institutional_coverage": "Swiss domestic economy",
       "instrument": null,
       "maturity": null,
-      "aggregation": "Annual change; calculation and source measure pending audit.",
+      "aggregation": "Published annual percentage change; no derivation from nominal GDP.",
       "source_ids": [
-        "seco",
-        "history"
+        "fso-gdp-long-series"
       ],
-      "source_identifier": null,
-      "breaks": [],
-      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "source_identifier": "ts-x-04.02.01.08; B1GQ/ACPP",
+      "breaks": [
+        {
+          "period": "1995",
+          "description": "Transition from reconstructed historical national accounts to the current framework; full history is not methodologically uniform."
+        }
+      ],
+      "usage_notes": "1949–1994 reconstructed historical accounts. The 1995 transition changes methodology. 1948 is explicitly missing in the source; 1946–1948 and 2026 have no value. Normal source status A is final in this retained vintage; later vintages can revise history.",
       "measurement": "growth",
       "price_basis": "real",
       "aggregation_kind": "annual_change"

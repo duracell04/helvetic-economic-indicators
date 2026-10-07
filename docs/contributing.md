@@ -68,3 +68,5 @@ After merge to `main`, GitHub Actions repeats checks and deploys static output. 
 ## Register topics and chart arrangements
 
 Add memberships to `topics.json` and panels to `presets.json`; indicators can appear in multiple topics and visualizations. Keep presentation colours outside statistical definitions. See [composition contracts](composition.md) for unit compatibility, acknowledgment and fixed indexing bases. Run `npm run check:registries`, and check chart changes with `npm run build:demo` followed by `npm run test:browser`. Production inputs remain verified real observations only.
+
+For the same audited long GDP CSV, `--importer fso-real-growth --series real-gdp-growth` selects published real annual changes (ACPP). It does not calculate growth from nominal levels.

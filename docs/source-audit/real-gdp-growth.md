@@ -1,0 +1,7 @@
+# Real GDP growth — audit of 8 October 2026
+
+Verified source: [FSO long GDP series](https://www.bfs.admin.ch/asset/en/ts-x-04.02.01.08), published 25 August 2026. Select `VARIABLE=B1GQ`, `UNIT_MEAS=ACPP` in the [original CSV](https://dam-api.bfs.admin.ch/hub/api/dam/assets/36813569/master). The existing immutable snapshot is shared with nominal GDP (SHA-256 `16c49f1313335a64a82dd01b00381633ab9edc2f3db72fb7c2b9487c2bbde042`). The appendix defines ACPP as change at prices of the preceding year. AC is nominal growth and is excluded.
+
+77 values cover 1949–2025. 1948 has an empty value with missing flag O and is omitted; 1946–1948 and 2026 remain gaps. Preserve all published decimals. 1949–1994 is reconstructed under older national-account frameworks, with the documented 1995 transition. A denotes normal observations, mapped to final for this vintage; later publications can revise them. These published rates are independent of the nominal-level series and do not establish a volume level without a separate audit.
+
+Reproduce with `data:import --importer fso-real-growth`; tests compare every value, flag, year and source lineage and reject duplicate years, invalid values and incompatible selections. [FSO OPEN-BY](https://www.bfs.admin.ch/bfs/en/home/bfs/bundesamt-statistik/nutzungsbedingungen.html) permits reuse with attribution to FSO – National Accounts, © FSO 2026. The GDP audit contains the full source history and rights review.

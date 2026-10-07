@@ -3,7 +3,7 @@ import { productionAtlas } from './lib/atlas-data.ts';
 import { readFile } from 'node:fs/promises';
 import { parseArgs } from 'node:util';
 import { importLocal, canonicalCsvImporter } from './lib/importer.ts';
-import { fsoGdpImporter } from './lib/fso-gdp.ts';
+import { fsoGdpImporter, fsoRealGrowthImporter } from './lib/fso-gdp.ts';
 import { validate, load, validateMetadata, exportPublic, atomicWrite, json } from './lib/store.ts';
 import { derive } from './lib/transforms.ts';
 import { readObservations, writeObservations } from './lib/csv.ts';
@@ -28,8 +28,8 @@ try {
       break;
     }
     case 'import': {
-      const importer = [canonicalCsvImporter, fsoGdpImporter].find(item => item.name === (values.importer ?? 'canonical-csv'));
-      if (!importer) throw new Error('Unknown importer. Use canonical-csv or fso-gdp.');
+      const importer = [canonicalCsvImporter, fsoGdpImporter, fsoRealGrowthImporter].find(item => item.name === (values.importer ?? 'canonical-csv'));
+      if (!importer) throw new Error('Unknown importer. Use canonical-csv, fso-gdp or fso-real-growth.');
       const id = await importLocal({ root, file: path.resolve(required('file')), seriesId: required('series'), sourceId: required('source'), retrievedOn: required('retrieved-on'), replace: values.replace, importer });
       console.log(`Imported immutable snapshot ${id}. Review registry and canonical changes before publication.`);
       break;
