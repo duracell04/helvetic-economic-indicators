@@ -1,0 +1,18 @@
+{
+  "format": "xlsx",
+  "original_file": "data/extractions/originals/cpi.xlsx",
+  "original_sha256": "7019d8273a93ab1de240d378c84f7705b924fbb054541f6e33c79340d343c2a7",
+  "original_url": "https://dam-api.bfs.admin.ch/hub/api/dam/assets/36878067/master",
+  "sheet": "VAR_y-1",
+  "layout": "horizontal",
+  "period_row": 4,
+  "value_row": 5,
+  "start_column": 15,
+  "end_column": 56,
+  "period_format": "year",
+  "key": "LIK25B25/VAR_y-1/100_100",
+  "assert_cell": {
+    "A5": "100_100"
+  },
+  "expected_count": 42
+}

@@ -62,3 +62,7 @@ Add 85 published quarterly survey unemployment rates, preserving Q2-only histori
 ## 8 October 2026 — Consumer price index
 
 Add 526 monthly total CPI levels on the December 2025 base, preserving published precision and frequency. [Audit](source-audit/cpi.md).
+
+## 8 October 2026 — Annual CPI inflation
+
+Add 42 published complete-year annual-average CPI inflation rates, 1984–2025, as a separate indicator. [Audit](source-audit/cpi-inflation.md).

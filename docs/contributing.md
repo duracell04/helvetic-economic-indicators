@@ -80,3 +80,7 @@ Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.
 ### Consumer price index
 
 Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.py data/extractions/cpi.json data/extractions/originals/cpi.xlsx ../cpi.csv`, then import using `--importer audited-extract --series cpi --source fso-cpi-2025`. Review [the source audit](source-audit/cpi.md) before updating a vintage.
+
+### Annual CPI inflation
+
+Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.py data/extractions/cpi-inflation.json data/extractions/originals/cpi.xlsx ../cpi-inflation.csv`, then import using `--importer audited-extract --series cpi-inflation --source fso-cpi-2025`. Review [the source audit](source-audit/cpi-inflation.md) before updating a vintage.
