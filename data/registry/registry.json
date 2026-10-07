@@ -565,29 +565,29 @@
     {
       "id": "cpi-inflation",
       "title": "Annual CPI inflation",
-      "verification": "candidate",
+      "verification": "verified",
       "data_class": "real",
-      "definition": "Change between annual-average CPI index levels, once the underlying source is verified.",
+      "definition": "Published percentage change between annual-average total CPI levels. December-on-December inflation is a distinct measure.",
       "unit": {
         "code": "percent",
         "label": "Percent",
         "dimension": "percent",
         "scale": 1
       },
+      "measurement": "rate",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "annual_change",
       "frequency": "annual",
       "institutional_coverage": "Swiss household consumption basket",
       "instrument": null,
       "maturity": null,
-      "aggregation": "100 \u00d7 (annual-average CPI / previous annual-average CPI \u2212 1).",
+      "aggregation": "Published VAR_y-1 annual-average inflation, preserving the source precision; no derivation from rounded monthly indices.",
       "source_ids": [
-        "fso"
+        "fso-cpi-2025"
       ],
-      "source_identifier": null,
+      "source_identifier": "LIK25B25/VAR_y-1/100_100",
       "breaks": [],
-      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
-      "measurement": "rate",
-      "price_basis": "not_applicable",
-      "aggregation_kind": "annual_change"
+      "usage_notes": "1984–2025 complete-year published changes. Negative values and zero are valid. 2026 is incomplete and absent. History may change in subsequent vintages."
     },
     {
       "id": "snb-policy-rate",
@@ -1249,6 +1249,14 @@
       "retrieved_on": "2026-10-08",
       "sha256": "b6fcd3984bd41f21f8365f02889038f6ad95e07425dbae88ae1b741d04b54aa3",
       "file": "data/raw/fso-cpi-2025-2026-10-08-b6fcd3984bd41f21.csv",
+      "source_url": "https://dam-api.bfs.admin.ch/hub/api/dam/assets/36878067/master"
+    },
+    {
+      "id": "fso-cpi-2025-2026-10-08-1bc3763f72da7e35",
+      "source_id": "fso-cpi-2025",
+      "retrieved_on": "2026-10-08",
+      "sha256": "1bc3763f72da7e35df83c61fd7a8e440d826594ed6749ac002a493b8331b4557",
+      "file": "data/raw/fso-cpi-2025-2026-10-08-1bc3763f72da7e35.csv",
       "source_url": "https://dam-api.bfs.admin.ch/hub/api/dam/assets/36878067/master"
     }
   ]
