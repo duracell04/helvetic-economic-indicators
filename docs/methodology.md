@@ -34,7 +34,7 @@ Percent means percentage levels: a 2% rate is stored as `2`, not `0.02`. Changes
 
 - **Annual growth:** `100 × (value[t] / value[t−1] − 1)`. Require the preceding calendar year and a positive denominator. Missing input produces a missing result; absent prior years produce no comparison row.
 - **Rebasing:** `100 × value[t] / value[base]`. The fixed base must exist and be positive. Missing later input remains missing.
-- **Spread:** aligned left yield minus right yield, both stored in percent. Output is percentage points. Keep only matched periods; no asynchronous pairing or filling.
+- **Spread:** aligned left yield minus right yield, both stored in percent. Output is percentage points. Keep only matched periods; no asynchronous pairing or filling. Optional explicit `exclude_periods` omits documented non-comparable annual periods; the Confederation spread excludes 2026 because its two partial-year windows differ.
 
 Growth/rebasing require level inputs. All initial calculations require annual frequency, matching institutional coverage and matching real/synthetic class. Combined rows require equal value-kind and revision-status fields. If all input publication dates are known, the derived date is their latest date; otherwise it remains unknown. Source snapshot references are unioned and checked against registered lineage.
 

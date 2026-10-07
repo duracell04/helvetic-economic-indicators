@@ -75,10 +75,16 @@ test('invalid shared layouts recover; new energy definitions render without code
   await page.route('**/data/atlas.json',route=>route.fulfill({json:data}));await ready(page);await expect(panel(page,0)).toContainText('Energy consumption');await expect(page.locator('[data-series-id="demo-energy"]')).toHaveCount(2);
   await page.locator('#add-indicator').click();await page.locator('#indicator-search').fill('energy');await expect(page.locator('#indicator-list')).toContainText('Energy');
 });
-test('production remains empty and isolated from demo layouts',async({page})=>{
-  await page.goto('http://127.0.0.1:4323/helvetic-economic-indicators/');await expect(page.locator('#atlas')).toHaveAttribute('data-ready','true');await expect(page.locator('#demo-banner')).toBeHidden();await expect(page.locator('.chart-panel')).toHaveCount(0);await expect(page.locator('#empty-atlas')).toBeVisible();
-  await page.locator('#add-indicator').click();await expect(page.locator('#indicator-list button:not([disabled])')).toHaveCount(0);
-  const response=await page.request.get('http://127.0.0.1:4323/helvetic-economic-indicators/data/atlas.json');const data=await response.json();expect(data.mode).toBe('production');expect(data.observations).toHaveLength(0);expect(data.registry.series.every((s:{data_class:string})=>s.data_class==='real')).toBe(true);
+test('production renders verified yields, partial-year notes and completed-year spread',async({page},testInfo)=>{
+  await page.goto('http://127.0.0.1:4323/helvetic-economic-indicators/');await expect(page.locator('#atlas')).toHaveAttribute('data-ready','true');await expect(page.locator('#demo-banner')).toBeHidden();await expect(page.locator('.chart-panel')).toHaveCount(2);await expect(page.locator('#empty-atlas')).toBeHidden();
+  await expect(panel(page,0)).toContainText('2026 partial year');
+  const chart=panel(page,0).locator('svg');await chart.focus();await chart.press('End');
+  await expect(page.locator('#readout')).toContainText('Jan–Aug 2026 (8 months)');await expect(page.locator('#readout')).toContainText('Jan–Sep 2026 (9 months)');await expect(page.locator('#readout')).toContainText('provisional');await expect(page.locator('#readout')).toContainText('No observation');
+  await chart.press('Home');await expect(page.locator('#readout')).toContainText('historical long-term');await expect(page.locator('#readout')).toContainText('reconstructed');await chart.press('Escape');
+  await page.locator('#add-indicator').click();await expect(page.locator('#indicator-list button:not([disabled])')).toHaveCount(3);await page.getByRole('button',{name:'Close indicator selector'}).click();
+  const response=await page.request.get('http://127.0.0.1:4323/helvetic-economic-indicators/data/atlas.json');const data=await response.json();expect(data.mode).toBe('production');expect(data.observations).toHaveLength(174);expect(data.registry.series.every((s:{data_class:string})=>s.data_class==='real')).toBe(true);
+  const dimensions=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,width:innerWidth}));expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.width);
+  await page.screenshot({path:`.cache/evidence-yields-${testInfo.project.name}.png`,fullPage:true});
 });
 
 test('comparison cancellation preserves axis controls and offers a separate new panel',async({page})=>{
@@ -92,6 +98,6 @@ test('comparison cancellation preserves axis controls and offers a separate new 
 test('demo storage cannot restore into production on the same origin',async({page})=>{
  await ready(page);await page.locator('[data-indicator="demo-population"]').getByRole('button',{name:'Separate Population',exact:true}).click();
  const production=JSON.parse(await readFile('public/data/atlas.json','utf8'));
- await page.route('**/data/atlas.json',route=>route.fulfill({json:production}));await page.reload();await expect(page.locator('#atlas')).toHaveAttribute('data-ready','true');await expect(page.locator('.chart-panel')).toHaveCount(0);await expect(page.locator('#demo-banner')).toBeHidden();
+ await page.route('**/data/atlas.json',route=>route.fulfill({json:production}));await page.reload();await expect(page.locator('#atlas')).toHaveAttribute('data-ready','true');await expect(page.locator('.chart-panel')).toHaveCount(2);await expect(page.locator('#demo-banner')).toBeHidden();await expect(page.locator('[data-indicator^="demo-"]')).toHaveCount(0);
  await page.unroute('**/data/atlas.json');await page.reload();await expect(page.locator('.chart-panel')).toHaveCount(4);
 });

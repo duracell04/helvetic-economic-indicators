@@ -23,7 +23,9 @@ export const source = z.object({
 export const derivation = z.discriminatedUnion('method', [
   z.object({ id, output_series_id: id, method: z.literal('growth'), inputs: z.array(id).length(1), convention: text }).strict(),
   z.object({ id, output_series_id: id, method: z.literal('rebase'), inputs: z.array(id).length(1), base_period: z.string().regex(/^\d{4}$/), convention: text }).strict(),
-  z.object({ id, output_series_id: id, method: z.literal('spread'), inputs: z.array(id).length(2), convention: text }).strict(),
+  z.object({ id, output_series_id: id, method: z.literal('spread'), inputs: z.array(id).length(2), convention: text,
+    exclude_periods: z.array(z.string().regex(/^(18|19|20|21)\d{2}$/)).refine(periods => new Set(periods).size === periods.length, 'Duplicate excluded period').optional(),
+  }).strict(),
 ]);
 export const series = z.object({
   id, title: text,

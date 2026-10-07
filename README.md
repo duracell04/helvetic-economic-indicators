@@ -2,7 +2,7 @@
 
 A lightweight interactive atlas for exploring Swiss economic history on one synchronized timeline. Indicators, topics, calculations and chart arrangements are independent, versioned records. Astro, TypeScript and npm; static GitHub Pages hosting; no backend or database.
 
-**The local preview uses synthetic examples. No Swiss observations or historical coverage have been verified for publication.** The original `switzerland_macro_1946_2026.html` informed the warm colours, compact controls and synchronized inspection; its compiled observations and recession dates were not imported.
+**Production now publishes verified annual Confederation yields and the 10Y − 3M spread.** The long series includes a labeled historical proxy for 1946–1954; 2026 yield points are partial-year observations with different month coverage and no derived spread. See [yield source audit](docs/source-audit/yields.md). The local demonstration remains synthetic. The original `switzerland_macro_1946_2026.html` informed the warm colours, compact controls and synchronized inspection; its compiled observations and recession dates were not imported.
 
 ## Start the interactive demonstration
 
@@ -38,7 +38,7 @@ npm run dev
 
 `check` validates provenance and registries, runs pipeline/calculation/composition tests, checks TypeScript, builds production, and verifies Pages paths and publication isolation. Browser tests run the built demo and production artifacts at ports 4322/4323 with desktop and phone viewports. `npm run check:all` runs both check suites (install the browser first).
 
-Production currently shows a concise availability message and candidate indicator definitions. Only verified, redistributable real observations may enter public downloads and the chart payload. Builds fetch no live economic data.
+Production starts with government financing yields and their spread: 174 verified observations in three downloadable series. Other indicator definitions remain candidates. Only verified, redistributable real observations may enter public downloads and the chart payload. Builds fetch no live economic data.
 
 ## Independent layers
 
@@ -78,15 +78,15 @@ The final `demo` command demonstrates the local importer in a separate ignored f
 
 ## Initial presets and later milestones
 
-The default arrangement compares indexed GDP/GDP per capita/population, inflation/unemployment and policy rates. Reset returns to these three panels. A six-panel overview remains in the internal registry for future saved layouts. The toolbar has no preset selector; visitors compose their own arrangement directly.
+The production default arrangement compares the two government yields and their spread in two panels. Reset returns to this arrangement. The local synthetic demonstration retains the original three-panel macro layout. The original reference and six-panel overview remain in the registry for saved layouts and later data additions. The toolbar has no preset selector; visitors compose their own arrangement directly.
 
-Verified Swiss-data acquisition, native-frequency charts, additional chart types and Relationships/correlation analysis remain later milestones.
+Further verified Swiss-data acquisition, native-frequency charts, additional chart types and Relationships/correlation analysis remain later milestones.
 
 ## GitHub Pages
 
 The repository is hosted at [duracell04/helvetic-economic-indicators](https://github.com/duracell04/helvetic-economic-indicators), with **Settings → Pages → GitHub Actions** enabled. Pushes to `main` run checks including the demo browser suite, then deploy **only `dist/` production artifacts**. Pull requests validate without deploying.
 
-The owner and repository name from `GITHUB_REPOSITORY` determine `https://<owner>.github.io/helvetic-economic-indicators/`; account sites use `/`. Optional local overrides are `SITE_URL` and `SITE_BASE` (use identical settings for build/path checks). The configuration follows [Astro's official deployment guide](https://docs.astro.build/en/guides/deploy/github/). No custom domain is configured. The [production website](https://duracell04.github.io/helvetic-economic-indicators/) shows an availability message until verified observations are published; the synthetic demonstration remains a local preview.
+The owner and repository name from `GITHUB_REPOSITORY` determine `https://<owner>.github.io/helvetic-economic-indicators/`; account sites use `/`. Optional local overrides are `SITE_URL` and `SITE_BASE` (use identical settings for build/path checks). The configuration follows [Astro's official deployment guide](https://docs.astro.build/en/guides/deploy/github/). No custom domain is configured. The [production website](https://duracell04.github.io/helvetic-economic-indicators/) publishes committed, validated observations; the synthetic demonstration remains a local preview.
 
 ## Licences
 

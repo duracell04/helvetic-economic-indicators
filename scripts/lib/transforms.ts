@@ -49,6 +49,7 @@ export function derive(target: Series, inputs: Series[], observations: Observati
     return first.map(row => combine(target, row.reference_period, [base, row], row.value === null ? null : 100 * row.value / base.value!));
   }
   return first.flatMap(row => {
+    if (spec.exclude_periods?.includes(row.reference_period)) return [];
     const other = second.get(row.reference_period);
     return other ? [combine(target, row.reference_period, [row, other], row.value === null || other.value === null ? null : row.value - other.value)] : [];
   });

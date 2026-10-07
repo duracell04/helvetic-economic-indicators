@@ -120,6 +120,86 @@
         "attribution": null,
         "conditions": "Exact dataset and redistribution terms must be audited before import or publication."
       }
+    },
+    {
+      "id": "snb-historical-yields",
+      "publisher": "Swiss National Bank",
+      "title": "Interest rates and yields, Historical time series (November 2007)",
+      "landing_url": "https://www.snb.ch/public/publication/en/www-snb-ch/publications/statistical-publications/historical-time-series/2007/renditen_book/publications0_en/e_zinssaetze_u_renditen.book.pdf",
+      "data_url": "https://www.snb.ch/public/publication/en/www-snb-ch/publications/statistical-publications/historical-time-series/2007/renditen_book/publications0_en/e_zinssaetze_u_renditen.book.pdf",
+      "source_identifier": "Tables 3.1 column 2 and 2.1 column 1",
+      "audit_status": "verified",
+      "definition": "Historical Confederation yield by maturity and three-month Confederation money market debt register claims. The retained CSV is a checked transcription of selected printed tables, not original publisher CSV bytes.",
+      "coverage": "Proxy 1946–1954; GMBF 1980–2006",
+      "revision_practice": "Fixed November 2007 publication vintage; later corrections require a new snapshot.",
+      "rights": {
+        "redistribution": "permitted",
+        "licence": "SNB 2007 publication: reproduction with attribution",
+        "evidence_url": "https://www.snb.ch/public/publication/en/www-snb-ch/publications/statistical-publications/historical-time-series/2007/renditen_book/publications0_en/e_zinssaetze_u_renditen.book.pdf",
+        "reviewed_on": "2026-10-07",
+        "attribution": "Swiss National Bank (2007), Interest rates and yields, tables 3.1 and 2.1, accessed 2026-10-07.",
+        "conditions": "The publication permits reproduction and publication of figures with reference to source. Preserve methodological notes; the software MIT licence does not apply to these data."
+      }
+    },
+    {
+      "id": "oecd-swiss-10y-annual",
+      "publisher": "OECD, distributed by Federal Reserve Bank of St. Louis (FRED)",
+      "title": "Swiss long-term government bond yield, 10-year, annual",
+      "landing_url": "https://fred.stlouisfed.org/data/IRLTLT01CHA156N",
+      "data_url": "https://fred.stlouisfed.org/data/IRLTLT01CHA156N",
+      "source_identifier": "IRLTLT01CHA156N",
+      "audit_status": "verified",
+      "definition": "OECD Main Economic Indicators: Switzerland long-term government bond yield, 10-year, main including benchmark; percent per annum, not seasonally adjusted. This is the OECD benchmark definition, not an assertion of identity with the fitted SNB daily 10-year spot rate.",
+      "coverage": "1955–2025",
+      "revision_practice": "Source histories may be revised. Values reflect the FRED table retrieved on 2026-10-07; CSV snapshot is extracted from the HTML table, retaining published numeric precision.",
+      "rights": {
+        "redistribution": "permitted",
+        "licence": "OECD Terms and Conditions, section 3 (Data)",
+        "evidence_url": "https://www.oecd.org/en/about/terms-conditions.html",
+        "reviewed_on": "2026-10-07",
+        "attribution": "OECD (2026), Main Economic Indicators, IRLTLT01CHA156N, via FRED, https://fred.stlouisfed.org/data/IRLTLT01CHA156N (accessed 2026-10-07).",
+        "conditions": "Reuse and redistribution permitted with OECD attribution, subject to source-specific restrictions. Pass the acknowledgment requirement to downstream users. SNB-origin statistical figures are reused for this non-commercial educational atlas; no source-specific restriction is displayed on the selected FRED tables."
+      }
+    },
+    {
+      "id": "oecd-swiss-10y-monthly",
+      "publisher": "OECD, distributed by Federal Reserve Bank of St. Louis (FRED)",
+      "title": "Swiss long-term government bond yield, 10-year, monthly",
+      "landing_url": "https://fred.stlouisfed.org/data/IRLTLT01CHM156N",
+      "data_url": "https://fred.stlouisfed.org/data/IRLTLT01CHM156N",
+      "source_identifier": "IRLTLT01CHM156N",
+      "audit_status": "verified",
+      "definition": "OECD Main Economic Indicators: Switzerland long-term government bond yield, 10-year, main including benchmark; percent per annum, not seasonally adjusted. This is the OECD benchmark definition, not an assertion of identity with the fitted SNB daily 10-year spot rate.",
+      "coverage": "January–August 2026 (selected source observations)",
+      "revision_practice": "Source histories may be revised. Values reflect the FRED table retrieved on 2026-10-07; CSV snapshot is extracted from the HTML table, retaining published numeric precision.",
+      "rights": {
+        "redistribution": "permitted",
+        "licence": "OECD Terms and Conditions, section 3 (Data)",
+        "evidence_url": "https://www.oecd.org/en/about/terms-conditions.html",
+        "reviewed_on": "2026-10-07",
+        "attribution": "OECD (2026), Main Economic Indicators, IRLTLT01CHM156N, via FRED, https://fred.stlouisfed.org/data/IRLTLT01CHM156N (accessed 2026-10-07).",
+        "conditions": "Reuse and redistribution permitted with OECD attribution, subject to source-specific restrictions. Pass the acknowledgment requirement to downstream users. SNB-origin statistical figures are reused for this non-commercial educational atlas; no source-specific restriction is displayed on the selected FRED tables."
+      }
+    },
+    {
+      "id": "snb-eg3m-monthly",
+      "publisher": "Swiss National Bank",
+      "title": "Money market rates: Confederation debt register claims, 3 months",
+      "landing_url": "https://data.snb.ch/en/topics/ziredev/cube/zimoma",
+      "data_url": "https://data.snb.ch/api/cube/zimoma/data/csv/en?dimSel=D0(EG3M)&fromDate=2007-01&toDate=2026-09",
+      "source_identifier": "EPB@SNB.zimoma{EG3M}",
+      "audit_status": "verified",
+      "definition": "Month-end observations of three-month Confederation money market debt register claims, in percent per annum. Annual values are unweighted means of twelve month-end readings; 2026 uses nine readings.",
+      "coverage": "January 2007–September 2026",
+      "revision_practice": "SNB portal vintage PublishingDate 2026-10-01 14:30; monthly histories can be revised. Retain source bytes and recalculate when importing a new vintage.",
+      "rights": {
+        "redistribution": "permitted",
+        "licence": "SNB data portal: non-commercial reuse with attribution",
+        "evidence_url": "https://data.snb.ch/en/topics/texts/doc/introduction",
+        "reviewed_on": "2026-10-07",
+        "attribution": "Swiss National Bank, Money market rates, EG3M, accessed 2026-10-07. Annual and partial-year averages calculated by Helvetic Economic Indicators.",
+        "conditions": "Non-commercial educational use compatible with the data purpose, with source attribution. Commercial reuse may require SNB consent. Third-party rights and the original quotation convention remain applicable."
+      }
     }
   ],
   "series": [
@@ -676,40 +756,55 @@
     },
     {
       "id": "confederation-10y-annual",
-      "title": "Annual ten-year Confederation yield",
-      "verification": "candidate",
+      "title": "Annual Confederation 10Y yield / historical proxy",
+      "verification": "verified",
       "data_class": "real",
-      "definition": "Proposed annual companion to confederation-10y. Exact preparation convention requires source audit.",
+      "definition": "Annual OECD Swiss ten-year government benchmark yield from 1955, preceded by the SNB long-term Confederation yield-by-maturity proxy for 1946–1954. The proxy is an explicit historical extension, not a constant-maturity ten-year spot rate. 2026 is a partial-year average.",
       "unit": {
         "code": "percent",
-        "label": "Percent",
+        "label": "% p.a.",
         "dimension": "percent",
         "scale": 1
       },
       "frequency": "annual",
       "institutional_coverage": "Swiss Confederation",
-      "instrument": "Confederation spot rate",
-      "maturity": "10 years",
-      "aggregation": "Annual convention to be verified: annual average",
+      "instrument": "OECD ten-year government benchmark; historical Confederation bond proxy before 1955",
+      "maturity": "10 years from 1955; source-defined long term for 1946–1954",
+      "aggregation": "1946–1954: published SNB annual averages. 1955–2025: OECD annual benchmark observations. 2026: arithmetic mean of Jan–Aug OECD monthly observations (8 months), provisional partial year. Values retained at three decimals.",
       "source_ids": [
-        "snb"
+        "snb-historical-yields",
+        "oecd-swiss-10y-annual",
+        "oecd-swiss-10y-monthly"
       ],
-      "source_identifier": null,
-      "breaks": [],
-      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
-      "measurement": "rate",
+      "source_identifier": "IRLTLT01CHA156N; IRLTLT01CHM156N; SNB 2007 table 3.1 column 2",
+      "breaks": [
+        {
+          "period": "1946",
+          "description": "1946–1954: historical long-term yield-by-maturity proxy; not an exact ten-year benchmark."
+        },
+        {
+          "period": "1955",
+          "description": "Switch from historical yield-by-maturity proxy to OECD ten-year government benchmark; definitions are not identical."
+        },
+        {
+          "period": "2026",
+          "description": "Partial-year average: Jan–Aug 2026 (8 months), not a full-year average or current yield."
+        }
+      ],
+      "usage_notes": "1946–1954 rows are marked reconstructed because of the proxy extension; their source yields are observed. 2026 is observed/provisional, not a forecast. This series differs from the daily SNB fitted spot-rate candidate. Do not pair the 2026 average with a different-month short-rate average. Data retain publisher-specific usage terms.",
+      "measurement": "yield",
       "price_basis": "not_applicable",
       "aggregation_kind": "annual_average"
     },
     {
       "id": "gmbf-3m-annual",
       "title": "Annual three-month GMBF yield",
-      "verification": "candidate",
+      "verification": "verified",
       "data_class": "real",
-      "definition": "Proposed annual companion to gmbf-3m. Exact preparation convention requires source audit.",
+      "definition": "Annual average yield of three-month Confederation money market debt register claims (GMBF). SNB historical table 1980–2006, continued from monthly EG3M observations for 2007 onward. 2026 is partial-year.",
       "unit": {
         "code": "percent",
-        "label": "Percent",
+        "label": "% p.a.",
         "dimension": "percent",
         "scale": 1
       },
@@ -717,14 +812,27 @@
       "institutional_coverage": "Swiss Confederation",
       "instrument": "GMBF",
       "maturity": "3 months",
-      "aggregation": "Annual convention to be verified: annual average",
+      "aggregation": "Unweighted average of month-end observations, using the last issue/auction in a month. Before 1990: yield at issue; since 1990: auction yield. Published annual values for 1980–2006; means of 12 EG3M observations for 2007–2025; Jan–Sep mean (9 months) for 2026. Three decimals.",
       "source_ids": [
-        "ffa",
-        "snb"
+        "snb-historical-yields",
+        "snb-eg3m-monthly"
       ],
-      "source_identifier": null,
-      "breaks": [],
-      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "source_identifier": "SNB 2007 table 2.1 column 1; EPB@SNB.zimoma{EG3M}",
+      "breaks": [
+        {
+          "period": "1990",
+          "description": "Quotation changes from yield at issue to auction yield; last issue/auction of each month."
+        },
+        {
+          "period": "2007",
+          "description": "Continue historical published annual table with computed calendar-year means of the same SNB EG3M monthly series."
+        },
+        {
+          "period": "2026",
+          "description": "Partial-year average: Jan–Sep 2026 (9 months), not a full-year average or current yield."
+        }
+      ],
+      "usage_notes": "No three-month observations are supplied before 1980; absence is not zero. 2026 is observed/provisional. Public SNB portal data are reused for non-commercial educational purposes with attribution; commercial reuse may require consent.",
       "measurement": "yield",
       "price_basis": "not_applicable",
       "aggregation_kind": "annual_average"
@@ -838,7 +946,75 @@
       "measurement": "return",
       "price_basis": "not_applicable",
       "aggregation_kind": "annual_change"
+    },
+    {
+      "id": "confederation-10y-minus-gmbf-3m",
+      "title": "Confederation 10Y − 3M spread",
+      "verification": "verified",
+      "data_class": "real",
+      "definition": "Difference between matched completed-calendar-year Confederation ten-year benchmark and three-month GMBF annual-average yields, 1980–2025.",
+      "unit": {
+        "code": "percentage_points",
+        "label": "Percentage points",
+        "dimension": "percentage_points",
+        "scale": 1
+      },
+      "frequency": "annual",
+      "institutional_coverage": "Swiss Confederation",
+      "instrument": "Ten-year government benchmark minus three-month GMBF",
+      "maturity": "10 years minus 3 months",
+      "aggregation": "Left annual yield minus right annual yield, in percentage points, after input values are rounded to three decimals. Matched completed years only; 2026 excluded because input averaging windows differ.",
+      "source_ids": [
+        "oecd-swiss-10y-annual",
+        "oecd-swiss-10y-monthly",
+        "snb-eg3m-monthly",
+        "snb-historical-yields"
+      ],
+      "source_identifier": "derive-confederation-yield-spread",
+      "breaks": [
+        {
+          "period": "1990",
+          "description": "Quotation changes from yield at issue to auction yield; last issue/auction of each month."
+        }
+      ],
+      "usage_notes": "Negative values indicate annual-average short yields above long yields; annual averages do not establish the duration of intrayear inversion. 2026 has no spread observation because Jan–Aug and Jan–Sep means are not comparable. Native source terms are inherited.",
+      "measurement": "spread",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "annual_average"
     }
   ],
-  "snapshots": []
+  "snapshots": [
+    {
+      "id": "snb-historical-yields-2026-10-07-dafa209b0ca325c3",
+      "source_id": "snb-historical-yields",
+      "retrieved_on": "2026-10-07",
+      "sha256": "dafa209b0ca325c39bd560971d6a310659812d5c8a9069871f30abc14b26e629",
+      "file": "data/raw/snb-historical-yields-2026-10-07-dafa209b0ca325c3.csv",
+      "source_url": "https://www.snb.ch/public/publication/en/www-snb-ch/publications/statistical-publications/historical-time-series/2007/renditen_book/publications0_en/e_zinssaetze_u_renditen.book.pdf"
+    },
+    {
+      "id": "oecd-swiss-10y-annual-2026-10-07-e70f956181631b2b",
+      "source_id": "oecd-swiss-10y-annual",
+      "retrieved_on": "2026-10-07",
+      "sha256": "e70f956181631b2b1cb7e27270a4f8b3531103b7a1ce57ddd40b5d5cd0af3b48",
+      "file": "data/raw/oecd-swiss-10y-annual-2026-10-07-e70f956181631b2b.csv",
+      "source_url": "https://fred.stlouisfed.org/data/IRLTLT01CHA156N"
+    },
+    {
+      "id": "oecd-swiss-10y-monthly-2026-10-07-409ac9da46bd6816",
+      "source_id": "oecd-swiss-10y-monthly",
+      "retrieved_on": "2026-10-07",
+      "sha256": "409ac9da46bd68169cc1202f5191df953cc702ac2456d682b7cd44cc133aed91",
+      "file": "data/raw/oecd-swiss-10y-monthly-2026-10-07-409ac9da46bd6816.csv",
+      "source_url": "https://fred.stlouisfed.org/data/IRLTLT01CHM156N"
+    },
+    {
+      "id": "snb-eg3m-monthly-2026-10-07-0a8fd19fe9f27e93",
+      "source_id": "snb-eg3m-monthly",
+      "retrieved_on": "2026-10-07",
+      "sha256": "0a8fd19fe9f27e93cb587e0a2330e1db213f3ffe7b013aa1fbbb814de3ef2baa",
+      "file": "data/raw/snb-eg3m-monthly-2026-10-07-0a8fd19fe9f27e93.csv",
+      "source_url": "https://data.snb.ch/api/cube/zimoma/data/csv/en?dimSel=D0(EG3M)&fromDate=2007-01&toDate=2026-09"
+    }
+  ]
 }

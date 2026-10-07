@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0.0",
-  "default_preset_id": "reference",
+  "default_preset_id": "verified-financing",
   "presets": [
     {
       "id": "overview",
@@ -150,6 +150,47 @@
         "show_raw": false,
         "annotation_ids": []
       }
+    },
+    {
+      "id": "verified-financing",
+      "title": "Verified government financing",
+      "config": {
+        "version": "2.0.0",
+        "preset_id": "verified-financing",
+        "start_year": 1946,
+        "end_year": 2026,
+        "panels": [
+          {
+            "id": "financing",
+            "title": "Government financing · 2026 partial year",
+            "series_ids": [
+              "confederation-10y-annual",
+              "gmbf-3m-annual"
+            ],
+            "axis": {
+              "mode": "native",
+              "base_year": null
+            },
+            "conventions_acknowledged": true
+          },
+          {
+            "id": "yield-spread",
+            "title": "10Y − 3M spread · completed years",
+            "series_ids": [
+              "confederation-10y-minus-gmbf-3m"
+            ],
+            "axis": {
+              "mode": "native",
+              "base_year": null
+            },
+            "conventions_acknowledged": false
+          }
+        ],
+        "show_events": true,
+        "show_intervals": true,
+        "show_raw": false,
+        "annotation_ids": []
+      }
     }
   ],
   "styles": {
@@ -165,6 +206,7 @@
     "general-government-debt-ratio": "#334155",
     "confederation-debt-ratio": "#9f1239",
     "smi-annual-return": "#0f766e",
-    "smic-annual-return": "#6b21a8"
+    "smic-annual-return": "#6b21a8",
+    "confederation-10y-minus-gmbf-3m": "#6b21a8"
   }
 }

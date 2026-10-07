@@ -136,6 +136,7 @@ async function boot(): Promise<void> {
         row.append(label, make('strong', '', formatValue(point.raw, s.unit.label)));
         if (point.value !== null && panel.axis.mode === 'indexed') row.append(make('small', '', `Index ${panel.axis.base_year} = 100: ${formatValue(point.value)}`));
         if (point.observation) row.append(make('small', '', `${point.observation.value_kind} · ${point.observation.revision_status} · ${s.aggregation_kind.replaceAll('_',' ')}`));
+        for (const note of s.breaks.filter(note => note.period === String(year))) row.append(make('small', '', note.description));
         group.append(row);
       }
       readout.append(group);

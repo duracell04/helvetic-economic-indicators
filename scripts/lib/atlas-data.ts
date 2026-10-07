@@ -83,7 +83,7 @@ export async function createDemo(root: string): Promise<AtlasData> {
     { id: 'demo-event', type: 'event', start_year: 1975, end_year: null, label: 'Illustrative event', source_url: null, verification: 'candidate', data_class: 'synthetic' },
     { id: 'demo-interval', type: 'interval', start_year: 2000, end_year: 2002, label: 'Illustrative contraction', source_url: null, verification: 'candidate', data_class: 'synthetic' },
   ];
-  const data: AtlasData = { ...original, mode: 'demo', registry, observations: rows, annotations,
+  const data: AtlasData = { ...original, mode: 'demo', default_preset_id: 'reference', registry, observations: rows, annotations,
     topics: original.topics.map(t => ({ ...t, series_ids: [...new Set(t.series_ids.flatMap(id => rename(id) === id ? [id] : [rename(id), id]))] })),
     presets: original.presets.map(p => ({ ...p, config: { ...p.config, annotation_ids: annotations.map(a => a.id), panels: p.config.panels.map(panel => ({ ...panel, series_ids: panel.series_ids.map(rename) })) } })),
     styles: { ...original.styles, ...Object.fromEntries(Object.entries(original.styles).map(([id, color]) => [rename(id), color])) },

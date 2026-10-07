@@ -1,4 +1,18 @@
 {
   "schema_version": "2.0.0",
-  "transformations": []
+  "transformations": [
+    {
+      "id": "derive-confederation-yield-spread",
+      "output_series_id": "confederation-10y-minus-gmbf-3m",
+      "method": "spread",
+      "inputs": [
+        "confederation-10y-annual",
+        "gmbf-3m-annual"
+      ],
+      "exclude_periods": [
+        "2026"
+      ],
+      "convention": "10Y minus 3M annual-average yields in percentage points for matched completed years. Exclude 2026: long Jan–Aug and short Jan–Sep are different observation windows. Subtract stored three-decimal input values."
+    }
+  ]
 }

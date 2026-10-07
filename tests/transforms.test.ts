@@ -52,6 +52,18 @@ test('mixed observation statuses require an explicit decision', () => {
   assert.throws(() => derive(growth, [input], [row('2020', 100), { ...row('2021', 110), revision_status: 'provisional' }]), /statuses differ/);
 });
 
+test('spread exclusions omit unequal partial-year windows before status combination', () => {
+  const long: Series = {...input,id:'partial-long',unit:{code:'percent',label:'Percent',dimension:'percent',scale:1}};
+  const short = {...long,id:'partial-short'};
+  const target: Series = {...long,id:'partial-spread',measurement:'spread',unit:{code:'percentage_points',label:'Percentage points',dimension:'percentage_points',scale:1}};
+  const spec: Transformation = {id:'exclude-partial-year',output_series_id:target.id,method:'spread',inputs:[long.id,short.id],exclude_periods:['2026'],convention:'Exclude unequal Jan–Aug and Jan–Sep windows.'};
+  const rows = [row('2025',.324,long.id),row('2025',-.028,short.id),{...row('2026',.384,long.id),revision_status:'provisional' as const},row('2026',-.066,short.id)];
+  const result = calculate(target,[long,short],rows,spec);
+  assert.deepEqual(result.map(row=>row.reference_period),['2025']);
+  assert.ok(Math.abs(result[0].value!-.352)<1e-12);
+  assert.throws(()=>calculate(target,[long,short],rows,{...spec,exclude_periods:[]}),/statuses differ/);
+});
+
 test('validation detects stale derived values and cycles', async t => {
   const { root, registry, rows } = await populatedFixture();
   t.after(() => rm(root, { recursive: true, force: true }));

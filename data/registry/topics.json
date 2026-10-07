@@ -43,7 +43,8 @@
         "confederation-10y",
         "gmbf-3m",
         "confederation-10y-annual",
-        "gmbf-3m-annual"
+        "gmbf-3m-annual",
+        "confederation-10y-minus-gmbf-3m"
       ]
     },
     {
