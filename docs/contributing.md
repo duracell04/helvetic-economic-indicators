@@ -88,3 +88,7 @@ Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.
 ### SNB policy rate
 
 Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.py data/extractions/snb-policy-rate.json data/extractions/originals/snb-policy-rate.csv ../snb-policy-rate.csv`, then import using `--importer audited-extract --series snb-policy-rate --source snb-policy-daily`. Review [the source audit](source-audit/snb-policy-rate.md) before updating a vintage.
+
+### Annual SNB policy rate
+
+Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.py data/extractions/snb-policy-rate-annual.json data/extractions/originals/snb-policy-rate.csv ../snb-policy-rate-annual.csv`, then import using `--importer audited-extract --series snb-policy-rate-annual --source snb-policy-daily`. Review [the source audit](source-audit/snb-policy-rate-annual.md) before updating a vintage.

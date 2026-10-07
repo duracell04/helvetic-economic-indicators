@@ -56,10 +56,23 @@ elif spec['format'] in ['snb-json','snb-csv']:
   source=list(csv.DictReader(lines[3:],delimiter=';'))
   if any(any(r.get(k)!=v for k,v in spec['selection'].items()) for r in source):raise ValueError('SNB source selection mismatch')
   values=[{'date':r['Date'],'value':r['Value']} for r in source if r['Value']!='']
- previous=None
- for v in values:
-  if spec.get('changes_only') and previous==v['value']:continue
-  rows.append([v['date'],spec['key'],v['value']]);previous=v['value']
+ if spec.get('aggregation')=='calendar-day-mean':
+  import datetime
+  from decimal import Decimal
+  if [v['date'] for v in values]!=sorted(set(v['date'] for v in values)):raise ValueError('SNB periods must be unique and sorted')
+  for year in spec['annual_years']:
+   start=datetime.date(year,1,1);end=datetime.date(year+1,1,1)
+   if values[0]['date']>start.isoformat() or values[-1]['date']<(end-datetime.timedelta(days=1)).isoformat():raise ValueError('Incomplete policy-rate year')
+   i=0;total=Decimal(0);day=start
+   while day<end:
+    while i+1<len(values) and values[i+1]['date']<=day.isoformat():i+=1
+    total+=Decimal(values[i]['value']);day+=datetime.timedelta(days=1)
+   rows.append([str(year),spec['key'],str(total/Decimal((end-start).days))])
+ else:
+  previous=None
+  for v in values:
+   if spec.get('changes_only') and previous==v['value']:continue
+   rows.append([v['date'],spec['key'],v['value']]);previous=v['value']
 else:raise ValueError('Unknown extraction format')
 with open(sys.argv[3],'w',newline='') as f:
  writer=csv.writer(f);writer.writerow(['reference_period','source_identifier','value']);writer.writerows(rows)
