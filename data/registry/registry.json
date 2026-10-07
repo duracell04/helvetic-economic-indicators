@@ -480,6 +480,26 @@
         "attribution": "State Secretariat for Economic Affairs",
         "conditions": "No dataset-specific public redistribution grant has been established. Candidate only; obtain applicable permission before publishing observations or source bytes."
       }
+    },
+    {
+      "id": "real-gdp-per-capita-inputs-candidate",
+      "publisher": "State Secretariat for Economic Affairs / Federal Statistical Office",
+      "title": "Candidate inputs for real GDP per capita",
+      "landing_url": "https://www.seco.admin.ch/en/gross-domestic-product",
+      "data_url": "https://www.seco.admin.ch/dam/en/sd-web/SaAbXCUZ5Fj8/qna_p_na.xlsx",
+      "source_identifier": "real_y / annual GDP / population denominator pending",
+      "audit_status": "candidate",
+      "definition": "Candidate annual chain-linked GDP per person; denominator convention and source permissions remain unresolved.",
+      "coverage": null,
+      "revision_practice": "Retain the original source vintage and documented revisions before any import.",
+      "rights": {
+        "redistribution": "unknown",
+        "licence": null,
+        "evidence_url": "https://www.admin.ch/en/terms-and-conditions",
+        "reviewed_on": "2026-10-08",
+        "attribution": "State Secretariat for Economic Affairs / Federal Statistical Office",
+        "conditions": "No dataset-specific public redistribution grant has been established. Candidate only; obtain applicable permission before publishing observations or source bytes."
+      }
     }
   ],
   "series": [
@@ -499,14 +519,13 @@
       "institutional_coverage": "Swiss resident population",
       "instrument": null,
       "maturity": null,
-      "aggregation": "Preserve the source volume methodology and population convention.",
+      "aggregation": "Candidate real GDP per person; compatible population convention must be verified before derivation.",
       "source_ids": [
-        "fso",
-        "history"
+        "real-gdp-per-capita-inputs-candidate"
       ],
-      "source_identifier": null,
+      "source_identifier": "real_y / annual GDP / population denominator pending",
       "breaks": [],
-      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "usage_notes": "Candidate. Audit on 8 October 2026: Resolve the real-GDP source reuse grant and verify a compatible published annual-average population denominator, or obtain an official real-GDP-per-capita series with documented methodology and permission. No observations are published. See docs/source-audit/real-gdp-per-capita.md.",
       "measurement": "level",
       "price_basis": "real",
       "aggregation_kind": "sum"
