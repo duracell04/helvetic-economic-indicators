@@ -173,3 +173,33 @@ test('production published real growth is selectable with metadata and downloada
  expect(rows).toHaveLength(77);expect(rows[0].value).toBe(-3.49393473432399);expect(rows.at(-1).value).toBe(1.60786486422242);
  const dimensions=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,width:innerWidth}));expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.width);
 });
+
+
+test('every verified dataset is catalogued, downloadable and selectable at its supported frequency',async({page})=>{
+ test.setTimeout(120000);
+ const origin='http://127.0.0.1:4323/helvetic-economic-indicators/';
+ const data=await (await page.request.get(`${origin}data/atlas.json`)).json() as AtlasData;
+ const baseline=new Set(['confederation-10y-annual','gmbf-3m-annual','confederation-10y-minus-gmbf-3m','general-government-debt-ratio','nominal-gdp','real-gdp-growth']);
+ for(const series of data.registry.series.filter(s=>s.verification==='verified'&&!baseline.has(s.id))){
+  const expected=data.observations.filter(o=>o.series_id===series.id);
+  if(!expected.length)continue;
+  await page.goto(`${origin}series/${series.id}/`);
+  await expect(page.getByRole('heading',{name:series.title,exact:true})).toBeVisible();
+  await expect(page.locator('body')).toContainText(`${expected.length} observations available.`);
+  for(const extension of ['json','csv']){
+   const link=page.getByRole('link',{name:extension.toUpperCase()+' ↓',exact:true});
+   const response=await page.request.get(new URL((await link.getAttribute('href'))!,origin).href);expect(response.ok()).toBe(true);
+   if(extension==='json')expect(await response.json()).toEqual(expected);else expect(await response.text()).toContain('series_id,reference_period,value,source_snapshot_ids,publication_date,value_kind,revision_status');
+  }
+  await page.goto(origin);await expect(page.locator('#atlas')).toHaveAttribute('data-ready','true');
+  await page.locator('#add-indicator').click();
+  const button=page.getByRole('button',{name:`Add ${series.title}`,exact:true}).first();
+  if(series.frequency==='annual'){
+   await expect(button).toBeEnabled();await button.click();
+   const chart=page.locator('.chart-panel').filter({has:page.locator(`[data-indicator="${series.id}"]`)}).last();
+   await expect(chart).toBeVisible();await chart.locator('svg').focus();await chart.locator('svg').press('End');
+   await expect(page.locator('#readout .readout-row').filter({hasText:series.title}).first()).toBeVisible();
+  }else{await expect(button).toBeDisabled();await page.getByRole('button',{name:'Close indicator selector'}).click();}
+  const dimensions=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,width:innerWidth}));expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.width);
+ }
+});

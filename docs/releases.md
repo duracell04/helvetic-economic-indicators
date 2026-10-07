@@ -50,3 +50,7 @@ No real observations, verified historical coverage, chart findings or unrestrict
 ## 8 October 2026 — real GDP growth
 
 Add 77 published FSO real annual changes, 1949–2025, in a separate indicator commit. [Audit](source-audit/real-gdp-growth.md).
+
+## 8 October 2026 — population
+
+Add 165 published year-end counts, 1861–2025, preserving reconstructed census history and register transitions. [Audit](source-audit/population.md).

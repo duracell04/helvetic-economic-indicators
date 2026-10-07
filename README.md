@@ -38,7 +38,7 @@ npm run dev
 
 `check` validates provenance and registries, runs pipeline/calculation/composition tests, checks TypeScript, builds production, and verifies Pages paths and publication isolation. Browser tests run the built demo and production artifacts at ports 4322/4323 with desktop and phone viewports. `npm run check:all` runs both check suites (install the browser first).
 
-Production starts with government financing yields, their spread and broad public debt: 410 verified data points in six downloadable series, including nominal GDP available through **Add indicator** and the catalogue. Other indicator definitions remain candidates. Only verified, redistributable real data may enter public downloads and the chart payload. Forecast and reconstructed points retain their explicit statuses. Builds fetch no live economic data. Historical debt data and adaptations use CC BY-NC-SA 4.0; modern debt data retain IMF and ecolod terms. These data do not inherit the MIT software licence.
+Production starts with government financing yields, their spread and broad public debt: 575 verified data points in six downloadable series, including nominal GDP available through **Add indicator** and the catalogue. Other indicator definitions remain candidates. Only verified, redistributable real data may enter public downloads and the chart payload. Forecast and reconstructed points retain their explicit statuses. Builds fetch no live economic data. Historical debt data and adaptations use CC BY-NC-SA 4.0; modern debt data retain IMF and ecolod terms. These data do not inherit the MIT software licence.
 
 ## Independent layers
 
@@ -93,3 +93,5 @@ The owner and repository name from `GITHUB_REPOSITORY` determine `https://<owner
 [MIT](LICENSE) covers the software and original documentation; datasets retain source-specific usage terms. See [DATA_LICENSES.md](DATA_LICENSES.md).
 
 Published real GDP growth (1949–2025) is selectable with historical reconstruction and the 1995 methodology boundary.
+
+Population is available for 1861–2025 as published year-end counts in persons.
