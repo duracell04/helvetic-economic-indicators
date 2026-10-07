@@ -1,5 +1,13 @@
 # Interactive atlas verification
 
+## Broad government gross debt addition — 7 October 2026
+
+`npm run check`, the isolated demo build and all 14 desktop/mobile browser cases passed. Production has 255 data points in four datasets, 31 pages and 446 checked internal links. Source-specific checks reproduce the historical percent conversion and submitted rounding, compare the two-decimal modern transcription against official IMF readings, preserve provenance and reject inclusion of JST's earlier central-government history.
+
+Chart checks confirm the debt ratio has its own panel, source breaks at 1988/1990 and a dashed 2025–2026 forecast connector. Year inspection identifies 2026 as forecast/provisional, while yields remain partial-year observed/provisional and the spread has no 2026 value. Definition information distinguishes Maastricht debt; downloads communicate dataset attribution and reuse terms. A resize check waits for the replacement overlay before reading its coordinates.
+
+## Foundation verification
+
 Verified locally on 7 October 2026 using Node 24.
 
 | Check | Result |

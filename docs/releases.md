@@ -1,5 +1,13 @@
 # Release notes
 
+## 2026-10-07 — General government gross debt / GDP
+
+- Published 81 annual ratios for 1946–2026 in their own production panel; the default now has yields, completed-year spreads and broad gross debt.
+- Kept the broad concept distinct from Maastricht debt and Confederation-only debt. Marked historical reconstruction and the 1988/1990 source-vintage boundaries; 2025 is provisional and 2026 is an IMF forecast with a dashed connector.
+- Retained three checked CSV extractions: JST R6 fractional ratios, official IMF DataMapper readings and the cited two-decimal WEO transcription. Documented attribution and non-commercial/share-alike terms on the downloads page and in the manifest.
+- Confirmed the Guex & Guex supplementary table is downloadable; its earlier reconstruction is reserved for a separately audited extension rather than silently merged into this composite.
+- Validation: production data, registry and reproducibility checks, Astro/TypeScript, static build/link checks, isolated demo and all 14 desktop/mobile browser checks passed. The production artifact has 255 data points in four datasets and no synthetic observations. The pending equity preparation remains outside this commit.
+
 ## 2026-10-07 — First verified data: Confederation yields
 
 - Added the supplied 1946–2026 annual long-yield history and 1980–2026 GMBF history, retaining three decimals, publisher terms and four immutable source snapshots.

@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0.0",
-  "default_preset_id": "verified-financing",
+  "default_preset_id": "verified-macro",
   "presets": [
     {
       "id": "overview",
@@ -178,6 +178,59 @@
             "title": "10Y − 3M spread · completed years",
             "series_ids": [
               "confederation-10y-minus-gmbf-3m"
+            ],
+            "axis": {
+              "mode": "native",
+              "base_year": null
+            },
+            "conventions_acknowledged": false
+          }
+        ],
+        "show_events": true,
+        "show_intervals": true,
+        "show_raw": false,
+        "annotation_ids": []
+      }
+    },
+    {
+      "id": "verified-macro",
+      "title": "Verified financing and public debt",
+      "config": {
+        "version": "2.0.0",
+        "preset_id": "verified-macro",
+        "start_year": 1946,
+        "end_year": 2026,
+        "panels": [
+          {
+            "id": "financing",
+            "title": "Government financing · 2026 partial year",
+            "series_ids": [
+              "confederation-10y-annual",
+              "gmbf-3m-annual"
+            ],
+            "axis": {
+              "mode": "native",
+              "base_year": null
+            },
+            "conventions_acknowledged": true
+          },
+          {
+            "id": "yield-spread",
+            "title": "10Y − 3M spread · completed years",
+            "series_ids": [
+              "confederation-10y-minus-gmbf-3m"
+            ],
+            "axis": {
+              "mode": "native",
+              "base_year": null
+            },
+            "conventions_acknowledged": false
+          },
+          {
+            "id": "public-debt",
+            "title": "General government gross debt / GDP · 2026 forecast",
+            "series_ids": [
+              "general-government-debt-ratio"
             ],
             "axis": {
               "mode": "native",

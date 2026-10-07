@@ -200,6 +200,66 @@
         "attribution": "Swiss National Bank, Money market rates, EG3M, accessed 2026-10-07. Annual and partial-year averages calculated by Helvetic Economic Indicators.",
         "conditions": "Non-commercial educational use compatible with the data purpose, with source attribution. Commercial reuse may require SNB consent. Third-party rights and the original quotation convention remain applicable."
       }
+    },
+    {
+      "id": "jst-swiss-public-debt",
+      "publisher": "Jordà–Schularick–Taylor Macrohistory Database",
+      "title": "Release 6: Swiss public debt / GDP",
+      "landing_url": "https://www.macrohistory.net/database/",
+      "data_url": "https://www.macrohistory.net/app/download/9834512569/JSTdatasetR6.xlsx?t=1763503850",
+      "source_identifier": "JSTdatasetR6.xlsx / Sheet1 / iso=CHE / debtgdp / 1946–1989",
+      "audit_status": "verified",
+      "definition": "Annual debt/GDP fractions. 1946–1987 uses HSSO U.45 total debts of Confederation, cantons and municipalities divided by JST nominal GDP; 1988–1989 uses the IMF WEO vintage compiled by JST. Excludes JST central-government-only history before 1946.",
+      "coverage": "1946–1989 extracted from Release 6",
+      "revision_practice": "Release 6 download vintage retrieved 2026-10-07; historical values and source splices may be revised in later releases. Retain this vintage.",
+      "rights": {
+        "redistribution": "permitted",
+        "licence": "CC BY-NC-SA 4.0",
+        "evidence_url": "https://www.macrohistory.net/database/licence-terms/",
+        "reviewed_on": "2026-10-07",
+        "attribution": "Òscar Jordà, Moritz Schularick, and Alan M. Taylor. 2017. “Macrofinancial History and the New Business Cycle Facts.” NBER Macroeconomics Annual 2016, volume 31, edited by Martin Eichenbaum and Jonathan A. Parker. Chicago: University of Chicago Press. Release 6, accessed 2026-10-07. Swiss 1946–1989 debtgdp extracted, converted to percent and rounded to one decimal by Helvetic Economic Indicators.",
+        "conditions": "Non-commercial reuse and sharing only, with the specified citation and identical CC BY-NC-SA 4.0 terms. Identify extraction, unit conversion and rounding. The historical component and its adaptations do not inherit the MIT software licence."
+      }
+    },
+    {
+      "id": "imf-weo-swiss-gross-debt",
+      "publisher": "International Monetary Fund",
+      "title": "World Economic Outlook, April 2026: Swiss general government gross debt",
+      "landing_url": "https://www.imf.org/external/datamapper/GGXWDG_NGDP@WEO/CHE",
+      "data_url": "https://www.imf.org/external/datamapper/api/v1/GGXWDG_NGDP/CHE",
+      "source_identifier": "WEO April 2026 / GGXWDG_NGDP / CHE",
+      "audit_status": "verified",
+      "definition": "General government gross debt as a percentage of GDP. Official DataMapper observations are displayed at one decimal; used as an independent cross-check of the two-decimal transcription, not as its precision source. 2026 is a forecast.",
+      "coverage": "1990–2026 selected from the April 2026 WEO vintage",
+      "revision_practice": "WEO histories and staff estimates can change between semiannual releases. DataMapper has one-decimal precision. The latest completed-year reading is retained as provisional.",
+      "rights": {
+        "redistribution": "permitted",
+        "licence": "IMF Copyright and Usage: special terms for statistical Data",
+        "evidence_url": "https://www.imf.org/en/about/copyright-and-terms",
+        "reviewed_on": "2026-10-07",
+        "attribution": "Source: International Monetary Fund, World Economic Outlook (April 2026), GGXWDG_NGDP, Switzerland. https://www.imf.org/external/datamapper/GGXWDG_NGDP@WEO/CHE. Accessed 2026-10-07; Swiss 1990–2026 extract.",
+        "conditions": "Statistical data may be extracted, transformed and redistributed with accurate IMF attribution and disclosure of transformations. Communicate IMF usage terms to downstream users. This atlas is non-commercial; potential commercial reuse requires contacting the IMF. No IMF endorsement is implied."
+      }
+    },
+    {
+      "id": "ecolod-imf-swiss-gross-debt",
+      "publisher": "International Monetary Fund; transcription by ecolod / Team KitaSan",
+      "title": "Swiss general government gross debt / GDP: two-decimal WEO transcription",
+      "landing_url": "https://en.ecolod.org/country/CHE/gov-debt-gdp.html",
+      "data_url": "https://en.ecolod.org/country/CHE/gov-debt-gdp.html",
+      "source_identifier": "CHE / gov-debt-gdp / WEO April 2026 / 1990–2026",
+      "audit_status": "verified",
+      "definition": "IMF general government gross debt / GDP, percent, displayed at up to two decimal places. The table labels 1990–2025 Actual and 2026 Forecast. Cross-checked against official IMF DataMapper at its one-decimal precision.",
+      "coverage": "1990–2026",
+      "revision_practice": "Table states April 2026 WEO via ecodb.net. Retain the retrieved table vintage; revise the complete affected history when WEO changes. The source Actual label is not a guarantee of final statistical revision status.",
+      "rights": {
+        "redistribution": "permitted",
+        "licence": "CC BY 4.0 for ecolod data; underlying IMF statistical-data terms also apply",
+        "evidence_url": "https://en.ecolod.org/country/CHE/gov-debt-gdp.html",
+        "reviewed_on": "2026-10-07",
+        "attribution": "Source: International Monetary Fund, World Economic Outlook (April 2026), Switzerland, GGXWDG_NGDP; annual table distributed by ecolod / Team KitaSan via ecodb.net, https://en.ecolod.org/country/CHE/gov-debt-gdp.html. Accessed 2026-10-07; table extracted to CSV.",
+        "conditions": "Preserve IMF and ecolod attribution, link CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/) and identify extraction. Underlying IMF data-use conditions remain applicable; this educational atlas is non-commercial."
+      }
     }
   ],
   "series": [
@@ -839,10 +899,10 @@
     },
     {
       "id": "general-government-debt-ratio",
-      "title": "General-government debt / GDP",
-      "verification": "candidate",
+      "title": "General government gross debt / GDP",
+      "verification": "verified",
       "data_class": "real",
-      "definition": "Proposed annual companion to general-government-debt. Exact preparation convention requires source audit.",
+      "definition": "Swiss general government gross debt as a percentage of nominal GDP. Composite of JST/HSSO historical ratios for 1946–1987, JST-compiled IMF ratios for 1988–1989 and the April 2026 IMF WEO table for 1990–2026. The early aggregation and modern IMF liability/consolidation conventions differ; source changes are explicit. This is not the narrower Maastricht debt ratio.",
       "unit": {
         "code": "percent",
         "label": "Percent",
@@ -850,17 +910,27 @@
         "scale": 1
       },
       "frequency": "annual",
-      "institutional_coverage": "Consolidated Swiss general government",
-      "instrument": null,
+      "institutional_coverage": "Swiss general government; historical Confederation, cantons and municipalities, modern IMF general-government coverage",
+      "instrument": "Gross government debt; historical and IMF definitions differ",
       "maturity": null,
-      "aggregation": "Annual convention to be verified: end of period",
+      "aggregation": "Annual gross debt stock divided by annual nominal GDP; 2026 is an IMF forecast",
       "source_ids": [
-        "ffa",
-        "history"
+        "jst-swiss-public-debt",
+        "imf-weo-swiss-gross-debt",
+        "ecolod-imf-swiss-gross-debt"
       ],
-      "source_identifier": null,
-      "breaks": [],
-      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "source_identifier": "JST R6 CHE debtgdp (1946–1989); IMF WEO April 2026 GGXWDG_NGDP (1990–2026)",
+      "breaks": [
+        {
+          "period": "1988",
+          "description": "JST changes from HSSO U.45 total debt / historical GDP to IMF WEO public debt / GDP. Coverage, liability and consolidation conventions may differ; do not interpret the splice as a seamless constant-definition series."
+        },
+        {
+          "period": "1990",
+          "description": "Continue JST 1988–1989 IMF vintage with April 2026 WEO history. Source vintage and precision change; the two-year JST bridge is not revised with the current WEO data."
+        }
+      ],
+      "usage_notes": "Not Maastricht debt and not Confederation-only debt. No pre-1946 total-government observations are imported from JST because earlier JST debt covers central government only. 1946–1987 is marked reconstructed; 2025 is observed/provisional and 2026 forecast/provisional (38.50% of GDP), not a completed observation. Historical ratios retain the supplied one-decimal rounding; modern ratios retain the cited two-decimal table. Historical data/adaptations: CC BY-NC-SA 4.0 with JST citation; modern data retain IMF and ecolod terms. Reuse this combined file for non-commercial purposes under CC BY-NC-SA 4.0, retaining all source attributions.",
       "measurement": "rate",
       "price_basis": "not_applicable",
       "aggregation_kind": "end_of_period"
@@ -1015,6 +1085,30 @@
       "sha256": "0a8fd19fe9f27e93cb587e0a2330e1db213f3ffe7b013aa1fbbb814de3ef2baa",
       "file": "data/raw/snb-eg3m-monthly-2026-10-07-0a8fd19fe9f27e93.csv",
       "source_url": "https://data.snb.ch/api/cube/zimoma/data/csv/en?dimSel=D0(EG3M)&fromDate=2007-01&toDate=2026-09"
+    },
+    {
+      "id": "jst-swiss-public-debt-2026-10-07-759c973f78245d49",
+      "source_id": "jst-swiss-public-debt",
+      "retrieved_on": "2026-10-07",
+      "sha256": "759c973f78245d4939ddfcfe9d2be3b6ef5ec3f7547c5f732c7f5bed6119c3a0",
+      "file": "data/raw/jst-swiss-public-debt-2026-10-07-759c973f78245d49.csv",
+      "source_url": "https://www.macrohistory.net/app/download/9834512569/JSTdatasetR6.xlsx?t=1763503850"
+    },
+    {
+      "id": "imf-weo-swiss-gross-debt-2026-10-07-0efe0708d744fa7d",
+      "source_id": "imf-weo-swiss-gross-debt",
+      "retrieved_on": "2026-10-07",
+      "sha256": "0efe0708d744fa7d7f22427c21f6d3ebed8f83f34052852af643261691e97010",
+      "file": "data/raw/imf-weo-swiss-gross-debt-2026-10-07-0efe0708d744fa7d.csv",
+      "source_url": "https://www.imf.org/external/datamapper/api/v1/GGXWDG_NGDP/CHE"
+    },
+    {
+      "id": "ecolod-imf-swiss-gross-debt-2026-10-07-bdd660a99e12ad8f",
+      "source_id": "ecolod-imf-swiss-gross-debt",
+      "retrieved_on": "2026-10-07",
+      "sha256": "bdd660a99e12ad8f551f9a8741caa101b44e1d896e6544673c2d4b96e26f6f79",
+      "file": "data/raw/ecolod-imf-swiss-gross-debt-2026-10-07-bdd660a99e12ad8f.csv",
+      "source_url": "https://en.ecolod.org/country/CHE/gov-debt-gdp.html"
     }
   ]
 }

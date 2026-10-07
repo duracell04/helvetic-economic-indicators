@@ -51,6 +51,7 @@ test('production exposes real yields and completed-year spreads without importin
   assert.deepEqual(spreads.filter(o=>o.value!<0).map(o=>o.reference_period),['1980','1981','1989','1990','1991','1992','1993','2023','2024']);
   assert.ok(spreads.every(o=>o.source_snapshot_ids.length===2));
   assert.ok(data.registry.series.every(s=>s.data_class==='real'));
-  assert.equal(data.observations.length,174);
-  assert.deepEqual(initialState(data).panels.map(p=>p.series_ids),[['confederation-10y-annual','gmbf-3m-annual'],['confederation-10y-minus-gmbf-3m']]);
+  const yieldIds=new Set(['confederation-10y-annual','gmbf-3m-annual','confederation-10y-minus-gmbf-3m']);
+  assert.equal(data.observations.filter(o=>yieldIds.has(o.series_id)).length,174);
+  assert.deepEqual(initialState(data).panels.slice(0,2).map(p=>p.series_ids),[['confederation-10y-annual','gmbf-3m-annual'],['confederation-10y-minus-gmbf-3m']]);
 });
