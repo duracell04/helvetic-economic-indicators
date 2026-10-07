@@ -100,3 +100,7 @@ Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.
 ### Historical SNB Libor target range — upper bound
 
 Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.py data/extractions/snb-libor-target-upper.json data/extractions/originals/snb-libor-target-upper.csv ../snb-libor-target-upper.csv`, then import using `--importer audited-extract --series snb-libor-target-upper --source snb-libor-upper-daily`. Review [the source audit](source-audit/snb-libor-target-upper.md) before updating a vintage.
+
+### Ten-year Confederation spot rate
+
+Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.py data/extractions/confederation-10y.json data/extractions/originals/confederation-10y.csv ../confederation-10y.csv`, then import using `--importer audited-extract --series confederation-10y --source snb-confederation-spot-daily`. Review [the source audit](source-audit/confederation-10y.md) before updating a vintage.
