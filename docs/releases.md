@@ -70,3 +70,7 @@ Add 42 published complete-year annual-average CPI inflation rates, 1984–2025, 
 ## 8 October 2026 — SNB policy rate
 
 Add 12 SNB policy-rate effective-change events, with the exact daily source retained and earlier instruments kept separate. [Audit](source-audit/snb-policy-rate.md).
+
+## 8 October 2026 — Annual SNB policy rate
+
+Add six explicitly calculated complete-year calendar-day-weighted policy-rate averages, 2020–2025; omit partial 2019 and 2026. [Audit](source-audit/snb-policy-rate-annual.md).

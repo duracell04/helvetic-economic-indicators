@@ -1,0 +1,7 @@
+series_id,reference_period,value,source_snapshot_ids,publication_date,value_kind,revision_status
+snb-policy-rate-annual,2020,-0.75,"[""snb-policy-daily-2026-10-08-c8c71e7adc346652""]",2026-10-05,observed,final
+snb-policy-rate-annual,2021,-0.75,"[""snb-policy-daily-2026-10-08-c8c71e7adc346652""]",2026-10-05,observed,final
+snb-policy-rate-annual,2022,-0.2513698630136986,"[""snb-policy-daily-2026-10-08-c8c71e7adc346652""]",2026-10-05,observed,final
+snb-policy-rate-annual,2023,1.5191780821917809,"[""snb-policy-daily-2026-10-08-c8c71e7adc346652""]",2026-10-05,observed,final
+snb-policy-rate-annual,2024,1.3312841530054644,"[""snb-policy-daily-2026-10-08-c8c71e7adc346652""]",2026-10-05,observed,final
+snb-policy-rate-annual,2025,0.17054794520547945,"[""snb-policy-daily-2026-10-08-c8c71e7adc346652""]",2026-10-05,observed,final

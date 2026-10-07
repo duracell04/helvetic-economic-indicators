@@ -924,29 +924,29 @@
     {
       "id": "snb-policy-rate-annual",
       "title": "Annual SNB policy rate",
-      "verification": "candidate",
+      "verification": "verified",
       "data_class": "real",
-      "definition": "Proposed annual companion to snb-policy-rate. Exact preparation convention requires source audit.",
+      "definition": "Calendar-day-weighted annual mean of the administered SNB policy rate, calculated from official effective daily rates for complete years.",
       "unit": {
         "code": "percent",
         "label": "Percent",
         "dimension": "percent",
         "scale": 1
       },
+      "measurement": "rate",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "annual_average",
       "frequency": "annual",
       "institutional_coverage": "Swiss monetary-policy framework",
       "instrument": "SNB policy rate",
       "maturity": null,
-      "aggregation": "Annual convention to be verified: annual average",
+      "aggregation": "Sum the effective rate for every calendar day, including weekends/holidays, then divide by 365 or 366. Carry the last effective policy rate until the next published change.",
       "source_ids": [
-        "snb"
+        "snb-policy-daily"
       ],
-      "source_identifier": null,
+      "source_identifier": "snbgwdzid/LZ/calendar-day-mean",
       "breaks": [],
-      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
-      "measurement": "rate",
-      "price_basis": "not_applicable",
-      "aggregation_kind": "annual_average"
+      "usage_notes": "Calculated annual averages for 2020–2025. 2019 starts in June and 2026 ends in October, so both incomplete years are absent. This is an atlas calculation, not an SNB-published annual table. No earlier instrument is spliced in. Source observations can be corrected in later vintages."
     },
     {
       "id": "confederation-10y-annual",
@@ -1290,6 +1290,14 @@
       "retrieved_on": "2026-10-08",
       "sha256": "5b83dea5c79cd84d82402c109d5982329249fd493b2fc1d19f282e3394e90e57",
       "file": "data/raw/snb-policy-daily-2026-10-08-5b83dea5c79cd84d.csv",
+      "source_url": "https://data.snb.ch/api/cube/snbgwdzid/data/csv/en?dimSel=D0(LZ)&fromDate=2019-06-13&toDate=2026-10-02"
+    },
+    {
+      "id": "snb-policy-daily-2026-10-08-c8c71e7adc346652",
+      "source_id": "snb-policy-daily",
+      "retrieved_on": "2026-10-08",
+      "sha256": "c8c71e7adc346652e46350665529e29064b27aebe8547af2a611bb67a8555a7a",
+      "file": "data/raw/snb-policy-daily-2026-10-08-c8c71e7adc346652.csv",
       "source_url": "https://data.snb.ch/api/cube/snbgwdzid/data/csv/en?dimSel=D0(LZ)&fromDate=2019-06-13&toDate=2026-10-02"
     }
   ]
