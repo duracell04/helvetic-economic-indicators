@@ -300,6 +300,26 @@
         "attribution": "FSO – Population census, ESPOP, STATPOP, © FSO 2026.",
         "conditions": "Free reuse with source attribution. Preserve the population definition and identify any transformations."
       }
+    },
+    {
+      "id": "fso-ilo-quarterly",
+      "publisher": "Federal Statistical Office",
+      "title": "ILO unemployment rate by sex, nationality and other characteristics",
+      "landing_url": "https://www.bfs.admin.ch/asset/en/36710104",
+      "data_url": "https://dam-api.bfs.admin.ch/hub/api/dam/assets/36710104/master",
+      "source_identifier": "T03.03.01.14; Trimestriel; total rate",
+      "audit_status": "verified",
+      "definition": "Swiss Labour Force Survey quarterly total ILO unemployment rate. The historical survey supplies only Q2 before 2010.",
+      "coverage": "1991-Q2–2026-Q2; Q2 only through 2009, all quarters from 2010",
+      "revision_practice": "Retained 18 August 2026 vintage; survey weighting and subsequent releases may revise observations.",
+      "rights": {
+        "redistribution": "permitted",
+        "licence": "FSO OPEN-BY",
+        "evidence_url": "https://www.bfs.admin.ch/bfs/en/home/bfs/bundesamt-statistik/nutzungsbedingungen.html",
+        "reviewed_on": "2026-10-08",
+        "attribution": "FSO – Swiss Labour Force Survey / ILO unemployment statistics, © FSO 2026.",
+        "conditions": "Open reuse with source attribution; identify transformations and preserve survey-definition changes."
+      }
     }
   ],
   "series": [
@@ -458,29 +478,42 @@
     {
       "id": "ilo-unemployment",
       "title": "ILO unemployment",
-      "verification": "candidate",
+      "verification": "verified",
       "data_class": "real",
-      "definition": "Survey-based unemployment rate kept separate from registered unemployment.",
+      "definition": "Quarterly total ILO unemployment rate in percent of the survey labour force, as published by FSO. Survey estimates are observed statistics.",
       "unit": {
         "code": "percent",
         "label": "Percent",
         "dimension": "percent",
         "scale": 1
       },
+      "measurement": "rate",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "native",
       "frequency": "quarterly",
       "institutional_coverage": "FSO survey labour force",
       "instrument": null,
       "maturity": null,
-      "aggregation": "Preserve survey frequency and source adjustment convention.",
+      "aggregation": "Published quarterly averages; Q2 only in 1991–2009. No interpolation for the missing historical quarters.",
       "source_ids": [
-        "fso"
+        "fso-ilo-quarterly"
       ],
-      "source_identifier": null,
-      "breaks": [],
-      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
-      "measurement": "rate",
-      "price_basis": "not_applicable",
-      "aggregation_kind": "native"
+      "source_identifier": "T03.03.01.14/quarterly/total/rate",
+      "breaks": [
+        {
+          "period": "2009-Q2",
+          "description": "Diplomats and international officials were included through 2008; subsequent survey population differs."
+        },
+        {
+          "period": "2010-Q1",
+          "description": "Continuous quarterly SLFS replaces the historical annual Q2 survey. Revised weighting introduces a 2009/2010 boundary."
+        },
+        {
+          "period": "2021-Q1",
+          "description": "Changes to the SLFS survey in 2021 create a documented comparability boundary."
+        }
+      ],
+      "usage_notes": "Preserve gaps before 2010. This is the ILO survey concept, distinct from registered unemployment. Final denotes this retained published vintage, not immunity from later revisions. Native quarterly data are available in the catalogue and downloads."
     },
     {
       "id": "cpi",
@@ -1181,6 +1214,14 @@
       "sha256": "de6246ed2ccb5cdb827e864a59c3467de0b05035d5ddb016328eb102c14dd32b",
       "file": "data/raw/fso-population-long-2026-10-08-de6246ed2ccb5cdb.csv",
       "source_url": "https://dam-api.bfs.admin.ch/hub/api/dam/assets/36681960/master"
+    },
+    {
+      "id": "fso-ilo-quarterly-2026-10-08-ba7af7f993cac5f2",
+      "source_id": "fso-ilo-quarterly",
+      "retrieved_on": "2026-10-08",
+      "sha256": "ba7af7f993cac5f250abeea09a5272e0ba8d39d9831df49dcab96b0dd297c55b",
+      "file": "data/raw/fso-ilo-quarterly-2026-10-08-ba7af7f993cac5f2.csv",
+      "source_url": "https://dam-api.bfs.admin.ch/hub/api/dam/assets/36710104/master"
     }
   ]
 }

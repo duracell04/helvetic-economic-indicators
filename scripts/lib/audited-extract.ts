@@ -1,0 +1,29 @@
+import { parse } from 'csv-parse/sync';
+import type { Importer } from './importer.ts';
+import { validPeriod, type Series } from './schema.ts';
+export type ExtractSpec = {
+ source: string; url: string; key: string; frequency: Series['frequency']; unit: Series['unit'];
+ first: string; last: string; minimum: number; maximum: number; publication: string | null;
+};
+export const extractSpecs: Record<string, ExtractSpec> = {
+ 'ilo-unemployment': {"source":"fso-ilo-quarterly","url":"https://dam-api.bfs.admin.ch/hub/api/dam/assets/36710104/master","key":"T03.03.01.14/quarterly/total/rate","frequency":"quarterly","unit":{"code":"percent","label":"Percent","dimension":"percent","scale":1},"first":"1991-Q2","last":"2026-Q2","minimum":0,"maximum":100,"publication":"2026-08-18"},
+};
+/** Verified, explicitly documented publisher extracts. Source bytes are checked before extraction. */
+export const auditedExtractImporter: Importer = {
+ name:'audited-extract',
+ parse(contents,{series,snapshot}){
+  const spec=extractSpecs[series.id];
+  if(!spec || series.frequency!==spec.frequency || series.unit.code!==spec.unit.code || series.unit.dimension!==spec.unit.dimension || series.unit.scale!==spec.unit.scale || series.source_identifier!==spec.key || !series.source_ids.includes(spec.source) || snapshot.source_id!==spec.source || snapshot.source_url!==spec.url)throw new Error('Incompatible audited extract identity or source');
+  const rows=parse(contents,{bom:true,columns:true,skip_empty_lines:true}) as Record<string,string>[];
+  if(!rows.length || Object.keys(rows[0]).join(',')!=='reference_period,source_identifier,value')throw new Error('Unexpected audited extract header');
+  const seen=new Set<string>();
+  return rows.map(row=>{
+   const period=row.reference_period;
+   if(row.source_identifier!==spec.key)throw new Error('Incompatible source selection');
+   if(!validPeriod(period,spec.frequency) || period<spec.first || period>spec.last)throw new Error('Unaudited extract period');
+   if(seen.has(period))throw new Error('Duplicate extract period');seen.add(period);
+   if(!/^-?(?:\d+(?:\.\d+)?|\.\d+)(?:[eE][+-]?\d+)?$/.test(row.value) || !Number.isFinite(Number(row.value)) || Number(row.value)<spec.minimum || Number(row.value)>spec.maximum)throw new Error('Invalid extract value');
+   return {series_id:series.id,reference_period:period,value:Number(row.value),source_snapshot_ids:[snapshot.id],publication_date:spec.publication,value_kind:'observed' as const,revision_status:'final' as const};
+  });
+ },
+};

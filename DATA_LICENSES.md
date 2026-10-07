@@ -15,3 +15,5 @@ The spread inherits its input source terms. Full attribution and conditions are 
 Before importing, record the exact terms URL, licence name, review date, attribution and conditions for that specific dataset. Split source records when different tables carry different rights. If restrictions prohibit public redistribution, keep the source reference and permitted processing code, but keep raw and canonical observations outside tracked and published directories.
 
 Test fixtures are original synthetic examples covered by the project's MIT licence. They are labelled synthetic, use reserved `example.invalid` source references, and are blocked from public exports. Their test metadata does not assert rights over real economic data.
+
+- **FSO ILO unemployment:** the exact dataset is OPEN-BY, with FSO attribution. See the [ILO audit](docs/source-audit/ilo-unemployment.md).
