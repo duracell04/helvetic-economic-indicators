@@ -540,6 +540,26 @@
         "attribution": "State Secretariat for Economic Affairs",
         "conditions": "No dataset-specific public redistribution grant has been established. Candidate only; obtain applicable permission before publishing observations or source bytes."
       }
+    },
+    {
+      "id": "ffa-general-government-debt-candidate",
+      "publisher": "Federal Finance Administration",
+      "title": "General-government gross debt — FS/GFS aggregate candidate",
+      "landing_url": "https://opendata.swiss/en/dataset/hauptaggregate-und-prognosen-im-fs-und-gfs-modell",
+      "data_url": "https://www.data.finance.admin.ch/static/assets/datasets/fs_dashboard/main_extern.csv",
+      "source_identifier": "FS/GFS main_extern / hh and variable selections pending",
+      "audit_status": "candidate",
+      "definition": "Annual general-government gross debt; exact fiscal model and source row selection remain unverified.",
+      "coverage": null,
+      "revision_practice": "Retain the original source vintage and documented revisions before any import.",
+      "rights": {
+        "redistribution": "permitted",
+        "licence": "opendata.swiss OPEN",
+        "evidence_url": "https://opendata.swiss/en/dataset/hauptaggregate-und-prognosen-im-fs-und-gfs-modell",
+        "reviewed_on": "2026-10-08",
+        "attribution": "Federal Finance Administration",
+        "conditions": "The exact FS/GFS main-aggregates catalogue record labels the linked data OPEN. Preserve source attribution. This permission does not settle debt definitions or grant rights to unrelated FFA resources."
+      }
     }
   ],
   "series": [
@@ -952,12 +972,11 @@
       "maturity": null,
       "aggregation": "Annual stock; Maastricht and broader liabilities require separate identities.",
       "source_ids": [
-        "ffa",
-        "history"
+        "ffa-general-government-debt-candidate"
       ],
-      "source_identifier": null,
+      "source_identifier": "FS/GFS main_extern / hh and variable selections pending",
       "breaks": [],
-      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "usage_notes": "Candidate. Audit on 8 October 2026: Retrieve usable original FFA data and codelists; verify consolidated general government, debt valuation/consolidation and the FS/GFS debt definition and currency scale. No observations are published. See docs/source-audit/general-government-debt.md.",
       "measurement": "level",
       "price_basis": "nominal",
       "aggregation_kind": "end_of_period"
