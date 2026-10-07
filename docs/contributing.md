@@ -76,3 +76,7 @@ For the same audited long GDP CSV, `--importer fso-real-growth --series real-gdp
 ### ILO unemployment
 
 Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.py data/extractions/ilo-unemployment.json data/extractions/originals/ilo-unemployment.xlsx ../ilo-unemployment.csv`, then import using `--importer audited-extract --series ilo-unemployment --source fso-ilo-quarterly`. Review [the source audit](source-audit/ilo-unemployment.md) before updating a vintage.
+
+### Consumer price index
+
+Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.py data/extractions/cpi.json data/extractions/originals/cpi.xlsx ../cpi.csv`, then import using `--importer audited-extract --series cpi --source fso-cpi-2025`. Review [the source audit](source-audit/cpi.md) before updating a vintage.

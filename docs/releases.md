@@ -58,3 +58,7 @@ Add 165 published year-end counts, 1861–2025, preserving reconstructed census 
 ## 8 October 2026 — ILO unemployment
 
 Add 85 published quarterly survey unemployment rates, preserving Q2-only historical coverage and survey transitions. [Audit](source-audit/ilo-unemployment.md).
+
+## 8 October 2026 — Consumer price index
+
+Add 526 monthly total CPI levels on the December 2025 base, preserving published precision and frequency. [Audit](source-audit/cpi.md).

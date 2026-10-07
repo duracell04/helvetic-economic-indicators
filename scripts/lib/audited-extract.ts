@@ -6,6 +6,7 @@ export type ExtractSpec = {
  first: string; last: string; minimum: number; maximum: number; publication: string | null;
 };
 export const extractSpecs: Record<string, ExtractSpec> = {
+ 'cpi': {"source":"fso-cpi-2025","url":"https://dam-api.bfs.admin.ch/hub/api/dam/assets/36878067/master","key":"LIK25B25/INDEX_m/100_100","frequency":"monthly","unit":{"code":"index","label":"December 2025 = 100","dimension":"cpi-index","scale":1},"first":"1982-12","last":"2026-09","minimum":1e-06,"maximum":1000000,"publication":"2026-10-01"},
  'ilo-unemployment': {"source":"fso-ilo-quarterly","url":"https://dam-api.bfs.admin.ch/hub/api/dam/assets/36710104/master","key":"T03.03.01.14/quarterly/total/rate","frequency":"quarterly","unit":{"code":"percent","label":"Percent","dimension":"percent","scale":1},"first":"1991-Q2","last":"2026-Q2","minimum":0,"maximum":100,"publication":"2026-08-18"},
 };
 /** Verified, explicitly documented publisher extracts. Source bytes are checked before extraction. */
