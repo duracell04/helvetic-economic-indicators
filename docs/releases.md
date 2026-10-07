@@ -98,3 +98,7 @@ Add 99 published year-end historical Lombard readings, 1907–2005, with 1989 an
 ## 8 October 2026 — Real GDP source audit
 
 Remains candidate: Establish a dataset-specific redistribution grant for the annual real-volume workbook, or obtain a compatible FSO OPEN-BY real-volume dataset. [Audit](source-audit/real-gdp.md).
+
+## 8 October 2026 — Real GDP per capita source audit
+
+Remains candidate: Resolve the real-GDP source reuse grant and verify a compatible published annual-average population denominator, or obtain an official real-GDP-per-capita series with documented methodology and permission. [Audit](source-audit/real-gdp-per-capita.md).
