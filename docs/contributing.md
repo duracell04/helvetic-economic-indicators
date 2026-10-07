@@ -96,3 +96,7 @@ Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.
 ### Historical SNB Libor target range — lower bound
 
 Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.py data/extractions/snb-libor-target-lower.json data/extractions/originals/snb-libor-target-lower.csv ../snb-libor-target-lower.csv`, then import using `--importer audited-extract --series snb-libor-target-lower --source snb-libor-lower-daily`. Review [the source audit](source-audit/snb-libor-target-lower.md) before updating a vintage.
+
+### Historical SNB Libor target range — upper bound
+
+Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.py data/extractions/snb-libor-target-upper.json data/extractions/originals/snb-libor-target-upper.csv ../snb-libor-target-upper.csv`, then import using `--importer audited-extract --series snb-libor-target-upper --source snb-libor-upper-daily`. Review [the source audit](source-audit/snb-libor-target-upper.md) before updating a vintage.

@@ -1,0 +1,13 @@
+{
+  "format": "snb-csv",
+  "original_file": "data/extractions/originals/snb-libor-target-upper.csv",
+  "original_sha256": "f52e321c8ed2f5ff95e7e790be1bd2ca7c34996fbb40c602d91b97974b79a12b",
+  "original_url": "https://data.snb.ch/api/cube/snbband/data/csv/en?dimSel=D0(OG)&fromDate=2000-01-03&toDate=2019-06-12",
+  "cube": "snbband",
+  "selection": {
+    "D0": "OG"
+  },
+  "changes_only": true,
+  "key": "snbband/OG/effective-changes",
+  "expected_count": 28
+}
