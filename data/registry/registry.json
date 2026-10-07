@@ -340,6 +340,26 @@
         "attribution": "FSO – Swiss Consumer Price Index, © FSO 2026.",
         "conditions": "Open reuse with source attribution. Preserve the index base and identify transformations."
       }
+    },
+    {
+      "id": "snb-policy-daily",
+      "publisher": "Swiss National Bank",
+      "title": "SNB policy rate, daily official observations",
+      "landing_url": "https://data.snb.ch/en/topics/snb/cube/snbgwdzid",
+      "data_url": "https://data.snb.ch/api/cube/snbgwdzid/data/csv/en?dimSel=D0(LZ)&fromDate=2019-06-13&toDate=2026-10-02",
+      "source_identifier": "snbgwdzid; D0=LZ; 2019-06-13–2026-10-02",
+      "audit_status": "verified",
+      "definition": "Daily administered SNB policy rate in percent. Exact selection excludes third-party SARON and other instruments.",
+      "coverage": "2019-06-13–2026-10-02, business-day official observations",
+      "revision_practice": "Retained publishing date 5 October 2026; source updates may correct historical data. No automatic refresh.",
+      "rights": {
+        "redistribution": "permitted",
+        "licence": "SNB non-commercial reuse with attribution",
+        "evidence_url": "https://www.snb.ch/en/srv/disclaimer_copyright",
+        "reviewed_on": "2026-10-08",
+        "attribution": "Swiss National Bank, SNB data portal, cube snbgwdzid, SNB policy rate (LZ), accessed 8 October 2026.",
+        "conditions": "Non-commercial use compatible with the data purpose, with source attribution. Commercial reuse requires an additional grant. The original selection includes only SNB own policy-rate data."
+      }
     }
   ],
   "series": [
@@ -592,29 +612,34 @@
     {
       "id": "snb-policy-rate",
       "title": "SNB policy rate",
-      "verification": "candidate",
+      "verification": "verified",
       "data_class": "real",
-      "definition": "Administered policy-rate observations at effective change dates, distinct from earlier instruments.",
+      "definition": "SNB policy rate in percent at its introduction and subsequent effective rate changes, extracted from the official daily LZ series.",
       "unit": {
         "code": "percent",
         "label": "Percent",
         "dimension": "percent",
         "scale": 1
       },
+      "measurement": "rate",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "native",
       "frequency": "event",
       "institutional_coverage": "Swiss monetary-policy framework",
       "instrument": "SNB policy rate",
       "maturity": null,
-      "aggregation": "Preserve effective-date changes; annual calendar-day weighting is a separate derivation.",
+      "aggregation": "First observed effective rate and each changed value; unchanged business-day repetitions are compressed. These are effective dates, not announcement dates.",
       "source_ids": [
-        "snb"
+        "snb-policy-daily"
       ],
-      "source_identifier": null,
-      "breaks": [],
-      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
-      "measurement": "rate",
-      "price_basis": "not_applicable",
-      "aggregation_kind": "native"
+      "source_identifier": "snbgwdzid/LZ/effective-changes",
+      "breaks": [
+        {
+          "period": "2019-06-13",
+          "description": "SNB policy rate introduced; replaces the earlier three-month Libor target range."
+        }
+      ],
+      "usage_notes": "12 effective-date observations, 13 June 2019–20 June 2025. The retained official daily source continues through 2 October 2026 with rate 0. No earlier instrument is spliced into this line. Event-frequency data are in the catalogue/downloads. Annual calendar-day averages are a separate series."
     },
     {
       "id": "snb-historical-instruments",
@@ -1258,6 +1283,14 @@
       "sha256": "1bc3763f72da7e35df83c61fd7a8e440d826594ed6749ac002a493b8331b4557",
       "file": "data/raw/fso-cpi-2025-2026-10-08-1bc3763f72da7e35.csv",
       "source_url": "https://dam-api.bfs.admin.ch/hub/api/dam/assets/36878067/master"
+    },
+    {
+      "id": "snb-policy-daily-2026-10-08-5b83dea5c79cd84d",
+      "source_id": "snb-policy-daily",
+      "retrieved_on": "2026-10-08",
+      "sha256": "5b83dea5c79cd84d82402c109d5982329249fd493b2fc1d19f282e3394e90e57",
+      "file": "data/raw/snb-policy-daily-2026-10-08-5b83dea5c79cd84d.csv",
+      "source_url": "https://data.snb.ch/api/cube/snbgwdzid/data/csv/en?dimSel=D0(LZ)&fromDate=2019-06-13&toDate=2026-10-02"
     }
   ]
 }

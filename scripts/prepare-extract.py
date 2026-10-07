@@ -46,13 +46,20 @@ if spec['format']=='xlsx':
    for i in range(spec['first_row'],spec['last_row']+1):
     period=cells.get(spec['period_column']+str(i));value=cells.get(spec['value_column']+str(i))
     if period is not None and value is not None:rows.append([period,spec['key'],value])
-elif spec['format']=='snb-json':
- series=next(s for s in json.loads(data)['timeseries'] if s['metadata']['key']==spec['series_key'])
+elif spec['format'] in ['snb-json','snb-csv']:
+ if spec['format']=='snb-json':
+  series=next(s for s in json.loads(data)['timeseries'] if s['metadata']['key']==spec['series_key'])
+  values=[{'date':v['date'],'value':str(v['value'])} for v in series['values'] if v['value'] is not None]
+ else:
+  lines=data.decode('utf-8-sig').splitlines()
+  if next(csv.reader([lines[0]],delimiter=';'))!=['CubeId',spec['cube']]:raise ValueError('SNB cube identity mismatch')
+  source=list(csv.DictReader(lines[3:],delimiter=';'))
+  if any(any(r.get(k)!=v for k,v in spec['selection'].items()) for r in source):raise ValueError('SNB source selection mismatch')
+  values=[{'date':r['Date'],'value':r['Value']} for r in source if r['Value']!='']
  previous=None
- for v in series['values']:
-  if v['value'] is None:continue
+ for v in values:
   if spec.get('changes_only') and previous==v['value']:continue
-  rows.append([v['date'],spec['key'],str(v['value'])]);previous=v['value']
+  rows.append([v['date'],spec['key'],v['value']]);previous=v['value']
 else:raise ValueError('Unknown extraction format')
 with open(sys.argv[3],'w',newline='') as f:
  writer=csv.writer(f);writer.writerow(['reference_period','source_identifier','value']);writer.writerows(rows)
