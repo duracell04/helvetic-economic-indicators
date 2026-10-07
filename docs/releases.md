@@ -106,3 +106,7 @@ Remains candidate: Resolve the real-GDP source reuse grant and verify a compatib
 ## 8 October 2026 — Registered unemployment source audit
 
 Remains candidate: Obtain an auditable national SECO/FSO monthly rate export, its denominator and method history, and a dataset-specific public redistribution grant. [Audit](source-audit/registered-unemployment.md).
+
+## 8 October 2026 — Annual registered unemployment source audit
+
+Remains candidate: Obtain an auditable national annual SECO/FSO rate table and its redistribution grant; verify full-year coverage and the published annual denominator/averaging convention. [Audit](source-audit/registered-unemployment-annual.md).
