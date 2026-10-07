@@ -660,6 +660,26 @@
         "attribution": "SIX Swiss Exchange",
         "conditions": "SIX historical index data and use are subject to purpose-specific licensing. No agreement authorizing this project's public observations, source snapshots or downloadable outputs was established. Derived output permission must also be confirmed."
       }
+    },
+    {
+      "id": "six-smic-candidate",
+      "publisher": "SIX Swiss Exchange",
+      "title": "SMIC total-return index — historical data candidate",
+      "landing_url": "https://www.six-group.com/en/market-data/indices/switzerland/equity/smi.html",
+      "data_url": null,
+      "source_identifier": "CH0000222130 / daily closing level candidate",
+      "audit_status": "candidate",
+      "definition": "SIX SMIC total-return index closing-level candidate",
+      "coverage": null,
+      "revision_practice": "Retain the original source vintage and documented revisions before any import.",
+      "rights": {
+        "redistribution": "restricted",
+        "licence": "SIX licence required; no applicable agreement established",
+        "evidence_url": "https://www.six-group.com/en/market-data/indices/licensing.html",
+        "reviewed_on": "2026-10-08",
+        "attribution": "SIX Swiss Exchange",
+        "conditions": "SIX historical index data and use are subject to purpose-specific licensing. No agreement authorizing this project's public observations, source snapshots or downloadable outputs was established. Derived output permission must also be confirmed."
+      }
     }
   ],
   "series": [
@@ -1170,10 +1190,10 @@
       "title": "SMIC total-return index",
       "verification": "candidate",
       "data_class": "real",
-      "definition": "Total-return index candidate with dividend treatment and redistribution terms awaiting audit.",
+      "definition": "SIX SMIC total-return daily closing index, ISIN CH0000222130; authorized historical dataset pending.",
       "unit": {
         "code": "index",
-        "label": "Source index points",
+        "label": "30 June 1988 = 1500",
         "dimension": "smic-index",
         "scale": 1
       },
@@ -1183,11 +1203,11 @@
       "maturity": null,
       "aggregation": "Align endpoints with SMI before comparing annual returns.",
       "source_ids": [
-        "six"
+        "six-smic-candidate"
       ],
-      "source_identifier": null,
+      "source_identifier": "CH0000222130 / daily closing level candidate",
       "breaks": [],
-      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "usage_notes": "Candidate. Audit on 8 October 2026: Obtain an authorized SIX historical SMIC closing-level dataset and a licence covering public website display and CSV/JSON redistribution; verify trading-date closes and original historical precision. No observations are published. See docs/source-audit/smic.md.",
       "measurement": "level",
       "price_basis": "not_applicable",
       "aggregation_kind": "native"
