@@ -90,3 +90,7 @@ Add 7,826 native-date ten-year Confederation spot-rate estimates, preserving his
 ## 8 October 2026 — Historical SNB discount rate — year end
 
 Add 92 published year-end historical discount-rate readings, 1907–1998, in a separate instrument series. [Audit](source-audit/snb-discount-rate.md).
+
+## 8 October 2026 — Historical SNB Lombard rate — year end
+
+Add 99 published year-end historical Lombard readings, 1907–2005, with 1989 and 2004 instrument annotations. Keep historical instruments separate. [Audit](source-audit/snb-lombard-rate.md).

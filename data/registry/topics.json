@@ -35,7 +35,8 @@
         "snb-policy-rate-annual",
         "snb-libor-target-lower",
         "snb-libor-target-upper",
-        "snb-discount-rate"
+        "snb-discount-rate",
+        "snb-lombard-rate"
       ]
     },
     {

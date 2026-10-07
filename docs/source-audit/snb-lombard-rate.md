@@ -1,0 +1,11 @@
+# Historical SNB Lombard rate
+
+Verified 8 October 2026. [SNB Historical time series 4, November 2007](https://www.snb.ch/public/publication/en/www-snb-ch/publications/statistical-publications/historical-time-series/2007/renditen_book/publications0_en/e_zinssaetze_u_renditen.book.pdf), table 1.1 column 2, printed pages 24–25. These are year-end readings. Retain all 99 published values for 1907–2005 and leave the blank 2006 entry absent.
+
+The PDF SHA-256 is `b4b27a0e8b1f861106f6f3442187064ffefc6c174075207fd9f1fe8f38363610`. Independent pypdf and pdfplumber extractions agreed on all 100 table rows; rendered headings and notes were inspected. The shared checked transcription, `data/extractions/checked/snb-official-rates.csv`, has SHA-256 `6503d28eec294f6eb4908d63f34bd149e70fffff1103690acc2491ec7016792c`. It is a transcription, not an original publisher CSV. The complete PDF is not redistributed.
+
+`python3 scripts/verify-historical-rates.py supplied.pdf` repeats the two-extractor comparison with pypdf/pdfplumber. The standard-library Lombard recipe selects column 2 from the checksum-pinned table and skips only source missing markers. Percent, scale 1, source precision retained. Publication month is November 2007, but the day is unknown; publication_date stays null.
+
+In May 1989 the rate became a daily calculation linked to a money-market rate. The table footnote specifies a one-percentage-point margin, while the narrative specifies two percentage points. This conflict is recorded rather than resolved through an unsupported assumption. Published figures remain unchanged. In 2004–2005 the table gives transitional Lombard rates equal to special-rate repo readings; the facility was abolished at the end of 2005. These instrument changes are annotated. No event dates are manufactured from annual observations.
+
+The publication expressly permits reproduction and publication of figures with source reference. Keep the Lombard, discount, lower/upper Libor target bounds and modern policy rate as separate series. The existing historical-instruments catalogue entry is a structural placeholder describing those separate series, not a blended data series. Annual year-end readings are available through the chart selector, detail page and downloads.

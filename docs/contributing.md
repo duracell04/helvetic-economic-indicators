@@ -108,3 +108,7 @@ Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.
 ### Historical SNB discount rate — year end
 
 Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.py data/extractions/snb-discount-rate.json data/extractions/originals/../checked/snb-official-rates.csv ../snb-discount-rate.csv`, then import using `--importer audited-extract --series snb-discount-rate --source snb-historical-discount`. Review [the source audit](source-audit/snb-discount-rate.md) before updating a vintage.
+
+### Historical SNB Lombard rate — year end
+
+Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.py data/extractions/snb-lombard-rate.json data/extractions/originals/../checked/snb-official-rates.csv ../snb-lombard-rate.csv`, then import using `--importer audited-extract --series snb-lombard-rate --source snb-historical-lombard`. Review [the source audit](source-audit/snb-lombard-rate.md) before updating a vintage.

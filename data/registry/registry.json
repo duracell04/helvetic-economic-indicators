@@ -440,6 +440,26 @@
         "attribution": "Swiss National Bank, Interest rates and yields, Historical time series 4, November 2007, table 1.1, printed pages 24–25.",
         "conditions": "Publication expressly permits reproduction and publication of figures with source reference. Only checked table figures are retained; the complete PDF is not redistributed."
       }
+    },
+    {
+      "id": "snb-historical-lombard",
+      "publisher": "Swiss National Bank",
+      "title": "Historical official SNB Lombard rate, year end",
+      "landing_url": "https://www.snb.ch/public/publication/en/www-snb-ch/publications/statistical-publications/historical-time-series/2007/renditen_book/publications0_en/e_zinssaetze_u_renditen.book.pdf",
+      "data_url": "https://www.snb.ch/public/publication/en/www-snb-ch/publications/statistical-publications/historical-time-series/2007/renditen_book/publications0_en/e_zinssaetze_u_renditen.book.pdf",
+      "source_identifier": "Historical time series 4, November 2007, table 1.1 column 2",
+      "audit_status": "verified",
+      "definition": "Published year-end official Lombard credit rate, in percent; historical instrument distinct from discount credit, Libor targets and the modern policy rate.",
+      "coverage": "1907–2005, annual year-end readings; the 2006 Lombard entry is blank",
+      "revision_practice": "Fixed November 2007 historical publication. Preserve the retained figures and table notes.",
+      "rights": {
+        "redistribution": "permitted",
+        "licence": "SNB historical figures: reproduction with source reference",
+        "evidence_url": "https://www.snb.ch/public/publication/en/www-snb-ch/publications/statistical-publications/historical-time-series/2007/renditen_book/publications0_en/e_zinssaetze_u_renditen.book.pdf",
+        "reviewed_on": "2026-10-08",
+        "attribution": "Swiss National Bank, Interest rates and yields, Historical time series 4, November 2007, table 1.1, printed pages 24–25.",
+        "conditions": "Publication expressly permits reproduction and publication of figures with source reference. Only checked table figures are retained; the complete PDF is not redistributed."
+      }
     }
   ],
   "series": [
@@ -726,16 +746,19 @@
       "title": "Historical SNB instruments",
       "verification": "candidate",
       "data_class": "real",
-      "definition": "Candidate catalogue entry to be split into instrument-specific series after source audit.",
+      "definition": "Structural catalogue entry for historical SNB instruments published as separate discount, Lombard and Libor target-bound series.",
       "unit": {
         "code": "percent",
         "label": "Percent",
         "dimension": "percent",
         "scale": 1
       },
+      "measurement": "rate",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "native",
       "frequency": "event",
       "institutional_coverage": "Historical Swiss monetary-policy frameworks",
-      "instrument": "To be split during audit",
+      "instrument": "Instrument-specific series listed in usage notes",
       "maturity": null,
       "aggregation": "Do not splice discount rates, Libor target ranges and policy rates.",
       "source_ids": [
@@ -744,10 +767,7 @@
       ],
       "source_identifier": null,
       "breaks": [],
-      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
-      "measurement": "rate",
-      "price_basis": "not_applicable",
-      "aggregation_kind": "native"
+      "usage_notes": "Structural catalogue placeholder. Verified historical instruments are published separately as snb-discount-rate, snb-lombard-rate, snb-libor-target-lower and snb-libor-target-upper. Their instrument changes and differing frequencies prevent a blended historical policy-rate series; this placeholder intentionally has no observations."
     },
     {
       "id": "confederation-long-yield",
@@ -1351,6 +1371,42 @@
       "source_identifier": "Historical time series 4/Table 1.1/discount/end-year",
       "breaks": [],
       "usage_notes": "92 year-end values, 1907–1998. Blank 1999–2006 table entries remain absent. The historical discount instrument is not joined into Libor targets or modern policy rates. The original source is a PDF; the committed CSV is a checked transcription of its figures."
+    },
+    {
+      "id": "snb-lombard-rate",
+      "title": "Historical SNB Lombard rate — year end",
+      "verification": "verified",
+      "data_class": "real",
+      "definition": "Published year-end official Lombard credit rate, in percent; historical instrument distinct from discount credit, Libor targets and the modern policy rate.",
+      "unit": {
+        "code": "percent",
+        "label": "Percent",
+        "dimension": "percent",
+        "scale": 1
+      },
+      "measurement": "rate",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "end_of_period",
+      "frequency": "annual",
+      "institutional_coverage": "Swiss monetary-policy framework",
+      "instrument": "SNB Lombard credit rate",
+      "maturity": null,
+      "aggregation": "Published year-end readings; no annual average or effective-date interpolation.",
+      "source_ids": [
+        "snb-historical-lombard"
+      ],
+      "source_identifier": "Historical time series 4/Table 1.1/lombard/end-year",
+      "breaks": [
+        {
+          "period": "1989",
+          "description": "From May 1989 the Lombard rate was calculated daily from a money-market rate rather than being tied to the discount rate. The publication gives conflicting margin descriptions; no homogeneous margin is assumed."
+        },
+        {
+          "period": "2004",
+          "description": "Published transitional Lombard readings equal the special-rate repo facility in 2004–2005. Lombard credit was abolished at the end of 2005."
+        }
+      ],
+      "usage_notes": "99 year-end values, 1907–2005. The blank 2006 Lombard entry remains absent. These are published year-end readings, not annual averages or an uninterrupted homogeneous policy-rate instrument. The CSV is a checked transcription of the source PDF. Table footnote and narrative disagree on the post-May-1989 margin; preserve the figures without inferring a margin."
     }
   ],
   "snapshots": [
@@ -1496,6 +1552,14 @@
       "retrieved_on": "2026-10-08",
       "sha256": "e049daff3e67327cd2b2362f1ee252179958bcfd11dbb896f3a3edebf6178e4b",
       "file": "data/raw/snb-historical-discount-2026-10-08-e049daff3e67327c.csv",
+      "source_url": "https://www.snb.ch/public/publication/en/www-snb-ch/publications/statistical-publications/historical-time-series/2007/renditen_book/publications0_en/e_zinssaetze_u_renditen.book.pdf"
+    },
+    {
+      "id": "snb-historical-lombard-2026-10-08-02906a5a1a7fba1d",
+      "source_id": "snb-historical-lombard",
+      "retrieved_on": "2026-10-08",
+      "sha256": "02906a5a1a7fba1dd87ec8a7d99a4ef0751538ae5577b1bc17b9a7dded1beb6f",
+      "file": "data/raw/snb-historical-lombard-2026-10-08-02906a5a1a7fba1d.csv",
       "source_url": "https://www.snb.ch/public/publication/en/www-snb-ch/publications/statistical-publications/historical-time-series/2007/renditen_book/publications0_en/e_zinssaetze_u_renditen.book.pdf"
     }
   ]

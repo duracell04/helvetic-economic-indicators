@@ -1,0 +1,21 @@
+{
+  "format": "checked-table-csv",
+  "original_file": "data/extractions/checked/snb-official-rates.csv",
+  "original_sha256": "6503d28eec294f6eb4908d63f34bd149e70fffff1103690acc2491ec7016792c",
+  "input_kind": "checked transcription of publisher table; not original publisher CSV",
+  "publisher_pdf_url": "https://www.snb.ch/public/publication/en/www-snb-ch/publications/statistical-publications/historical-time-series/2007/renditen_book/publications0_en/e_zinssaetze_u_renditen.book.pdf",
+  "publisher_pdf_sha256": "b4b27a0e8b1f861106f6f3442187064ffefc6c174075207fd9f1fe8f38363610",
+  "publisher_pdf_pages": [
+    25,
+    26
+  ],
+  "columns": [
+    "year",
+    "discount",
+    "lombard",
+    "special_repo"
+  ],
+  "value_column": "lombard",
+  "key": "Historical time series 4/Table 1.1/lombard/end-year",
+  "expected_count": 99
+}
