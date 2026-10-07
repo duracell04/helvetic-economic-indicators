@@ -580,6 +580,26 @@
         "attribution": "Federal Finance Administration",
         "conditions": "The exact FS/GFS main-aggregates catalogue record labels the linked data OPEN. Preserve source attribution. This permission does not settle debt definitions or grant rights to unrelated FFA resources."
       }
+    },
+    {
+      "id": "ffa-confederation-debt-ratio-candidate",
+      "publisher": "Federal Finance Administration",
+      "title": "Confederation debt / GDP — FS/GFS aggregate candidate",
+      "landing_url": "https://opendata.swiss/en/dataset/hauptaggregate-und-prognosen-im-fs-und-gfs-modell",
+      "data_url": "https://www.data.finance.admin.ch/static/assets/datasets/fs_dashboard/main_extern.csv",
+      "source_identifier": "FS/GFS main_extern / hh and variable selections pending",
+      "audit_status": "candidate",
+      "definition": "Annual confederation debt / gdp; exact fiscal model and source row selection remain unverified.",
+      "coverage": null,
+      "revision_practice": "Retain the original source vintage and documented revisions before any import.",
+      "rights": {
+        "redistribution": "permitted",
+        "licence": "opendata.swiss OPEN",
+        "evidence_url": "https://opendata.swiss/en/dataset/hauptaggregate-und-prognosen-im-fs-und-gfs-modell",
+        "reviewed_on": "2026-10-08",
+        "attribution": "Federal Finance Administration",
+        "conditions": "The exact FS/GFS main-aggregates catalogue record labels the linked data OPEN. Preserve source attribution. This permission does not settle debt definitions or grant rights to unrelated FFA resources."
+      }
     }
   ],
   "series": [
@@ -1307,12 +1327,11 @@
       "maturity": null,
       "aggregation": "Annual convention to be verified: end of period",
       "source_ids": [
-        "ffa",
-        "history"
+        "ffa-confederation-debt-ratio-candidate"
       ],
-      "source_identifier": null,
+      "source_identifier": "FS/GFS main_extern / hh and variable selections pending",
       "breaks": [],
-      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "usage_notes": "Candidate. Audit on 8 October 2026: Retrieve usable original FFA data and codelists; verify Confederation debt and nominal-GDP denominator, debt valuation/consolidation and the matching annual nominal-GDP vintage and ratio convention. No observations are published. See docs/source-audit/confederation-debt-ratio.md.",
       "measurement": "rate",
       "price_basis": "not_applicable",
       "aggregation_kind": "end_of_period"
