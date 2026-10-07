@@ -84,9 +84,9 @@ Verified Swiss-data acquisition, native-frequency charts, additional chart types
 
 ## GitHub Pages
 
-Attach a GitHub destination and enable **Settings → Pages → GitHub Actions**. Pushes to `main` run checks including the demo browser suite, then deploy **only `dist/` production artifacts**. Pull requests validate without deploying.
+The repository is hosted at [duracell04/helvetic-economic-indicators](https://github.com/duracell04/helvetic-economic-indicators), with **Settings → Pages → GitHub Actions** enabled. Pushes to `main` run checks including the demo browser suite, then deploy **only `dist/` production artifacts**. Pull requests validate without deploying.
 
-The owner and repository name from `GITHUB_REPOSITORY` determine `https://<owner>.github.io/helvetic-economic-indicators/`; account sites use `/`. Optional local overrides are `SITE_URL` and `SITE_BASE` (use identical settings for build/path checks). The configuration follows [Astro's official deployment guide](https://docs.astro.build/en/guides/deploy/github/). No custom domain is configured. Hosted deployment awaits a GitHub destination.
+The owner and repository name from `GITHUB_REPOSITORY` determine `https://<owner>.github.io/helvetic-economic-indicators/`; account sites use `/`. Optional local overrides are `SITE_URL` and `SITE_BASE` (use identical settings for build/path checks). The configuration follows [Astro's official deployment guide](https://docs.astro.build/en/guides/deploy/github/). No custom domain is configured. The [production website](https://duracell04.github.io/helvetic-economic-indicators/) shows an availability message until verified observations are published; the synthetic demonstration remains a local preview.
 
 ## Licences
 

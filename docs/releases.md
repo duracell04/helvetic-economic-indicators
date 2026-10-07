@@ -10,7 +10,7 @@
 - Added demo-only deterministic observations, status/gap/break styling, sourced-annotation contracts and isolated share/save state.
 - Added extensibility, desktop/mobile interaction and publication-isolation checks; Pages deploys only checked production artifacts.
 
-No Swiss observations or historical reference claims are verified in this release. Deployment awaits a GitHub destination.
+No Swiss observations or historical reference claims are verified in this release. The production shell is deployed at https://duracell04.github.io/helvetic-economic-indicators/ through GitHub Actions; synthetic preview observations are excluded.
 
 ## 0.1.0 — Foundation
 
