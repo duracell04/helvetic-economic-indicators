@@ -138,3 +138,7 @@ Remains candidate: Obtain an authorized SIX historical SMI closing-level dataset
 ## 8 October 2026 — SMIC total-return index source audit
 
 Remains candidate: Obtain an authorized SIX historical SMIC closing-level dataset and a licence covering public website display and CSV/JSON redistribution; verify trading-date closes and original historical precision. [Audit](source-audit/smic.md).
+
+## 8 October 2026 — SMI annual price return source audit
+
+Remains candidate: Obtain an authorized SIX historical SMI closing-level dataset and a licence covering public derived annual returns and downloads; verify matching year-end trading closes. [Audit](source-audit/smi-annual-return.md).
