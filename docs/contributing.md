@@ -72,3 +72,7 @@ Add memberships to `topics.json` and panels to `presets.json`; indicators can ap
 For the same audited long GDP CSV, `--importer fso-real-growth --series real-gdp-growth` selects published real annual changes (ACPP). It does not calculate growth from nominal levels.
 
 `--importer fso-population --series population --source fso-population-long` imports the original POP_DEC (31 December) series in persons.
+
+### ILO unemployment
+
+Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.py data/extractions/ilo-unemployment.json data/extractions/originals/ilo-unemployment.xlsx ../ilo-unemployment.csv`, then import using `--importer audited-extract --series ilo-unemployment --source fso-ilo-quarterly`. Review [the source audit](source-audit/ilo-unemployment.md) before updating a vintage.

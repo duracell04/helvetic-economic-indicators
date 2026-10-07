@@ -1,0 +1,19 @@
+{
+  "format": "xlsx",
+  "original_sha256": "a2f571a26b71b62d7b3cb3d9ffd191ba1fa00f0b8110b1384106cbe8845ec876",
+  "sheet": "Trimestriel",
+  "layout": "horizontal",
+  "period_row": 5,
+  "value_row": 8,
+  "start_column": 2,
+  "end_column": 87,
+  "period_format": "quarter",
+  "key": "T03.03.01.14/quarterly/total/rate",
+  "assert_cell": {
+    "A5": "Total",
+    "A8": "Total"
+  },
+  "original_file": "data/extractions/originals/ilo-unemployment.xlsx",
+  "original_url": "https://dam-api.bfs.admin.ch/hub/api/dam/assets/36710104/master",
+  "expected_count": 85
+}

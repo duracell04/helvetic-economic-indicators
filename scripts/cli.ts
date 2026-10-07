@@ -3,6 +3,7 @@ import { productionAtlas } from './lib/atlas-data.ts';
 import { readFile } from 'node:fs/promises';
 import { parseArgs } from 'node:util';
 import { importLocal, canonicalCsvImporter } from './lib/importer.ts';
+import { auditedExtractImporter } from './lib/audited-extract.ts';
 import { fsoPopulationImporter } from './lib/fso-population.ts';
 import { fsoGdpImporter, fsoRealGrowthImporter } from './lib/fso-gdp.ts';
 import { validate, load, validateMetadata, exportPublic, atomicWrite, json } from './lib/store.ts';
@@ -29,7 +30,7 @@ try {
       break;
     }
     case 'import': {
-      const importer = [canonicalCsvImporter, fsoGdpImporter, fsoRealGrowthImporter, fsoPopulationImporter].find(item => item.name === (values.importer ?? 'canonical-csv'));
+      const importer = [canonicalCsvImporter, fsoGdpImporter, fsoRealGrowthImporter, fsoPopulationImporter, auditedExtractImporter].find(item => item.name === (values.importer ?? 'canonical-csv'));
       if (!importer) throw new Error('Unknown importer. Select a registered importer from docs/contributing.md.');
       const id = await importLocal({ root, file: path.resolve(required('file')), seriesId: required('series'), sourceId: required('source'), retrievedOn: required('retrieved-on'), replace: values.replace, importer });
       console.log(`Imported immutable snapshot ${id}. Review registry and canonical changes before publication.`);

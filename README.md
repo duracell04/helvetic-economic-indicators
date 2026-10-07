@@ -38,7 +38,7 @@ npm run dev
 
 `check` validates provenance and registries, runs pipeline/calculation/composition tests, checks TypeScript, builds production, and verifies Pages paths and publication isolation. Browser tests run the built demo and production artifacts at ports 4322/4323 with desktop and phone viewports. `npm run check:all` runs both check suites (install the browser first).
 
-Production starts with government financing yields, their spread and broad public debt: 575 verified data points in six downloadable series, including nominal GDP available through **Add indicator** and the catalogue. Other indicator definitions remain candidates. Only verified, redistributable real data may enter public downloads and the chart payload. Forecast and reconstructed points retain their explicit statuses. Builds fetch no live economic data. Historical debt data and adaptations use CC BY-NC-SA 4.0; modern debt data retain IMF and ecolod terms. These data do not inherit the MIT software licence.
+Production starts with government financing yields, their spread and broad public debt: verified annual additions available through **Add indicator**, plus native-frequency datasets in the catalogue and downloads. Other indicator definitions remain candidates. Only verified, redistributable real data may enter public downloads and the chart payload. Forecast and reconstructed points retain their explicit statuses. Builds fetch no live economic data. Historical debt data and adaptations use CC BY-NC-SA 4.0; modern debt data retain IMF and ecolod terms. These data do not inherit the MIT software licence.
 
 ## Independent layers
 
