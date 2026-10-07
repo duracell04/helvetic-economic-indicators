@@ -1,0 +1,13 @@
+{
+  "format": "snb-csv",
+  "original_file": "data/extractions/originals/confederation-10y.csv",
+  "original_sha256": "8cdf2e59966f8037d88c283cf41578fc0953e333d6d5459866e69b5da71c93f8",
+  "original_url": "https://data.snb.ch/api/cube/rendeiduebd/data/csv/en?dimSel=D0(CHF),D1(10J)&fromDate=1988-01-04&toDate=2026-09-30",
+  "cube": "rendeiduebd",
+  "selection": {
+    "D0": "CHF",
+    "D1": "10J"
+  },
+  "key": "rendeiduebd/CHF/10J",
+  "expected_count": 7826
+}

@@ -400,6 +400,26 @@
         "attribution": "Swiss National Bank, SNB data portal, cube snbband, target range upper bound (OG), accessed 8 October 2026.",
         "conditions": "Non-commercial compatible use with source attribution. Exact selection excludes the third-party observed Libor fixing."
       }
+    },
+    {
+      "id": "snb-confederation-spot-daily",
+      "publisher": "Swiss National Bank",
+      "title": "Swiss Confederation ten-year spot interest rate, daily",
+      "landing_url": "https://data.snb.ch/en/topics/ziredev/cube/rendeiduebd",
+      "data_url": "https://data.snb.ch/api/cube/rendeiduebd/data/csv/en?dimSel=D0(CHF),D1(10J)&fromDate=1988-01-04&toDate=2026-09-30",
+      "source_identifier": "rendeiduebd; CHF; 10J",
+      "audit_status": "verified",
+      "definition": "Estimated zero-coupon spot rate for Swiss Confederation CHF bonds with a ten-year residual maturity, in percent per annum.",
+      "coverage": "1988-01-04–2026-09-30; sparse historical dates, then business days",
+      "revision_practice": "Retained publishing date 1 October 2026. Historical estimated spot rates can be corrected or revised.",
+      "rights": {
+        "redistribution": "permitted",
+        "licence": "SNB non-commercial reuse with attribution",
+        "evidence_url": "https://www.snb.ch/en/srv/disclaimer_copyright",
+        "reviewed_on": "2026-10-08",
+        "attribution": "Swiss National Bank, SNB data portal, cube rendeiduebd, Swiss Confederation CHF ten-year spot rate, accessed 8 October 2026.",
+        "conditions": "Non-commercial compatible reuse with source attribution. Only the SNB Swiss Confederation spot-rate selection is retained; other borrower/currency data are excluded."
+      }
     }
   ],
   "series": [
@@ -740,29 +760,34 @@
     {
       "id": "confederation-10y",
       "title": "Ten-year Confederation spot rate",
-      "verification": "candidate",
+      "verification": "verified",
       "data_class": "real",
-      "definition": "Maturity-specific fitted spot rate with verified quotation and source-table history.",
+      "definition": "Estimated zero-coupon spot rate for Swiss Confederation CHF bonds with a ten-year residual maturity, in percent per annum.",
       "unit": {
         "code": "percent",
-        "label": "Percent",
+        "label": "Percent per annum",
         "dimension": "percent",
         "scale": 1
       },
+      "measurement": "yield",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "native",
       "frequency": "daily",
       "institutional_coverage": "Swiss Confederation",
       "instrument": "Confederation spot rate",
       "maturity": "10 years",
-      "aggregation": "Daily observations; document source replacements before annual aggregation.",
+      "aggregation": "Native source dates, preserving gaps. No annual aggregation or carry-forward of market yields.",
       "source_ids": [
-        "snb"
+        "snb-confederation-spot-daily"
       ],
-      "source_identifier": null,
-      "breaks": [],
-      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
-      "measurement": "yield",
-      "price_basis": "not_applicable",
-      "aggregation_kind": "native"
+      "source_identifier": "rendeiduebd/CHF/10J",
+      "breaks": [
+        {
+          "period": "1998-01-01",
+          "description": "Source note: through 1997 only Monday and month-end observations were available; business-day spot observations thereafter."
+        }
+      ],
+      "usage_notes": "7,826 published dated estimates, January 1988–September 2026. Spot rates are fitted zero-coupon yields, not traded coupon-bond yields. Preserve sparse historical dates and market-calendar gaps. The historical average long yield and existing OECD annual benchmark are separate measures; no splice or annual derivation is made. Final denotes this retained source vintage."
     },
     {
       "id": "gmbf-3m",
@@ -1409,6 +1434,14 @@
       "sha256": "d305fae2c510cdb28405d5b9fdc84ce9e6f12df9290c8b2250b8ebfacde60246",
       "file": "data/raw/snb-libor-upper-daily-2026-10-08-d305fae2c510cdb2.csv",
       "source_url": "https://data.snb.ch/api/cube/snbband/data/csv/en?dimSel=D0(OG)&fromDate=2000-01-03&toDate=2019-06-12"
+    },
+    {
+      "id": "snb-confederation-spot-daily-2026-10-08-3bb522cd28550aea",
+      "source_id": "snb-confederation-spot-daily",
+      "retrieved_on": "2026-10-08",
+      "sha256": "3bb522cd28550aea7772d666fc446205f16bd4dc76d14307c1deae6ad6c275d1",
+      "file": "data/raw/snb-confederation-spot-daily-2026-10-08-3bb522cd28550aea.csv",
+      "source_url": "https://data.snb.ch/api/cube/rendeiduebd/data/csv/en?dimSel=D0(CHF),D1(10J)&fromDate=1988-01-04&toDate=2026-09-30"
     }
   ]
 }
