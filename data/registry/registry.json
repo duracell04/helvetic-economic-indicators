@@ -360,6 +360,26 @@
         "attribution": "Swiss National Bank, SNB data portal, cube snbgwdzid, SNB policy rate (LZ), accessed 8 October 2026.",
         "conditions": "Non-commercial use compatible with the data purpose, with source attribution. Commercial reuse requires an additional grant. The original selection includes only SNB own policy-rate data."
       }
+    },
+    {
+      "id": "snb-libor-lower-daily",
+      "publisher": "Swiss National Bank",
+      "title": "Historical three-month CHF Libor target range, lower bound",
+      "landing_url": "https://data.snb.ch/en/topics/snb/cube/snbband",
+      "data_url": "https://data.snb.ch/api/cube/snbband/data/csv/en?dimSel=D0(UG)&fromDate=2000-01-03&toDate=2019-06-12",
+      "source_identifier": "snbband; UG",
+      "audit_status": "verified",
+      "definition": "SNB administered lower bound of the three-month CHF Libor target range; not an observed market Libor fixing.",
+      "coverage": "2000-01-03–2019-06-12, business-day target observations",
+      "revision_practice": "Archived publishing date 21 June 2019. Preserve the retained vintage and any future corrections.",
+      "rights": {
+        "redistribution": "permitted",
+        "licence": "SNB non-commercial reuse with attribution",
+        "evidence_url": "https://www.snb.ch/en/srv/disclaimer_copyright",
+        "reviewed_on": "2026-10-08",
+        "attribution": "Swiss National Bank, SNB data portal, cube snbband, target range lower bound (UG), accessed 8 October 2026.",
+        "conditions": "Non-commercial compatible use with source attribution. Exact selection excludes the third-party observed Libor fixing."
+      }
     }
   ],
   "series": [
@@ -1185,6 +1205,33 @@
       "measurement": "spread",
       "price_basis": "not_applicable",
       "aggregation_kind": "annual_average"
+    },
+    {
+      "id": "snb-libor-target-lower",
+      "title": "Historical SNB Libor target range — lower bound",
+      "verification": "verified",
+      "data_class": "real",
+      "definition": "SNB administered lower bound of the three-month CHF Libor target range; not an observed market Libor fixing.",
+      "unit": {
+        "code": "percent",
+        "label": "Percent",
+        "dimension": "percent",
+        "scale": 1
+      },
+      "measurement": "rate",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "native",
+      "frequency": "event",
+      "institutional_coverage": "Swiss monetary-policy framework",
+      "instrument": "Three-month CHF Libor target range, lower bound",
+      "maturity": "3 months (target benchmark)",
+      "aggregation": "First published target bound and each effective change; unchanged daily repetitions omitted.",
+      "source_ids": [
+        "snb-libor-lower-daily"
+      ],
+      "source_identifier": "snbband/UG/effective-changes",
+      "breaks": [],
+      "usage_notes": "Archived instrument, separate from the SNB policy rate introduced 13 June 2019. These are effective target-bound dates, not market rates or announcement dates. No earlier framework is spliced in."
     }
   ],
   "snapshots": [
@@ -1299,6 +1346,14 @@
       "sha256": "c8c71e7adc346652e46350665529e29064b27aebe8547af2a611bb67a8555a7a",
       "file": "data/raw/snb-policy-daily-2026-10-08-c8c71e7adc346652.csv",
       "source_url": "https://data.snb.ch/api/cube/snbgwdzid/data/csv/en?dimSel=D0(LZ)&fromDate=2019-06-13&toDate=2026-10-02"
+    },
+    {
+      "id": "snb-libor-lower-daily-2026-10-08-c441e682784cb3c6",
+      "source_id": "snb-libor-lower-daily",
+      "retrieved_on": "2026-10-08",
+      "sha256": "c441e682784cb3c63be95cf593abf03cf6b672725dc73e6ee0b2caf9a13a5051",
+      "file": "data/raw/snb-libor-lower-daily-2026-10-08-c441e682784cb3c6.csv",
+      "source_url": "https://data.snb.ch/api/cube/snbband/data/csv/en?dimSel=D0(UG)&fromDate=2000-01-03&toDate=2019-06-12"
     }
   ]
 }

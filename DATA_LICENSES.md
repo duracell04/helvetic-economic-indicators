@@ -21,3 +21,5 @@ Test fixtures are original synthetic examples covered by the project's MIT licen
 - **FSO CPI:** LIK25B25 is OPEN-BY with FSO attribution. Monthly levels and annual inflation use separate worksheet selections. See the [CPI audit](docs/source-audit/cpi.md).
 
 - **SNB policy rate:** SNB own LZ observations use [non-commercial copyright permission](https://www.snb.ch/en/srv/disclaimer_copyright), with attribution. The retained selection excludes SARON. See the [policy audit](docs/source-audit/snb-policy-rate.md).
+
+- **SNB historical Libor target bounds:** own administered target data use SNB non-commercial permission with attribution; observed market Libor fixings are excluded. [Lower-bound audit](docs/source-audit/snb-libor-target-lower.md).

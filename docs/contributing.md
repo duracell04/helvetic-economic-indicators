@@ -92,3 +92,7 @@ Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.
 ### Annual SNB policy rate
 
 Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.py data/extractions/snb-policy-rate-annual.json data/extractions/originals/snb-policy-rate.csv ../snb-policy-rate-annual.csv`, then import using `--importer audited-extract --series snb-policy-rate-annual --source snb-policy-daily`. Review [the source audit](source-audit/snb-policy-rate-annual.md) before updating a vintage.
+
+### Historical SNB Libor target range — lower bound
+
+Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.py data/extractions/snb-libor-target-lower.json data/extractions/originals/snb-libor-target-lower.csv ../snb-libor-target-lower.csv`, then import using `--importer audited-extract --series snb-libor-target-lower --source snb-libor-lower-daily`. Review [the source audit](source-audit/snb-libor-target-lower.md) before updating a vintage.

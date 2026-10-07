@@ -74,3 +74,7 @@ Add 12 SNB policy-rate effective-change events, with the exact daily source reta
 ## 8 October 2026 — Annual SNB policy rate
 
 Add six explicitly calculated complete-year calendar-day-weighted policy-rate averages, 2020–2025; omit partial 2019 and 2026. [Audit](source-audit/snb-policy-rate-annual.md).
+
+## 8 October 2026 — Historical SNB Libor target range — lower bound
+
+Add 26 historical lower Libor target-bound events, preserving the separate instrument identity. [Audit](source-audit/snb-libor-target-lower.md).
