@@ -78,3 +78,7 @@ Add six explicitly calculated complete-year calendar-day-weighted policy-rate av
 ## 8 October 2026 — Historical SNB Libor target range — lower bound
 
 Add 26 historical lower Libor target-bound events, preserving the separate instrument identity. [Audit](source-audit/snb-libor-target-lower.md).
+
+## 8 October 2026 — Historical SNB Libor target range — upper bound
+
+Add 28 historical upper Libor target-bound events, preserving the separate instrument identity. [Audit](source-audit/snb-libor-target-upper.md).
