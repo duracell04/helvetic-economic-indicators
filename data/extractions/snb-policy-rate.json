@@ -1,0 +1,13 @@
+{
+  "format": "snb-csv",
+  "original_file": "data/extractions/originals/snb-policy-rate.csv",
+  "original_sha256": "f87d5245cb0e4f509ad618167f2b2fe3ff84899cc09332a8b86e1a7b91a18cdf",
+  "original_url": "https://data.snb.ch/api/cube/snbgwdzid/data/csv/en?dimSel=D0(LZ)&fromDate=2019-06-13&toDate=2026-10-02",
+  "cube": "snbgwdzid",
+  "selection": {
+    "D0": "LZ"
+  },
+  "changes_only": true,
+  "key": "snbgwdzid/LZ/effective-changes",
+  "expected_count": 12
+}

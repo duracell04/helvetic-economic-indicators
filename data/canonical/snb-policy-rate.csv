@@ -1,0 +1,13 @@
+series_id,reference_period,value,source_snapshot_ids,publication_date,value_kind,revision_status
+snb-policy-rate,2019-06-13,-0.75,"[""snb-policy-daily-2026-10-08-5b83dea5c79cd84d""]",2026-10-05,observed,final
+snb-policy-rate,2022-06-17,-0.25,"[""snb-policy-daily-2026-10-08-5b83dea5c79cd84d""]",2026-10-05,observed,final
+snb-policy-rate,2022-09-23,0.5,"[""snb-policy-daily-2026-10-08-5b83dea5c79cd84d""]",2026-10-05,observed,final
+snb-policy-rate,2022-12-16,1,"[""snb-policy-daily-2026-10-08-5b83dea5c79cd84d""]",2026-10-05,observed,final
+snb-policy-rate,2023-03-24,1.5,"[""snb-policy-daily-2026-10-08-5b83dea5c79cd84d""]",2026-10-05,observed,final
+snb-policy-rate,2023-06-23,1.75,"[""snb-policy-daily-2026-10-08-5b83dea5c79cd84d""]",2026-10-05,observed,final
+snb-policy-rate,2024-03-22,1.5,"[""snb-policy-daily-2026-10-08-5b83dea5c79cd84d""]",2026-10-05,observed,final
+snb-policy-rate,2024-06-21,1.25,"[""snb-policy-daily-2026-10-08-5b83dea5c79cd84d""]",2026-10-05,observed,final
+snb-policy-rate,2024-09-27,1,"[""snb-policy-daily-2026-10-08-5b83dea5c79cd84d""]",2026-10-05,observed,final
+snb-policy-rate,2024-12-13,0.5,"[""snb-policy-daily-2026-10-08-5b83dea5c79cd84d""]",2026-10-05,observed,final
+snb-policy-rate,2025-03-21,0.25,"[""snb-policy-daily-2026-10-08-5b83dea5c79cd84d""]",2026-10-05,observed,final
+snb-policy-rate,2025-06-20,0,"[""snb-policy-daily-2026-10-08-5b83dea5c79cd84d""]",2026-10-05,observed,final

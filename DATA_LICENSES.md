@@ -19,3 +19,5 @@ Test fixtures are original synthetic examples covered by the project's MIT licen
 - **FSO ILO unemployment:** the exact dataset is OPEN-BY, with FSO attribution. See the [ILO audit](docs/source-audit/ilo-unemployment.md).
 
 - **FSO CPI:** LIK25B25 is OPEN-BY with FSO attribution. Monthly levels and annual inflation use separate worksheet selections. See the [CPI audit](docs/source-audit/cpi.md).
+
+- **SNB policy rate:** SNB own LZ observations use [non-commercial copyright permission](https://www.snb.ch/en/srv/disclaimer_copyright), with attribution. The retained selection excludes SARON. See the [policy audit](docs/source-audit/snb-policy-rate.md).

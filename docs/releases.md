@@ -66,3 +66,7 @@ Add 526 monthly total CPI levels on the December 2025 base, preserving published
 ## 8 October 2026 — Annual CPI inflation
 
 Add 42 published complete-year annual-average CPI inflation rates, 1984–2025, as a separate indicator. [Audit](source-audit/cpi-inflation.md).
+
+## 8 October 2026 — SNB policy rate
+
+Add 12 SNB policy-rate effective-change events, with the exact daily source retained and earlier instruments kept separate. [Audit](source-audit/snb-policy-rate.md).

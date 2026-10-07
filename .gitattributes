@@ -3,3 +3,6 @@
 
 # Immutable source snapshots retain publisher bytes and checksum on every platform.
 data/raw/** -text
+
+# Preserve exact publisher bytes for reproducible workbook/CSV extractions.
+data/extractions/originals/** -text

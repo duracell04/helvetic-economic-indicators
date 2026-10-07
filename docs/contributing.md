@@ -84,3 +84,7 @@ Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.
 ### Annual CPI inflation
 
 Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.py data/extractions/cpi-inflation.json data/extractions/originals/cpi.xlsx ../cpi-inflation.csv`, then import using `--importer audited-extract --series cpi-inflation --source fso-cpi-2025`. Review [the source audit](source-audit/cpi-inflation.md) before updating a vintage.
+
+### SNB policy rate
+
+Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.py data/extractions/snb-policy-rate.json data/extractions/originals/snb-policy-rate.csv ../snb-policy-rate.csv`, then import using `--importer audited-extract --series snb-policy-rate --source snb-policy-daily`. Review [the source audit](source-audit/snb-policy-rate.md) before updating a vintage.
