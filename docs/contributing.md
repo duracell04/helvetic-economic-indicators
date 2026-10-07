@@ -104,3 +104,7 @@ Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.
 ### Ten-year Confederation spot rate
 
 Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.py data/extractions/confederation-10y.json data/extractions/originals/confederation-10y.csv ../confederation-10y.csv`, then import using `--importer audited-extract --series confederation-10y --source snb-confederation-spot-daily`. Review [the source audit](source-audit/confederation-10y.md) before updating a vintage.
+
+### Historical SNB discount rate — year end
+
+Regenerate the checksum-pinned extraction with `python3 scripts/prepare-extract.py data/extractions/snb-discount-rate.json data/extractions/originals/../checked/snb-official-rates.csv ../snb-discount-rate.csv`, then import using `--importer audited-extract --series snb-discount-rate --source snb-historical-discount`. Review [the source audit](source-audit/snb-discount-rate.md) before updating a vintage.

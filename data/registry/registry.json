@@ -420,6 +420,26 @@
         "attribution": "Swiss National Bank, SNB data portal, cube rendeiduebd, Swiss Confederation CHF ten-year spot rate, accessed 8 October 2026.",
         "conditions": "Non-commercial compatible reuse with source attribution. Only the SNB Swiss Confederation spot-rate selection is retained; other borrower/currency data are excluded."
       }
+    },
+    {
+      "id": "snb-historical-discount",
+      "publisher": "Swiss National Bank",
+      "title": "Historical official SNB discount rate, year end",
+      "landing_url": "https://www.snb.ch/public/publication/en/www-snb-ch/publications/statistical-publications/historical-time-series/2007/renditen_book/publications0_en/e_zinssaetze_u_renditen.book.pdf",
+      "data_url": "https://www.snb.ch/public/publication/en/www-snb-ch/publications/statistical-publications/historical-time-series/2007/renditen_book/publications0_en/e_zinssaetze_u_renditen.book.pdf",
+      "source_identifier": "Historical time series 4, November 2007, table 1.1 column 1",
+      "audit_status": "verified",
+      "definition": "Published year-end official discount rate, in percent; historical instrument distinct from Libor targets and the modern policy rate.",
+      "coverage": "1907–1998, annual year-end values; no nonempty discount entry in 1999–2006",
+      "revision_practice": "Fixed November 2007 historical publication. Preserve the retained figures and table notes.",
+      "rights": {
+        "redistribution": "permitted",
+        "licence": "SNB historical figures: reproduction with source reference",
+        "evidence_url": "https://www.snb.ch/public/publication/en/www-snb-ch/publications/statistical-publications/historical-time-series/2007/renditen_book/publications0_en/e_zinssaetze_u_renditen.book.pdf",
+        "reviewed_on": "2026-10-08",
+        "attribution": "Swiss National Bank, Interest rates and yields, Historical time series 4, November 2007, table 1.1, printed pages 24–25.",
+        "conditions": "Publication expressly permits reproduction and publication of figures with source reference. Only checked table figures are retained; the complete PDF is not redistributed."
+      }
     }
   ],
   "series": [
@@ -1304,6 +1324,33 @@
       "source_identifier": "snbband/OG/effective-changes",
       "breaks": [],
       "usage_notes": "Archived instrument, separate from the SNB policy rate introduced 13 June 2019. These are effective target-bound dates, not market rates or announcement dates. No earlier framework is spliced in."
+    },
+    {
+      "id": "snb-discount-rate",
+      "title": "Historical SNB discount rate — year end",
+      "verification": "verified",
+      "data_class": "real",
+      "definition": "Published year-end official discount rate, in percent; historical instrument distinct from Libor targets and the modern policy rate.",
+      "unit": {
+        "code": "percent",
+        "label": "Percent",
+        "dimension": "percent",
+        "scale": 1
+      },
+      "measurement": "rate",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "end_of_period",
+      "frequency": "annual",
+      "institutional_coverage": "Swiss monetary-policy framework",
+      "instrument": "SNB discount credit rate",
+      "maturity": null,
+      "aggregation": "Published year-end readings; no annual average or effective-date interpolation.",
+      "source_ids": [
+        "snb-historical-discount"
+      ],
+      "source_identifier": "Historical time series 4/Table 1.1/discount/end-year",
+      "breaks": [],
+      "usage_notes": "92 year-end values, 1907–1998. Blank 1999–2006 table entries remain absent. The historical discount instrument is not joined into Libor targets or modern policy rates. The original source is a PDF; the committed CSV is a checked transcription of its figures."
     }
   ],
   "snapshots": [
@@ -1442,6 +1489,14 @@
       "sha256": "3bb522cd28550aea7772d666fc446205f16bd4dc76d14307c1deae6ad6c275d1",
       "file": "data/raw/snb-confederation-spot-daily-2026-10-08-3bb522cd28550aea.csv",
       "source_url": "https://data.snb.ch/api/cube/rendeiduebd/data/csv/en?dimSel=D0(CHF),D1(10J)&fromDate=1988-01-04&toDate=2026-09-30"
+    },
+    {
+      "id": "snb-historical-discount-2026-10-08-e049daff3e67327c",
+      "source_id": "snb-historical-discount",
+      "retrieved_on": "2026-10-08",
+      "sha256": "e049daff3e67327cd2b2362f1ee252179958bcfd11dbb896f3a3edebf6178e4b",
+      "file": "data/raw/snb-historical-discount-2026-10-08-e049daff3e67327c.csv",
+      "source_url": "https://www.snb.ch/public/publication/en/www-snb-ch/publications/statistical-publications/historical-time-series/2007/renditen_book/publications0_en/e_zinssaetze_u_renditen.book.pdf"
     }
   ]
 }

@@ -34,7 +34,8 @@
         "snb-historical-instruments",
         "snb-policy-rate-annual",
         "snb-libor-target-lower",
-        "snb-libor-target-upper"
+        "snb-libor-target-upper",
+        "snb-discount-rate"
       ]
     },
     {

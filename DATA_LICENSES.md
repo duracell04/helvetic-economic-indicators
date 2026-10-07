@@ -25,3 +25,5 @@ Test fixtures are original synthetic examples covered by the project's MIT licen
 - **SNB historical Libor target bounds:** own administered target data use SNB non-commercial permission with attribution; observed market Libor fixings are excluded. [Lower-bound audit](docs/source-audit/snb-libor-target-lower.md).
 
 - **SNB daily ten-year spot rate:** exact CHF/10J selection uses SNB non-commercial attribution permission. See the [daily spot-rate audit](docs/source-audit/confederation-10y.md).
+
+- **SNB historical discount and Lombard rates:** the 2007 publication permits reproducing its figures with source reference. Retained tables are checked transcriptions; the full PDF is not redistributed. [Discount audit](docs/source-audit/snb-discount-rate.md).
