@@ -102,3 +102,7 @@ Remains candidate: Establish a dataset-specific redistribution grant for the ann
 ## 8 October 2026 — Real GDP per capita source audit
 
 Remains candidate: Resolve the real-GDP source reuse grant and verify a compatible published annual-average population denominator, or obtain an official real-GDP-per-capita series with documented methodology and permission. [Audit](source-audit/real-gdp-per-capita.md).
+
+## 8 October 2026 — Registered unemployment source audit
+
+Remains candidate: Obtain an auditable national SECO/FSO monthly rate export, its denominator and method history, and a dataset-specific public redistribution grant. [Audit](source-audit/registered-unemployment.md).

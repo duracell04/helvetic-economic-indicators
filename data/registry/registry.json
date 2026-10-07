@@ -500,6 +500,26 @@
         "attribution": "State Secretariat for Economic Affairs / Federal Statistical Office",
         "conditions": "No dataset-specific public redistribution grant has been established. Candidate only; obtain applicable permission before publishing observations or source bytes."
       }
+    },
+    {
+      "id": "seco-registered-unemployment-candidate",
+      "publisher": "State Secretariat for Economic Affairs",
+      "title": "Registered unemployment — AMSTAT candidate",
+      "landing_url": "https://www.seco.admin.ch/en/labour-market-statistics",
+      "data_url": "https://www.amstat.ch/v2/amstat_de.html",
+      "source_identifier": "AMSTAT / national total / registered unemployment rate / monthly selection pending",
+      "audit_status": "candidate",
+      "definition": "National registered-unemployment rate, distinct from ILO survey unemployment; exact export selection remains unverified.",
+      "coverage": null,
+      "revision_practice": "Retain the original source vintage and documented revisions before any import.",
+      "rights": {
+        "redistribution": "unknown",
+        "licence": null,
+        "evidence_url": "https://www.admin.ch/en/terms-and-conditions",
+        "reviewed_on": "2026-10-08",
+        "attribution": "State Secretariat for Economic Affairs",
+        "conditions": "No dataset-specific public redistribution grant has been established. Candidate only; obtain applicable permission before publishing observations or source bytes."
+      }
     }
   ],
   "series": [
@@ -641,13 +661,13 @@
       "institutional_coverage": "SECO registered labour force",
       "instrument": null,
       "maturity": null,
-      "aggregation": "Native monthly readings; annual means require a separate derived series.",
+      "aggregation": "Native national monthly rate; exact seasonality, denominator and history pending audit.",
       "source_ids": [
-        "seco"
+        "seco-registered-unemployment-candidate"
       ],
-      "source_identifier": null,
+      "source_identifier": "AMSTAT / national total / registered unemployment rate / monthly selection pending",
       "breaks": [],
-      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "usage_notes": "Candidate. Audit on 8 October 2026: Obtain an auditable national SECO/FSO monthly rate export, its denominator and method history, and a dataset-specific public redistribution grant. No observations are published. See docs/source-audit/registered-unemployment.md.",
       "measurement": "rate",
       "price_basis": "not_applicable",
       "aggregation_kind": "native"
