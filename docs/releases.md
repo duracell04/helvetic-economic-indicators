@@ -94,3 +94,7 @@ Add 92 published year-end historical discount-rate readings, 1907–1998, in a s
 ## 8 October 2026 — Historical SNB Lombard rate — year end
 
 Add 99 published year-end historical Lombard readings, 1907–2005, with 1989 and 2004 instrument annotations. Keep historical instruments separate. [Audit](source-audit/snb-lombard-rate.md).
+
+## 8 October 2026 — Real GDP source audit
+
+Remains candidate: Establish a dataset-specific redistribution grant for the annual real-volume workbook, or obtain a compatible FSO OPEN-BY real-volume dataset. [Audit](source-audit/real-gdp.md).

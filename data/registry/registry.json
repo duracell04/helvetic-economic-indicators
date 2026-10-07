@@ -460,6 +460,26 @@
         "attribution": "Swiss National Bank, Interest rates and yields, Historical time series 4, November 2007, table 1.1, printed pages 24–25.",
         "conditions": "Publication expressly permits reproduction and publication of figures with source reference. Only checked table figures are retained; the complete PDF is not redistributed."
       }
+    },
+    {
+      "id": "seco-real-gdp-annual-candidate",
+      "publisher": "State Secretariat for Economic Affairs",
+      "title": "Annual real GDP, production approach, unadjusted",
+      "landing_url": "https://www.seco.admin.ch/en/gross-domestic-product",
+      "data_url": "https://www.seco.admin.ch/dam/en/sd-web/SaAbXCUZ5Fj8/qna_p_na.xlsx",
+      "source_identifier": "qna_p_na.xlsx / real_y / annual GDP / candidate",
+      "audit_status": "candidate",
+      "definition": "Annual chain-linked real GDP in CHF millions at reference-year 2020 prices, unadjusted.",
+      "coverage": "Workbook inspection identifies annual rows 1980–2025; publication remains blocked pending redistribution evidence.",
+      "revision_practice": "Retain the original source vintage and documented revisions before any import.",
+      "rights": {
+        "redistribution": "unknown",
+        "licence": null,
+        "evidence_url": "https://www.admin.ch/en/terms-and-conditions",
+        "reviewed_on": "2026-10-08",
+        "attribution": "State Secretariat for Economic Affairs",
+        "conditions": "No dataset-specific public redistribution grant has been established. Candidate only; obtain applicable permission before publishing observations or source bytes."
+      }
     }
   ],
   "series": [
@@ -535,23 +555,21 @@
       "definition": "Output measured in volumes; preserve price basis and reconstruction methodology.",
       "unit": {
         "code": "currency",
-        "label": "Volume measure",
+        "label": "CHF millions, chain-linked volumes (reference year 2020)",
         "dimension": "CHF",
-        "scale": 1
+        "scale": 1000000
       },
       "frequency": "annual",
       "institutional_coverage": "Swiss domestic economy",
       "instrument": null,
       "maturity": null,
-      "aggregation": "Preserve official annual volume measure.",
+      "aggregation": "Annual unadjusted GDP volumes; reference year 2020. Source reuse grant pending.",
       "source_ids": [
-        "fso",
-        "seco",
-        "history"
+        "seco-real-gdp-annual-candidate"
       ],
-      "source_identifier": null,
+      "source_identifier": "qna_p_na.xlsx / real_y / annual GDP / candidate",
       "breaks": [],
-      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "usage_notes": "Candidate. Audit on 8 October 2026: Establish a dataset-specific redistribution grant for the annual real-volume workbook, or obtain a compatible FSO OPEN-BY real-volume dataset. No observations are published. See docs/source-audit/real-gdp.md.",
       "measurement": "level",
       "price_basis": "real",
       "aggregation_kind": "sum"
