@@ -8,7 +8,7 @@ const add=async(page:Page,title:string,target='')=>{
   await page.getByRole('button',{name:'+ Add indicator',exact:true}).click();
   await page.getByRole('searchbox',{name:'Search indicators'}).fill(title);
   await page.locator('#add-target').selectOption(target);
-  await page.locator(`button[aria-label="Add ${title}"]:not([disabled])`).click();
+  await page.locator(`button[aria-label="Add ${title}"]:not([disabled])`).first().click();
 };
 test('composition, indexing, reorder, ranges and saved/shared layouts',async({page})=>{
   await ready(page);await expect(page.locator('.chart-panel')).toHaveCount(3);
@@ -86,10 +86,61 @@ test('production renders yields, debt and distinct 2026 statuses',async({page},t
   const debtChart=panel(page,2).locator('svg');await debtChart.focus();await debtChart.press('End');
   await expect(page.locator('#readout')).toContainText('38.5%');await expect(page.locator('#readout')).toContainText('forecast');await debtChart.press('Escape');
   await page.locator('[data-indicator="general-government-debt-ratio"]').getByRole('button',{name:'Information about General government gross debt / GDP'}).click();await expect(page.locator('#info-dialog')).toContainText('Not Maastricht debt');await page.getByRole('button',{name:'Close indicator information'}).click();
-  await page.locator('#add-indicator').click();await expect(page.locator('#indicator-list button:not([disabled])')).toHaveCount(4);await page.getByRole('button',{name:'Close indicator selector'}).click();
-  const response=await page.request.get('http://127.0.0.1:4323/helvetic-economic-indicators/data/atlas.json');const data=await response.json();expect(data.mode).toBe('production');expect(data.observations).toHaveLength(255);expect(data.registry.series.every((s:{data_class:string})=>s.data_class==='real')).toBe(true);
+  await page.locator('#add-indicator').click();
+  for(const title of ['Annual Confederation 10Y yield / historical proxy','Annual three-month GMBF yield','Confederation 10Y − 3M spread','General government gross debt / GDP','Nominal GDP']){
+    await expect(page.getByRole('button',{name:`Add ${title}`,exact:true}).first()).toBeEnabled();
+  }
+  await page.getByRole('button',{name:'Close indicator selector'}).click();
+  const response=await page.request.get('http://127.0.0.1:4323/helvetic-economic-indicators/data/atlas.json');const data=await response.json();expect(data.mode).toBe('production');
+  const yieldIds=['confederation-10y-annual','gmbf-3m-annual','confederation-10y-minus-gmbf-3m'];
+  expect(data.observations.filter((o:{series_id:string})=>yieldIds.includes(o.series_id))).toHaveLength(174);
+  expect(data.observations.filter((o:{series_id:string})=>o.series_id==='general-government-debt-ratio')).toHaveLength(81);
+  expect(data.registry.series.every((s:{data_class:string})=>s.data_class==='real')).toBe(true);
   const dimensions=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,width:innerWidth}));expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.width);
   await page.screenshot({path:`.cache/evidence-yields-${testInfo.project.name}.png`,fullPage:true});
+});
+
+test('production nominal GDP renders audited history, gaps, indexing and downloads',async({page},testInfo)=>{
+  const origin='http://127.0.0.1:4323/helvetic-economic-indicators/';
+  await page.goto(origin);await expect(page.locator('#atlas')).toHaveAttribute('data-ready','true');
+  await add(page,'Nominal GDP');
+  const gdp=page.locator('.chart-panel').filter({has:page.locator('[data-indicator="nominal-gdp"]')});
+  await expect(gdp).toHaveCount(1);
+  await expect(gdp.locator('path[data-kind="reconstructed"]')).toHaveAttribute('stroke-dasharray','2 4');
+  await expect(gdp.locator('path[data-kind="observed"]')).toBeVisible();
+  await expect(gdp.locator('[data-statistical-break="nominal-gdp"]')).toHaveCount(1);
+  const chart=gdp.locator('svg');await chart.focus();await chart.press('Home');
+  await expect(page.locator('#readout')).toContainText('Nominal GDP');
+  await expect(page.locator('#readout')).toContainText('No observation');
+  await chart.press('ArrowRight');await chart.press('ArrowRight');
+  await expect(page.locator('#readout')).toContainText('CHF millions');
+  await expect(page.locator('#readout')).toContainText('reconstructed');
+  await chart.press('End');await expect(page.locator('#year-label')).toContainText('2026');
+  const gdpReadout=page.locator('#readout .readout-row').filter({hasText:'Nominal GDP'});
+  await expect(gdpReadout).toContainText('No observation');await chart.press('Escape');
+  await gdp.getByRole('combobox').selectOption('indexed');
+  await expect(gdp.getByRole('spinbutton')).toHaveValue('1960');
+  await page.locator('#start-year').fill('1960');await page.locator('#start-year').press('Tab');
+  await chart.focus();await chart.press('Home');await expect(gdpReadout).toContainText('100');
+  await expect(gdpReadout).toContainText('Index 1960 = 100');await chart.press('Escape');
+  await page.locator('[data-indicator="nominal-gdp"]').getByRole('button',{name:'Information about Nominal GDP'}).click();
+  await expect(page.locator('#info-dialog')).toContainText('1948–1994');
+  await expect(page.locator('#info-dialog')).toContainText('current prices');
+  await page.getByRole('button',{name:'Close indicator information'}).click();
+  const dimensions=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,width:innerWidth}));expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.width);
+  await page.screenshot({path:`.cache/evidence-gdp-${testInfo.project.name}.png`,fullPage:true});
+  await page.goto(`${origin}series/`);await expect(page.getByRole('link',{name:'Nominal GDP ↗',exact:true}).first()).toBeVisible();
+  await page.goto(`${origin}series/nominal-gdp/`);await expect(page.getByRole('heading',{name:'Nominal GDP',exact:true})).toBeVisible();
+  await expect(page.locator('body')).toContainText('78 observations available.');
+  for(const extension of ['csv','json']){
+    const link=page.getByRole('link',{name:extension.toUpperCase()+' ↓',exact:true});
+    const response=await page.request.get(new URL((await link.getAttribute('href'))!,origin).href);expect(response.ok()).toBe(true);
+    if(extension==='json'){
+      const rows=await response.json();expect(rows).toHaveLength(78);expect(rows[0].reference_period).toBe('1948');expect(rows.at(-1).reference_period).toBe('2025');
+    }else expect(await response.text()).toContain('nominal-gdp,2025,881571.800580975');
+  }
+  await page.goto(`${origin}downloads/`);await expect(page.getByRole('heading',{name:'Nominal GDP',exact:true})).toBeVisible();
+  await expect(page.locator('body')).toContainText('FSO OPEN-BY');
 });
 
 test('comparison cancellation preserves axis controls and offers a separate new panel',async({page})=>{

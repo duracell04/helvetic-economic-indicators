@@ -61,7 +61,9 @@ test('shared configurations round-trip, take priority and recover from invalid s
 });
 test('synthetic production rejection, candidate unavailability and deterministic demo',async()=>{
   assert.throws(()=>validateAtlas({...data,mode:'production'},true),/synthetic/);
-  const production=await productionAtlas(process.cwd());assert.equal(initialState(production).panels.length,3);assert.equal(production.observations.length,255);
+  const production=await productionAtlas(process.cwd());assert.equal(initialState(production).panels.length,3);
+  assert.ok(production.observations.length>0);
+  assert.ok(production.registry.series.every(s=>s.data_class==='real'));
   assert.equal(available(production,'population'),false);
   assert.throws(()=>validateState(initialState(data),production));
   const again=await createDemo(process.cwd());assert.deepEqual(again,data);

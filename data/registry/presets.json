@@ -260,6 +260,7 @@
     "confederation-debt-ratio": "#9f1239",
     "smi-annual-return": "#0f766e",
     "smic-annual-return": "#6b21a8",
-    "confederation-10y-minus-gmbf-3m": "#6b21a8"
+    "confederation-10y-minus-gmbf-3m": "#6b21a8",
+    "nominal-gdp": "#111111"
   }
 }

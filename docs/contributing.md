@@ -12,7 +12,13 @@ Register a primary series with native frequency, explicit unit code/dimension/sc
 
 ## Import a supplied local file
 
-The first importer accepts the canonical CSV contract. A future agency-specific importer implements the `Importer` interface, receives a source snapshot, and emits the same observations without changing their meaning. Original supplied file bytes are retained unchanged; no network fetch occurs.
+The default importer accepts the canonical CSV contract. Agency-specific importers implement the `Importer` interface, receive a source snapshot, and emit the same observations without changing their meaning. Original supplied file bytes are retained unchanged; no network fetch occurs.
+
+Select an importer with optional `--importer`; omitting it retains `canonical-csv`. The audited `fso-gdp` importer accepts the original FSO August 2026 long-series CSV and selects annual current-price GDP in CHF millions (`B1GQ/MCHF`). It rejects other series identities, source URLs, unit scales, duplicate periods, invalid values and unaudited status flags. See the [GDP source audit](source-audit/gdp.md) for reproduction and historical qualifications.
+
+```sh
+npm run data:import -- --importer fso-gdp --file /absolute/path/fso-gdp-long-series.csv --series nominal-gdp --source fso-gdp-long-series --retrieved-on 2026-10-07
+```
 
 ```sh
 npm run data:import -- --file /absolute/path/input.csv --series verified-series-id --source verified-source-id --retrieved-on 2026-10-07
