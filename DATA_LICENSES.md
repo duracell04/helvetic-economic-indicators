@@ -17,3 +17,5 @@ Before importing, record the exact terms URL, licence name, review date, attribu
 Test fixtures are original synthetic examples covered by the project's MIT licence. They are labelled synthetic, use reserved `example.invalid` source references, and are blocked from public exports. Their test metadata does not assert rights over real economic data.
 
 - **FSO ILO unemployment:** the exact dataset is OPEN-BY, with FSO attribution. See the [ILO audit](docs/source-audit/ilo-unemployment.md).
+
+- **FSO CPI:** LIK25B25 is OPEN-BY with FSO attribution. Monthly levels and annual inflation use separate worksheet selections. See the [CPI audit](docs/source-audit/cpi.md).
