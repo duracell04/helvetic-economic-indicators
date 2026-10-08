@@ -16,3 +16,7 @@ dialog{border:1px solid var(--line);border-radius:14px;background:var(--white);c
 .atlas-toast{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));z-index:30;max-width:min(320px,calc(100vw - 32px));padding:9px 12px;border-radius:8px;background:#171717f2;color:var(--white);font-size:.75rem;line-height:1.4;box-shadow:0 4px 18px #0002;pointer-events:none;opacity:0;visibility:hidden;transition:opacity .2s ease,visibility 0s linear .2s}
 .atlas-toast[data-visible=true]{opacity:1;visibility:visible;transition-delay:0s}
 @media(prefers-reduced-motion:reduce){.atlas-toast{transition:none}}
+
+.empty-atlas button{margin-top:18px}.empty-atlas[data-has-charts=true]{padding:22px;margin-top:0}.empty-atlas[data-has-charts=true] button{margin-top:0}
+
+.year-range{display:flex;gap:16px;border:0;padding:0;margin:16px 0 0}.year-range legend{font-size:.8rem}.year-range label{flex:1}.year-range input{min-width:0}.range-help{font-size:.75rem}#chosen-indicator{margin-bottom:10px}#available-years{font-size:.8rem}#empty-atlas button{min-height:42px}

@@ -1,5 +1,11 @@
 # Release notes
 
+## 2026-10-08 — Empty workspaces and chart-specific years
+
+- New workspaces start without charts or timeline controls. An Add indicator card remains below the charts for the next addition; Reset clears the workspace.
+- The indicator picker selects the full available annual range by default. Users can shorten it before adding or edit a chart's year button later without changing other charts.
+- Saved/shared layouts retain their chart arrangements. Older layouts inherit their original shared years into each chart; source observations and publication safeguards are unchanged.
+
 ## 2026-10-08 — Original-unit charts only
 
 - Removed the Original units / Index to 100 selector, base-year controls and optional Original-value labels control and rendering.

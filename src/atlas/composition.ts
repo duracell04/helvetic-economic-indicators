@@ -56,6 +56,8 @@ export function validateState(input: unknown, data: AtlasData, requireAvailable 
   unique(state.annotation_ids, 'annotation');
   for (const id of state.annotation_ids) if (!data.annotations.some(a => a.id === id)) throw new Error(`Unknown annotation: ${id}`);
   for (const panel of state.panels) {
+    // Older saved/shared charts inherit their former shared range exactly once.
+    panel.start_year ??= state.start_year; panel.end_year ??= state.end_year;
     unique(panel.series_ids, 'indicator within panel');
     if (panel.axis.mode === 'native' && panel.axis.base_year !== null) throw new Error('Native panels must not specify an index base');
     const result = compatible(panel, data);
@@ -65,7 +67,11 @@ export function validateState(input: unknown, data: AtlasData, requireAvailable 
       if (requireAvailable && !available(data, id)) throw new Error(`${id}: annual observations are unavailable in this view.`);
     }
   }
+  if(state.panels.length){state.start_year=Math.min(...state.panels.map(panel=>panel.start_year!));state.end_year=Math.max(...state.panels.map(panel=>panel.end_year!));}
   return state;
+}
+export function panelYears(panel: Panel, state: ChartState): Pick<ChartState, 'start_year' | 'end_year'> {
+  return { start_year: panel.start_year ?? state.start_year, end_year: panel.end_year ?? state.end_year };
 }
 
 export function initialState(data: AtlasData, presetId = data.default_preset_id): ChartState {
@@ -74,6 +80,16 @@ export function initialState(data: AtlasData, presetId = data.default_preset_id)
   const state = structuredClone(preset.config);
   state.panels = state.panels.map(p => ({ ...p, series_ids: p.series_ids.filter(id => available(data, id)) })).filter(p => p.series_ids.length > 0);
   return validateState(state, data);
+}
+export function emptyState(data: AtlasData): ChartState {
+  return { ...initialState(data), panels: [] };
+}
+export function availableYearRange(data: AtlasData, ids: string[]): Pick<ChartState, 'start_year' | 'end_year'> {
+  const selected = new Set(ids);
+  for (const id of selected) if (!available(data, id)) throw new Error(`${id}: annual observations are unavailable in this view.`);
+  const years = data.observations.filter(row => selected.has(row.series_id) && row.value !== null).map(row => Number(row.reference_period));
+  if (!years.length) throw new Error('Choose an indicator with available annual observations.');
+  return { start_year: Math.min(...years), end_year: Math.max(...years) };
 }
 export function newPanelId(state: ChartState): string {
   let index = 1;
@@ -86,7 +102,7 @@ export function addSeries(state: ChartState, id: string, data: AtlasData, target
   if (target) {
     if (target.series_ids.includes(id)) throw new Error('This indicator is already in that panel.');
     target.series_ids.push(id);
-  } else next.panels.push({ id: newPanelId(next), title: definition(data, id).title, series_ids: [id], axis: { mode: 'native', base_year: null }, conventions_acknowledged: false });
+  } else next.panels.push({ id: newPanelId(next), title: definition(data, id).title, series_ids: [id], axis: { mode: 'native', base_year: null }, conventions_acknowledged: false, ...availableYearRange(data,[id]) });
   return validateState(next, data);
 }
 export function removeSeries(state: ChartState, panelId: string, id: string): ChartState {
@@ -99,7 +115,7 @@ export function separateSeries(state: ChartState, panelId: string, id: string, d
   if (index < 0 || !state.panels[index].series_ids.includes(id)) throw new Error('Indicator is not in this panel');
   if (state.panels[index].series_ids.length === 1) return structuredClone(state);
   const next = removeSeries(state, panelId, id);
-  next.panels.splice(index + 1, 0, { id: newPanelId(next), title: definition(data, id).title, series_ids: [id], axis: { mode: 'native', base_year: null }, conventions_acknowledged: false });
+  next.panels.splice(index + 1, 0, { id: newPanelId(next), title: definition(data, id).title, series_ids: [id], axis: { mode: 'native', base_year: null }, conventions_acknowledged: false, ...panelYears(state.panels[index],state) });
   return validateState(next, data);
 }
 export function combineAbove(state: ChartState, panelId: string, id: string, data: AtlasData, options?: { acknowledge?: boolean }): ChartState {
@@ -110,6 +126,8 @@ export function combineAbove(state: ChartState, panelId: string, id: string, dat
   const target = next.panels.find(p => p.id === targetId)!;
   if (target.series_ids.includes(id)) throw new Error('This indicator is already in the panel above.');
   target.series_ids.push(id);
+  const sourceRange=panelYears(state.panels[position],state),targetRange=panelYears(target,state);
+  target.start_year=Math.min(sourceRange.start_year,targetRange.start_year);target.end_year=Math.max(sourceRange.end_year,targetRange.end_year);
   if (options?.acknowledge) target.conventions_acknowledged = true;
   return validateState(next, data);
 }
@@ -137,7 +155,7 @@ export function restoreState(data: AtlasData, fragment: string, stored: string |
     try { return {state:decodeState(shared,data)}; } catch { invalid=true; }
   }
   if (stored) {
-    try { return {state:validateState(JSON.parse(stored),data), ...(invalid ? {message:'The shared layout is invalid or unavailable. Your saved layout has been restored. Reset returns to the default.'} : {})}; } catch {invalid=true;}
+    try { return {state:validateState(JSON.parse(stored),data), ...(invalid ? {message:'The shared layout is invalid or unavailable. Your saved layout has been restored.'} : {})}; } catch {invalid=true;}
   }
-  return {state:initialState(data), ...(invalid ? {message:'That saved or shared layout is invalid or unavailable. The default layout has been restored.'} : {})};
+  return {state:emptyState(data), ...(invalid ? {message:'That saved or shared layout is invalid or unavailable. Start a new timeline by adding an indicator.'} : {})};
 }

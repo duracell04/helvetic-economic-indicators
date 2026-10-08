@@ -1,5 +1,5 @@
 import type { AtlasData, ChartState, Panel } from './contracts.ts';
-import { definition } from './composition.ts';
+import { definition, panelYears } from './composition.ts';
 import { chartGeometry, colorFor, formatValue } from './geometry.ts';
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -10,12 +10,13 @@ export function svgElement(tag: string, attrs: Record<string, string | number> =
   return node;
 }
 export function drawChart(svg: SVGSVGElement, panel: Panel, state: ChartState, data: AtlasData, width: number): void {
-  const g = chartGeometry(panel, data, state.start_year, state.end_year, width);
+  const range = panelYears(panel,state);
+  const g = chartGeometry(panel, data, range.start_year, range.end_year, width);
   svg.replaceChildren();
   svg.setAttribute('viewBox', `0 0 ${width} ${g.height}`);
   svg.setAttribute('height', String(g.height));
   svg.dataset.panelId = panel.id;
-  svg.append(svgElement('title', {}, `${panel.title}. ${state.start_year} to ${state.end_year}. Arrow keys inspect years.`));
+  svg.append(svgElement('title', {}, `${panel.title}. ${range.start_year} to ${range.end_year}. Arrow keys inspect years.`));
   const clipId = `clip-${panel.id}`;
   const defs = svgElement('defs');
   const clip = svgElement('clipPath', { id: clipId });
@@ -28,7 +29,7 @@ export function drawChart(svg: SVGSVGElement, panel: Panel, state: ChartState, d
       const node = svgElement('rect', { x: g.x(a.start_year - .45), y: g.top, width: g.x(a.end_year! + .45) - g.x(a.start_year - .45), height: g.bottom - g.top, fill: '#e9e5dc', opacity: .72, 'data-annotation': a.id });
       node.append(svgElement('title', {}, a.label)); plot.append(node);
     }
-    if (a.type === 'event' && state.show_events && a.start_year >= state.start_year && a.start_year <= state.end_year) {
+    if (a.type === 'event' && state.show_events && a.start_year >= range.start_year && a.start_year <= range.end_year) {
       plot.append(svgElement('line', { x1: g.x(a.start_year), x2: g.x(a.start_year), y1: g.top, y2: g.bottom, stroke: '#161616', opacity: .32, 'stroke-dasharray': '3 5', 'data-annotation': a.id }));
       svg.append(svgElement('text', { x: g.x(a.start_year), y: 17, 'text-anchor': 'middle', fill: '#67645e', 'font-size': 10, 'data-event-label': a.id }, `${a.start_year} · ${a.label}`));
     }
@@ -70,7 +71,9 @@ export function drawChart(svg: SVGSVGElement, panel: Panel, state: ChartState, d
 
 export function drawCursor(svg: SVGSVGElement, panel: Panel, state: ChartState, data: AtlasData, year: number | null): void {
   const width = svg.viewBox.baseVal.width;
-  const g = chartGeometry(panel, data, state.start_year, state.end_year, width);
+  const range = panelYears(panel,state);
+  if(year!==null&&(year<range.start_year||year>range.end_year))year=null;
+  const g = chartGeometry(panel, data, range.start_year, range.end_year, width);
   const cursor = svg.querySelector<SVGLineElement>('[data-cursor]')!;
   cursor.setAttribute('opacity', year === null ? '0' : '.6');
   if (year !== null) { cursor.setAttribute('x1', String(g.x(year))); cursor.setAttribute('x2', String(g.x(year))); }

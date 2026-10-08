@@ -1,6 +1,6 @@
 # Swiss Economic Atlas
 
-A lightweight interactive atlas for exploring Swiss economic history on one synchronized timeline. Indicators, topics, calculations and chart arrangements are independent, versioned records. Astro, TypeScript and npm; static GitHub Pages hosting; no backend or database.
+A lightweight interactive atlas for exploring Swiss economic history with independent chart ranges and synchronized year inspection. Indicators, topics, calculations and chart arrangements are independent, versioned records. Astro, TypeScript and npm; static GitHub Pages hosting; no backend or database.
 
 **Production publishes verified nominal GDP, Confederation yields, the 10Y − 3M spread and general government gross debt / GDP.** The long yield includes a labeled historical proxy for 1946–1954; 2026 yields are partial-year observations with different month coverage and no derived spread. Broad gross debt covers 1946–2026, with explicit source breaks and a 2026 IMF forecast; it is not the Maastricht ratio. See the [yield audit](docs/source-audit/yields.md) and [debt audit](docs/source-audit/debt.md). Nominal GDP covers 1948–2025 in current CHF millions, with pre-1995 reconstructions identified; see the [GDP audit](docs/source-audit/gdp.md). The local demonstration remains synthetic. The original `switzerland_macro_1946_2026.html` informed the warm colours, compact controls and synchronized inspection; its compiled observations and recession dates were not imported.
 
@@ -13,9 +13,9 @@ npm ci
 npm run dev:demo
 ```
 
-Open `http://localhost:4321/swiss-economic-atlas/`. The demonstration defaults to 1946–2025 with deliberate gaps, different starting dates, reconstructions, forecasts, revised/provisional observations and illustrative annotations. Every demo page displaying observations identifies them as synthetic.
+Open `http://localhost:4321/swiss-economic-atlas/`. New workspaces start empty. The demonstration includes deliberate gaps, different starting dates, reconstructions, forecasts, revised/provisional observations and illustrative annotations. Every demo page displaying observations identifies them as synthetic.
 
-Use **Add indicator** to search by topic or name. Choose a new panel or an existing one. Each indicator has information, combine-above, separate-below and remove controls; panel arrows reorder the timeline. Charts always use original units. Indicators with different units stay in separate synchronized panels; compatible units can share a panel.
+Use **Add indicator** in the empty card to search by topic or name. The picker selects the full available annual range for the chosen indicator; shorten it before adding if desired. Each chart has its own editable years, and a new Add indicator card remains below the charts. Choose a new panel or an existing compatible one. Each indicator has information, combine-above, separate-below and remove controls; panel arrows reorder the workspace. Charts always use original units. Indicators with different units stay in separate panels; compatible units can share a panel. Reset clears the workspace.
 
 Hover to inspect every panel at the same year. Click/tap to pin; Left/Right step, Home/End select endpoints, Escape releases. Pinned readouts scroll on phones. Save layouts locally or share configuration-only links. Demo and production have separate versioned browser storage.
 
@@ -47,7 +47,7 @@ Production starts with government financing yields, their spread and broad publi
 | `data/registry/registry.json` | Series statistical identities, sources, rights and immutable snapshot references |
 | `data/registry/topics.json` | Many-to-many topic memberships |
 | `data/registry/transformations.json` | Calculation inputs, output, method and convention |
-| `data/registry/presets.json` | Ordered panels, annual range, display indexing, annotations and presentation colours |
+| `data/registry/presets.json` | Reusable panel arrangements, annual ranges, annotations and presentation colours |
 | `data/registry/annotations.json` | Sourced events and intervals, with verification and real/synthetic identity |
 | `data/raw/` / `data/canonical/` | Permitted original source bytes / normalized observations |
 | `scripts/` | Local imports, validation, calculations and deterministic exports |

@@ -80,3 +80,9 @@ Live navigation exposed a zero-width resize callback while the atlas is hidden. 
 Removed the axes-fit note and separate year-inspection row. Chart hover/tap inspection, pinning, keyboard year selection and readout dismissal remain available. Update messages now appear as small bottom-right status toasts, fade after two seconds and clear automatically; repeated actions replace the message and restart its duration without shifting the panels.
 
 All 59 unit/data/configuration cases and 26 desktop/mobile browser cases passed. Browser checks cover toast placement, expiry, replacement, stable panel position and retained keyboard/touch inspection. Astro/TypeScript reported zero errors or warnings, and production safeguards still verify 9,317 permitted observations with no synthetic series.
+
+## Empty workspace and independent chart years — 8 October 2026
+
+New workspaces and Reset show only an Add indicator card. A compact next-indicator card stays below existing charts. The picker defaults to the full nonmissing annual data range for the chosen chart; shortening or editing that chart leaves other chart windows unchanged. One-year windows are supported. Existing saved/shared layouts retain their arrangements and inherit their former shared years into individual panels.
+
+All 61 unit/data/configuration cases and 28 desktop/mobile browser cases passed, with zero Astro/TypeScript errors or warnings. Tests cover the first addition, the next-card position, invalid years, automatic full ranges, independent edits, one-year rendering, last-chart removal with a pinned readout, Reset, saved/shared restoration and legacy migration. Production still contains 35 pages, 555 checked internal references and 9,317 verified permitted observations; economic source records and downloads are unchanged.

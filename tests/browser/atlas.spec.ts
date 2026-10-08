@@ -6,24 +6,74 @@ import {resolveSiteConfig} from '../../site.config.mjs';
 const productionURL=`http://127.0.0.1:4323${resolveSiteConfig().base}`;
 const ready=async(page:Page)=>{await page.goto('./');await expect(page.locator('#atlas')).toHaveAttribute('data-ready','true');};
 const panel=(page:Page,index:number)=>page.locator('.chart-panel').nth(index);
+test.beforeEach(async({page},testInfo)=>{
+  if(testInfo.title==='empty workspace keeps a next-indicator card and independent chart years')return;
+  const demo=JSON.parse(await readFile('.cache/atlas-demo.json','utf8')) as AtlasData;
+  const production=JSON.parse(await readFile('public/data/atlas.json','utf8')) as AtlasData;
+  await page.addInitScript(states=>{
+    const state=location.port==='4323' ? states.production : states.demo;
+    const key=location.port==='4323' ? 'hei-atlas-production-v2' : 'hei-atlas-demo-v2';
+    if(localStorage.getItem(key)===null)localStorage.setItem(key,JSON.stringify(state));
+  },{demo:initialState(demo),production:initialState(production)});
+});
+const years=async(page:Page,index:number,from:string,to:string)=>{
+  await panel(page,index).getByRole('button',{name:/Change years for/}).click();
+  await page.locator('#start-year').fill(from);await page.locator('#end-year').fill(to);
+  await page.getByRole('button',{name:'Apply years',exact:true}).click();
+};
 const add=async(page:Page,title:string,target='')=>{
   await page.getByRole('button',{name:'+ Add indicator',exact:true}).click();
   await page.getByRole('searchbox',{name:'Search indicators'}).fill(title);
-  await page.locator('#add-target').selectOption(target);
   await page.locator(`button[aria-label="Add ${title}"]:not([disabled])`).first().click();
+  await page.locator('#add-target').selectOption(target);
+  await page.getByRole('button',{name:'Add chart',exact:true}).click();
 };
+test('empty workspace keeps a next-indicator card and independent chart years',async({page},testInfo)=>{
+  const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));page.on('console',message=>{if(message.type()==='error')errors.push(message.text());});
+  await page.goto(productionURL);await expect(page.locator('#atlas')).toHaveAttribute('data-ready','true');
+  await expect(page.locator('.chart-panel')).toHaveCount(0);await expect(page.locator('#empty-intro')).toBeVisible();
+  for(const id of ['atlas-toolbar','display-controls','atlas-help'])await expect(page.locator('#'+id)).toBeHidden();
+  await expect(page.locator('#empty-atlas').getByRole('button',{name:'+ Add indicator',exact:true})).toBeVisible();
+  await page.screenshot({path:`.cache/evidence-empty-${testInfo.project.name}.png`});
+  await page.locator('#add-indicator').click();await page.locator('#indicator-search').fill('Nominal GDP');
+  await page.getByRole('button',{name:'Add Nominal GDP',exact:true}).first().click();
+  await expect(page.locator('#start-year')).toHaveValue('1948');await expect(page.locator('#end-year')).toHaveValue('2025');
+  await page.locator('#start-year').fill('2020');await page.locator('#end-year').fill('2000');await page.getByRole('button',{name:'Add chart',exact:true}).click();
+  await expect(page.locator('#indicator-dialog')).toBeVisible();await expect(page.locator('.chart-panel')).toHaveCount(0);
+  await page.locator('#start-year').fill('2000');await page.locator('#end-year').fill('2020');await page.getByRole('button',{name:'Add chart',exact:true}).click();
+  await expect(page.locator('.chart-panel')).toHaveCount(1);await expect(panel(page,0).getByRole('button',{name:/Change years for/})).toHaveText('2000–2020');
+  await expect(page.locator('#empty-intro')).toBeHidden();await expect(page.locator('#empty-atlas')).toBeVisible();
+  const card=(await page.locator('#empty-atlas').boundingBox())!,chart=(await panel(page,0).boundingBox())!;expect(card.y).toBeGreaterThanOrEqual(chart.y+chart.height);
+  await add(page,'Population');await expect(page.locator('.chart-panel')).toHaveCount(2);
+  await expect(panel(page,0).getByRole('button',{name:/Change years for/})).toHaveText('2000–2020');await expect(panel(page,1).getByRole('button',{name:/Change years for/})).toHaveText('1861–2025');
+  await years(page,0,'2010','2020');await expect(panel(page,1).getByRole('button',{name:/Change years for/})).toHaveText('1861–2025');
+  await panel(page,1).locator('svg').focus();await panel(page,1).locator('svg').press('Home');await expect(page.locator('#readout h3')).toContainText('1861');
+  await expect(panel(page,0).locator('[data-cursor]')).toHaveAttribute('opacity','0');await panel(page,1).locator('svg').press('Escape');
+  await page.getByRole('button',{name:'Share ↗',exact:true}).click();const shared=await page.locator('#share-link').inputValue();await page.getByRole('button',{name:'Close share dialog'}).click();
+  await page.reload();await expect(panel(page,0).getByRole('button',{name:/Change years for/})).toHaveText('2010–2020');
+  await page.getByRole('button',{name:'Reset',exact:true}).click();await expect(page.locator('.chart-panel')).toHaveCount(0);await expect(page.locator('#empty-intro')).toBeVisible();
+  await page.goto(shared);await expect(page.locator('.chart-panel')).toHaveCount(2);await expect(panel(page,1).getByRole('button',{name:/Change years for/})).toHaveText('1861–2025');
+  await years(page,0,'2025','2025');await panel(page,0).locator('svg').focus();await panel(page,0).locator('svg').press('Home');await expect(page.locator('#readout h3')).toContainText('2025');await panel(page,0).locator('svg').press('Escape');
+  await panel(page,0).getByRole('button',{name:/Change years for/}).click();await page.getByRole('button',{name:'Use all available years',exact:true}).click();await expect(page.locator('#start-year')).toHaveValue('1948');await expect(page.locator('#end-year')).toHaveValue('2025');await page.getByRole('button',{name:'Apply years',exact:true}).click();
+  await page.getByRole('button',{name:'Reset',exact:true}).click();await add(page,'Nominal GDP');
+  await panel(page,0).locator('svg').focus();await panel(page,0).locator('svg').press('Home');await expect(page.locator('#readout')).toBeVisible();
+  await panel(page,0).getByRole('button',{name:/Remove Nominal GDP from/}).click();
+  await expect(page.locator('.chart-panel')).toHaveCount(0);await expect(page.locator('#empty-intro')).toBeVisible();await expect(page.locator('#atlas-toolbar')).toBeHidden();
+  await expect(page.locator('#readout')).toBeHidden();
+  expect(errors).toEqual([]);
+});
 test('production branding, saved layouts and navigation follow the configured Pages path',async({page},testInfo)=>{
   await page.goto(productionURL);await expect(page.locator('#atlas')).toHaveAttribute('data-ready','true');
   await expect(page.getByRole('heading',{name:'Swiss Economic Atlas',exact:true})).toBeVisible();
   await expect(page).toHaveTitle('Economic atlas · Swiss Economic Atlas');
   await expect(page.locator('.chart-panel select')).toHaveCount(0);await expect(page.locator('#toggle-raw')).toHaveCount(0);
-  await page.locator('#start-year').fill('1980');await page.locator('#start-year').press('Tab');
+  await years(page,0,'1980','2026');
   expect(await page.evaluate(()=>localStorage.getItem('hei-atlas-production-v2'))).not.toBeNull();
-  await page.reload();await expect(page.locator('#start-year')).toHaveValue('1980');
+  await page.reload();await expect(panel(page,0).getByRole('button',{name:/Change years for/})).toHaveText('1980–2026');
   await page.getByRole('button',{name:'Share ↗',exact:true}).click();
   const shared=await page.locator('#share-link').inputValue();expect(shared.startsWith(productionURL+'#chart=')).toBe(true);
   await page.getByRole('button',{name:'Close share dialog'}).click();await page.getByRole('button',{name:'Reset',exact:true}).click();
-  await page.goto(shared);await expect(page.locator('#start-year')).toHaveValue('1980');
+  await page.goto(shared);await expect(panel(page,0).getByRole('button',{name:/Change years for/})).toHaveText('1980–2026');
   await page.getByRole('link',{name:'Indicators & topics',exact:true}).click();
   await expect(page).toHaveURL(productionURL+'series/');
   const navigation=page.getByRole('navigation',{name:'Main navigation'});
@@ -46,7 +96,7 @@ test('compact status toasts expire without shifting charts; the inspection row i
   expect((await panel(page,0).boundingBox())!.y).toBe(before.y);
   await page.screenshot({path:`.cache/evidence-toast-${testInfo.project.name}.png`});
   await page.clock.fastForward(1500);await expect(toast).toBeVisible();
-  await page.getByRole('button',{name:'Reset',exact:true}).click();await expect(toast).toHaveText('Default layout restored.');
+  await panel(page,0).getByRole('button',{name:/Move .* down/}).click();await expect(toast).toHaveText('Chart arrangement updated.');
   await page.clock.fastForward(1500);await expect(toast).toBeVisible();
   await page.clock.fastForward(700);await expect(toast).toBeHidden();await expect(toast).toBeEmpty();
   const chart=panel(page,0).locator('svg');await chart.focus();await chart.press('Home');await expect(page.locator('#readout h3')).toContainText('1946 · pinned');
@@ -60,15 +110,14 @@ test('original-unit composition, reorder, ranges and saved/shared layouts',async
   await page.locator('[data-indicator="demo-registered-unemployment-annual"]').getByRole('button',{name:'Combine Annual registered unemployment with panel above',exact:true}).click();await expect(page.locator('.chart-panel')).toHaveCount(5);
   await panel(page,0).getByRole('button',{name:/Move .* down/}).click();await expect(panel(page,0)).toContainText('Real GDP per capita');
   await panel(page,1).getByRole('button',{name:/Move .* up/}).click();
-  await page.locator('#start-year').fill('1980');await page.locator('#start-year').press('Tab');
-  await page.locator('#end-year').fill('2020');await page.locator('#end-year').press('Tab');
+  await years(page,0,'1980','2020');
   await expect(page.locator('.chart-panel input[type="number"]')).toHaveCount(0);
   await add(page,'Population');await expect(page.locator('.chart-panel')).toHaveCount(6);
   await panel(page,5).getByRole('button',{name:/Remove Population/}).click();await expect(page.locator('.chart-panel')).toHaveCount(5);
-  await page.reload();await expect(page.locator('#start-year')).toHaveValue('1980');
+  await page.reload();await expect(panel(page,0).getByRole('button',{name:/Change years for/})).toHaveText('1980–2020');
   await page.getByRole('button',{name:'Share ↗',exact:true}).click();const url=await page.locator('#share-link').inputValue();expect(url).toContain('#chart=');
-  await page.getByRole('button',{name:'Close share dialog'}).click();await page.getByRole('button',{name:'Reset',exact:true}).click();await expect(page.locator('.chart-panel')).toHaveCount(5);await expect(page.locator('#start-year')).toHaveValue('1946');await expect(panel(page,0)).toHaveAttribute('data-panel','levels');
-  await page.goto(url);await expect(page.locator('.chart-panel')).toHaveCount(5);await expect(page.locator('#start-year')).toHaveValue('1980');
+  await page.getByRole('button',{name:'Close share dialog'}).click();await page.getByRole('button',{name:'Reset',exact:true}).click();await expect(page.locator('.chart-panel')).toHaveCount(0);await expect(page.locator('#empty-intro')).toBeVisible();
+  await page.goto(url);await expect(page.locator('.chart-panel')).toHaveCount(5);await expect(panel(page,0).getByRole('button',{name:/Change years for/})).toHaveText('1980–2020');
 });
 test('unlike units stay separate and differing annual conventions require acknowledgment',async({page})=>{
   await ready(page);
@@ -83,11 +132,12 @@ test('former indexed saved and shared layouts render only original units without
   const data=JSON.parse(await readFile('.cache/atlas-demo.json','utf8')) as AtlasData;
   const current=initialState(data);
   const legacy={...current,start_year:1980,show_raw:true,panels:[{...current.panels[0],series_ids:['demo-real-gdp','demo-real-gdp-per-capita','demo-population'],axis:{mode:'indexed' as const,base_year:1960}},...current.panels.slice(3)]};
+  for(const panel of legacy.panels){delete panel.start_year;delete panel.end_year;}
   await page.addInitScript(value=>localStorage.setItem('hei-atlas-demo-v2',JSON.stringify(value)),legacy);
-  await ready(page);await expect(page.locator('.chart-panel')).toHaveCount(5);await expect(page.locator('#start-year')).toHaveValue('1980');
+  await ready(page);await expect(page.locator('.chart-panel')).toHaveCount(5);await expect(panel(page,0).getByRole('button',{name:/Change years for/})).toHaveText('1980–2025');
   await expect(page.locator('.chart-panel select')).toHaveCount(0);await expect(page.locator('#toggle-raw')).toHaveCount(0);await expect(page.locator('[data-raw-label]')).toHaveCount(0);
   await panel(page,0).locator('svg').focus();await panel(page,0).locator('svg').press('Home');await expect(page.locator('#readout')).not.toContainText('Index');
-  await page.goto('./#chart='+encodeState(legacy));await expect(page.locator('.chart-panel')).toHaveCount(5);await expect(page.locator('#start-year')).toHaveValue('1980');
+  await page.goto('./#chart='+encodeState(legacy));await expect(page.locator('.chart-panel')).toHaveCount(5);await expect(panel(page,0).getByRole('button',{name:/Change years for/})).toHaveText('1980–2025');
   await expect(page.locator('[data-raw-label]')).toHaveCount(0);await expect(page.locator('#panels')).not.toContainText('Index ·');
   await page.getByRole('button',{name:'Reset',exact:true}).click();
   const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('hei-atlas-demo-v2')!));expect(saved.show_raw).toBe(false);expect(saved.panels.every((p:{axis:{mode:string}})=>p.axis.mode==='native')).toBe(true);
@@ -108,7 +158,7 @@ test('synchronized cursor, missing values, pinning, keyboard, annotations and re
   await page.locator('#toggle-events').click();await expect(page.locator('[data-event-label]')).toHaveCount(0);
   await page.locator('#toggle-intervals').click();await expect(page.locator('[data-annotation]')).toHaveCount(0);
   await expect(page.locator('#toggle-raw')).toHaveCount(0);await expect(page.locator('[data-raw-label]')).toHaveCount(0);
-  await page.locator('#end-year').fill('2026');await page.locator('#end-year').press('Tab');await expect(page.locator('[data-kind="forecast"]')).toHaveCount(6);
+  await years(page,0,'1946','2026');await expect(page.locator('[data-kind="forecast"]')).toHaveCount(1);
   await expect(page.locator('[data-statistical-break]')).toHaveCount(1);
   if(testInfo.project.name==='desktop'){await page.setViewportSize({width:1000,height:800});let b:{x:number;y:number}|null=null;await expect.poll(async()=>{b=await overlay.boundingBox();return Boolean(b);}).toBe(true);await page.mouse.move(b!.x+80,b!.y+40);await expect(page.locator('#readout')).toBeVisible();}
   await page.evaluate(async()=>{document.getElementById('panels')!.style.display='none';await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});
@@ -124,11 +174,12 @@ test('invalid shared layouts recover; new energy definitions render without code
   data.registry.series.push({...source,id:'demo-energy',title:'Energy consumption',unit:{code:'count',label:'GWh',dimension:'energy',scale:1}});data.observations.push(...data.observations.filter(o=>o.series_id===source.id).map(o=>({...o,series_id:'demo-energy'})));
   data.topics.push({id:'energy',title:'Energy',description:'Synthetic test',series_ids:['demo-energy']});
   const config=initialState(data);config.preset_id='energy';config.panels=[{id:'energy-panel',title:'Energy',series_ids:['demo-energy'],axis:{mode:'native',base_year:null},conventions_acknowledged:false}];data.presets.push({id:'energy',title:'Energy',config});data.default_preset_id='energy';
+  await page.evaluate(state=>localStorage.setItem('hei-atlas-demo-v2',JSON.stringify(state)),config);
   await page.route('**/data/atlas.json',route=>route.fulfill({json:data}));await ready(page);await expect(panel(page,0)).toContainText('Energy consumption');await expect(page.locator('[data-series-id="demo-energy"]')).toHaveCount(2);
   await page.locator('#add-indicator').click();await page.locator('#indicator-search').fill('energy');await expect(page.locator('#indicator-list')).toContainText('Energy');
 });
 test('production renders yields, debt and distinct 2026 statuses',async({page},testInfo)=>{
-  await page.goto(productionURL);await expect(page.locator('#atlas')).toHaveAttribute('data-ready','true');await expect(page.locator('#demo-banner')).toBeHidden();await expect(page.locator('.chart-panel')).toHaveCount(3);await expect(page.locator('#empty-atlas')).toBeHidden();
+  await page.goto(productionURL);await expect(page.locator('#atlas')).toHaveAttribute('data-ready','true');await expect(page.locator('#demo-banner')).toBeHidden();await expect(page.locator('.chart-panel')).toHaveCount(3);await expect(page.locator('#empty-atlas')).toBeVisible();await expect(page.locator('#empty-intro')).toBeHidden();
   await expect(panel(page,0)).toContainText('2026 partial year');
   const chart=panel(page,0).locator('svg');await chart.focus();await chart.press('End');
   await expect(page.locator('#readout')).toContainText('Jan–Aug 2026 (8 months)');await expect(page.locator('#readout')).toContainText('Jan–Sep 2026 (9 months)');await expect(page.locator('#readout')).toContainText('provisional');await expect(page.locator('#readout')).toContainText('No observation');
@@ -163,15 +214,14 @@ test('production nominal GDP renders original units, audited history, gaps and d
   await expect(gdp.locator('[data-statistical-break="nominal-gdp"]')).toHaveCount(1);
   const chart=gdp.locator('svg');await chart.focus();await chart.press('Home');
   await expect(page.locator('#readout')).toContainText('Nominal GDP');
-  await expect(page.locator('#readout')).toContainText('No observation');
-  await chart.press('ArrowRight');await chart.press('ArrowRight');
+  await expect(page.locator('#readout h3')).toContainText('1948');
   await expect(page.locator('#readout')).toContainText('CHF millions');
   await expect(page.locator('#readout')).toContainText('reconstructed');
-  await chart.press('End');await expect(page.locator('#readout h3')).toContainText('2026');
+  await chart.press('End');await expect(page.locator('#readout h3')).toContainText('2025');
   const gdpReadout=page.locator('#readout .readout-row').filter({hasText:'Nominal GDP'});
-  await expect(gdpReadout).toContainText('No observation');await chart.press('Escape');
+  await expect(gdpReadout).toContainText('CHF millions');await chart.press('Escape');
   await expect(gdp.getByRole('combobox')).toHaveCount(0);
-  await page.locator('#start-year').fill('1960');await page.locator('#start-year').press('Tab');
+  await years(page,3,'1960','2025');
   await chart.focus();await chart.press('Home');await expect(gdpReadout).toContainText('CHF millions');
   await expect(gdpReadout).not.toContainText('Index');await chart.press('Escape');
   await page.locator('[data-indicator="nominal-gdp"]').getByRole('button',{name:'Information about Nominal GDP'}).click();
@@ -204,7 +254,7 @@ test('comparison cancellation keeps different conventions in a separate new pane
 test('demo storage cannot restore into production on the same origin',async({page})=>{
  await ready(page);await add(page,'Population');
  const production=JSON.parse(await readFile('public/data/atlas.json','utf8'));
- await page.route('**/data/atlas.json',route=>route.fulfill({json:production}));await page.reload();await expect(page.locator('#atlas')).toHaveAttribute('data-ready','true');await expect(page.locator('.chart-panel')).toHaveCount(3);await expect(page.locator('#demo-banner')).toBeHidden();await expect(page.locator('[data-indicator^="demo-"]')).toHaveCount(0);
+ await page.route('**/data/atlas.json',route=>route.fulfill({json:production}));await page.reload();await expect(page.locator('#atlas')).toHaveAttribute('data-ready','true');await expect(page.locator('.chart-panel')).toHaveCount(0);await expect(page.locator('#demo-banner')).toBeHidden();await expect(page.locator('[data-indicator^="demo-"]')).toHaveCount(0);
  await page.unroute('**/data/atlas.json');await page.reload();await expect(page.locator('.chart-panel')).toHaveCount(6);
 });
 
@@ -217,7 +267,7 @@ test('production published real growth is selectable with metadata and downloada
  await expect(growth.locator('path[data-kind="reconstructed"]')).toBeVisible();
  await expect(growth.locator('path[data-kind="observed"]')).toBeVisible();
  await growth.locator('svg').focus();await growth.locator('svg').press('End');
- await expect(page.locator('#readout .readout-row').filter({hasText:'Real GDP growth'})).toContainText('No observation');
+ await expect(page.locator('#readout .readout-row').filter({hasText:'Real GDP growth'})).toContainText('1.61%');
  await page.goto(`${origin}series/real-gdp-growth/`);await expect(page.locator('body')).toContainText('77 observations available.');
  const rows=await (await page.request.get(`${origin}data/real-gdp-growth.json`)).json();
  expect(rows).toHaveLength(77);expect(rows[0].value).toBe(-3.49393473432399);expect(rows.at(-1).value).toBe(1.60786486422242);
@@ -245,7 +295,7 @@ test('every verified dataset is catalogued, downloadable and selectable at its s
   await page.locator('#add-indicator').click();
   const button=page.getByRole('button',{name:`Add ${series.title}`,exact:true}).first();
   if(series.frequency==='annual'){
-   await expect(button).toBeEnabled();await button.click();
+   await expect(button).toBeEnabled();await button.click();await page.getByRole('button',{name:'Add chart',exact:true}).click();
    const chart=page.locator('.chart-panel').filter({has:page.locator(`[data-indicator="${series.id}"]`)}).last();
    await expect(chart).toBeVisible();await chart.locator('svg').focus();await chart.locator('svg').press('End');
    await expect(page.locator('#readout .readout-row').filter({hasText:series.title}).first()).toBeVisible();

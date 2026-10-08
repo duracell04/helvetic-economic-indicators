@@ -3,24 +3,31 @@ import Layout from '../layouts/Layout.astro';
 import { href } from '../lib/catalogue';
 ---
 <Layout title="Economic atlas" atlas>
-  <header class="atlas-heading"><div><h1>Swiss Economic Atlas</h1><p>Swiss economic history on one timeline. Combine, separate and rearrange the indicators.</p></div><span class="atlas-badge">Economic atlas<br />Annual view</span></header>
+  <header class="atlas-heading"><div><h1>Swiss Economic Atlas</h1><p>Explore Swiss economic history. Add indicators, compare charts and arrange your workspace.</p></div><span class="atlas-badge">Economic atlas<br />Annual view</span></header>
   <div id="atlas" data-url={href('data/atlas.json')}>
     <aside id="demo-banner" class="demo-banner" hidden>Synthetic demonstration — not Swiss historical observations</aside>
-    <div class="atlas-toolbar" aria-label="Chart composition controls">
-      <button id="add-indicator" class="primary">+ Add indicator</button>
-      <label>From <input id="start-year" type="number" min="1800" max="2199" value="1946" /></label>
-      <label>To <input id="end-year" type="number" min="1800" max="2199" value="2025" /></label>
+    <div id="atlas-toolbar" class="atlas-toolbar" aria-label="Chart composition controls" hidden>
       <button id="reset-layout">Reset</button><button id="share-layout">Share ↗</button>
     </div>
-    <div class="display-controls"><button id="toggle-events" aria-pressed="true">Event markers</button><button id="toggle-intervals" aria-pressed="true">Shaded intervals</button></div>
+    <div id="display-controls" class="display-controls" hidden><button id="toggle-events" aria-pressed="true">Event markers</button><button id="toggle-intervals" aria-pressed="true">Shaded intervals</button></div>
     <p id="atlas-status" class="atlas-toast" role="status" aria-live="polite" aria-atomic="true" data-visible="false"></p>
-    <section id="empty-atlas" class="empty-atlas" hidden><h2>Your timeline is ready.</h2><p>Add an available annual indicator to start. Production charts will appear when verified observations are published.</p></section>
     <div id="panels"></div>
-    <p class="atlas-help">⇧ Combine with the panel above · ⇩ Separate into a new panel · ↑↓ Move a panel. Hover or tap to inspect; click to pin. Arrow keys move through years. Dotted: reconstructed · Dashed: forecast · Hollow markers: provisional · Squares: revised · Triangles: definition breaks.</p>
+    <section id="empty-atlas" class="empty-atlas"><div id="empty-intro"><h2>Your timeline is ready.</h2><p>Choose an indicator to start.</p></div><button id="add-indicator" class="primary">+ Add indicator</button></section>
+    <p id="atlas-help" class="atlas-help" hidden>⇧ Combine with the panel above · ⇩ Separate into a new panel · ↑↓ Move a panel. Hover or tap to inspect; click to pin. Arrow keys move through years. Dotted: reconstructed · Dashed: forecast · Hollow markers: provisional · Squares: revised · Triangles: definition breaks.</p>
     <aside id="readout" class="readout" aria-label="Selected year observations" hidden></aside>
     <noscript><p>Enable JavaScript to compose and inspect charts. Series definitions remain available in the catalogue.</p></noscript>
   </div>
-  <dialog id="indicator-dialog"><div class="dialog-header"><h2>Add an indicator</h2><button data-close aria-label="Close indicator selector">×</button></div><input id="indicator-search" type="search" placeholder="Search indicators or topics" aria-label="Search indicators" /><label class="add-target">Add to <select id="add-target"></select></label><div id="indicator-list"></div></dialog>
+  <dialog id="indicator-dialog">
+    <div class="dialog-header"><h2 id="picker-title">Add an indicator</h2><button data-close aria-label="Close indicator selector">×</button></div>
+    <div id="indicator-picker"><input id="indicator-search" type="search" placeholder="Search indicators or topics" aria-label="Search indicators" /><div id="indicator-list"></div></div>
+    <form id="indicator-config" hidden>
+      <h3 id="chosen-indicator"></h3><label id="add-target-label" class="add-target">Add to <select id="add-target"></select></label><p id="available-years"></p>
+      <fieldset class="year-range"><legend>Chart years</legend><label>From <input id="start-year" type="number" required /></label><label>To <input id="end-year" type="number" required /></label></fieldset>
+      <p class="range-help">These years apply to this chart.</p>
+      <button id="use-full-range" type="button">Use all available years</button>
+      <div class="dialog-actions"><button id="back-to-indicators" type="button">Back</button><button id="confirm-indicator" type="submit" class="primary">Add chart</button></div>
+    </form>
+  </dialog>
   <dialog id="comparison-dialog"><div class="dialog-header"><h2>Different annual conventions</h2><button data-close aria-label="Close comparison">×</button></div><p id="comparison-description"></p><div class="dialog-actions"><button id="approve-comparison" class="primary">Combine with these conventions</button><button id="keep-separate">Keep separate</button></div></dialog>
   <dialog id="info-dialog"><div class="dialog-header"><span>Indicator information</span><button data-close aria-label="Close indicator information">×</button></div><div id="info-content"></div></dialog>
   <dialog id="share-dialog"><div class="dialog-header"><h2>Share this arrangement</h2><button data-close aria-label="Close share dialog">×</button></div><p id="share-message"></p><input id="share-link" readonly aria-label="Share link" /><p class="muted">Links from the synthetic preview require the same demo data to be available. Production and demo layouts are kept separate.</p></dialog>

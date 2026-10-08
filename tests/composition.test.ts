@@ -1,10 +1,36 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createDemo, validateAtlas, productionAtlas } from '../scripts/lib/atlas-data.ts';
-import { initialState, available, addSeries, removeSeries, separateSeries, combineAbove, movePanel, compatible, validateState, encodeState, decodeState, restoreState } from '../src/atlas/composition.ts';
+import { initialState, emptyState, availableYearRange, panelYears, available, addSeries, removeSeries, separateSeries, combineAbove, movePanel, compatible, validateState, encodeState, decodeState, restoreState } from '../src/atlas/composition.ts';
 import { chartGeometry, pointsFor } from '../src/atlas/geometry.ts';
 
 const data = await createDemo(process.cwd());
+test('new timelines start empty while saved and shared charts remain intact',()=>{
+  const empty=emptyState(data),preset=initialState(data);
+  assert.deepEqual(empty.panels,[]);assert.deepEqual(restoreState(data,'',null).state,empty);
+  assert.deepEqual(restoreState(data,'',JSON.stringify(preset)).state,preset);
+  assert.deepEqual(restoreState(data,'#chart='+encodeState(preset),null).state,preset);
+  assert.deepEqual(restoreState(data,'#chart=invalid','invalid').state,empty);
+  assert.deepEqual(restoreState(data,'',JSON.stringify(empty)).state,empty);
+});
+test('chart ranges use nonmissing annual observations and remain independent in saved layouts',async()=>{
+  const production=await productionAtlas(process.cwd());
+  assert.deepEqual(availableYearRange(production,['nominal-gdp']),{start_year:1948,end_year:2025});
+  const current=addSeries(addSeries(emptyState(production),'nominal-gdp',production),'gmbf-3m-annual',production);
+  assert.deepEqual(panelYears(current.panels[0],current),{start_year:1948,end_year:2025});
+  assert.deepEqual(panelYears(current.panels[1],current),{start_year:1980,end_year:2026});
+  current.panels[0].start_year=2000;current.panels[0].end_year=2020;
+  const shortened=validateState(current,production);
+  assert.deepEqual(panelYears(shortened.panels[1],shortened),{start_year:1980,end_year:2026});
+  assert.deepEqual(decodeState(encodeState(shortened),production),shortened);
+  const legacy={...initialState(production),start_year:1990,end_year:2010};
+  for(const panel of legacy.panels){delete panel.start_year;delete panel.end_year;}
+  assert.ok(validateState(legacy,production).panels.every(panel=>panel.start_year===1990&&panel.end_year===2010));
+  const invalid=structuredClone(shortened);invalid.panels[0].start_year=2021;assert.throws(()=>validateState(invalid,production),/Chart years/);
+  const single=structuredClone(shortened);single.panels[0].start_year=2020;single.panels[0].end_year=2020;
+  const year=validateState(single,production);assert.equal(chartGeometry(year.panels[0],production,2020,2020,900).series[0].points.length,1);
+  assert.throws(()=>availableYearRange(production,[production.registry.series.find(series=>series.frequency!=='annual')!.id]),/annual observations are unavailable/);
+});
 test('new sector, indicator and preset are metadata additions', () => {
   const energy = structuredClone(data);
   const source = energy.registry.series.find(s=>s.id==='demo-population')!;

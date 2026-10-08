@@ -1,5 +1,5 @@
 import type { AtlasData, ChartState, Panel } from './contracts.ts';
-import { available, definition, initialState, validateState, compatible, removeSeries, separateSeries, movePanel, restoreState, encodeState, newPanelId } from './composition.ts';
+import { available, availableYearRange, definition, emptyState, panelYears, validateState, compatible, removeSeries, separateSeries, movePanel, restoreState, encodeState, newPanelId } from './composition.ts';
 import { colorFor, formatValue, pointsFor } from './geometry.ts';
 import { drawChart, drawCursor } from './renderer.ts';
 
@@ -41,6 +41,10 @@ async function boot(): Promise<void> {
   const start = element<HTMLInputElement>('start-year'), end = element<HTMLInputElement>('end-year');
   const target = element<HTMLSelectElement>('add-target');
   const search = element<HTMLInputElement>('indicator-search');
+  const config = element<HTMLFormElement>('indicator-config');
+  let chosenId: string | null = null;
+  let editingPanelId: string | null = null;
+  let fullRange = { start_year: state.start_year, end_year: state.end_year };
   element('demo-banner').hidden = data.mode !== 'demo';
 
   function save(): void {
@@ -96,15 +100,7 @@ async function boot(): Promise<void> {
       const section = make('section'); section.append(make('h3', '', topic.title));
       for (const id of ids) {
         const s = definition(data, id), canAdd = available(data, id);
-        const node = button(`+ ${s.title}`, `Add ${s.title}`, () => {
-          const next = structuredClone(state), targetPanel = next.panels.find(p => p.id === target.value);
-          const single: Panel = { id: newPanelId(next), title: s.title, series_ids: [id], axis: { mode: 'native', base_year: null }, conventions_acknowledged: false };
-          if (targetPanel) {
-            if (targetPanel.series_ids.includes(id)) { message('This indicator is already in that panel.'); return; }
-            targetPanel.series_ids.push(id);
-            const fallback = structuredClone(state); fallback.panels.push(single); selector.close(); propose(next, fallback);
-          } else { next.panels.push(single); selector.close(); commit(next); }
-        }, !canAdd);
+        const node = button(`+ ${s.title}`, `Add ${s.title}`, () => configure(id), !canAdd);
         const detail = make('small', '', canAdd ? `${s.unit.label} · annual${s.data_class === 'synthetic' ? ' · synthetic example' : ''}` : s.frequency !== 'annual' ? `${s.frequency} · unavailable in this annual view` : 'Awaiting verified observations');
         const row = make('div', 'indicator-option'); row.append(node, detail); section.append(row); matches++;
       }
@@ -112,10 +108,50 @@ async function boot(): Promise<void> {
     }
     if (!matches) listing.append(make('p', 'muted', 'No matching indicators.'));
   }
-  element('add-indicator').addEventListener('click', () => {
+  function setRange(range: Pick<ChartState, 'start_year' | 'end_year'>): void {
+    start.value=String(range.start_year);end.value=String(range.end_year);end.setCustomValidity('');
+  }
+  function configure(id: string | null, panelId: string | null = null): void {
+    chosenId=id;editingPanelId=panelId;
+    const panel=state.panels.find(panel=>panel.id===(panelId ?? target.value));
+    fullRange=availableYearRange(data,[...(panel?.series_ids ?? []),...(id ? [id] : [])]);
+    for(const input of [start,end]){input.min=String(fullRange.start_year);input.max=String(fullRange.end_year);}
+    const current=id ? fullRange : panelYears(panel!,state);
+    const clipped={start_year:Math.max(fullRange.start_year,current.start_year),end_year:Math.min(fullRange.end_year,current.end_year)};
+    setRange(clipped.start_year<=clipped.end_year ? clipped : fullRange);
+    element('available-years').textContent=`Available years: ${fullRange.start_year}–${fullRange.end_year}`;
+    element('picker-title').textContent=id ? 'Add an indicator' : 'Chart years';
+    element('chosen-indicator').textContent=id ? definition(data,id).title : panel!.title;
+    element('indicator-picker').hidden=true;config.hidden=false;
+    element('add-target-label').hidden=id===null;element('back-to-indicators').hidden=id===null;
+    element('confirm-indicator').textContent=id ? 'Add chart' : 'Apply years';
+    start.focus();
+  }
+  function openPicker(): void {
+    chosenId=null;editingPanelId=null;config.hidden=true;element('indicator-picker').hidden=false;element('picker-title').textContent='Add an indicator';
     target.replaceChildren(); const option = make('option', '', 'New panel below'); option.value = ''; target.append(option);
     for (const panel of state.panels) { const option = make('option', '', panel.title); option.value = panel.id; target.append(option); }
     search.value = ''; renderSelector(); selector.showModal(); search.focus();
+  }
+  element('add-indicator').addEventListener('click',openPicker);
+  element('back-to-indicators').addEventListener('click',()=>{chosenId=null;config.hidden=true;element('indicator-picker').hidden=false;search.focus();});
+  target.addEventListener('change',()=>{if(chosenId)configure(chosenId);});
+  element('use-full-range').addEventListener('click',()=>setRange(fullRange));
+  for(const input of [start,end])input.addEventListener('input',()=>end.setCustomValidity(''));
+  config.addEventListener('submit',event=>{
+    event.preventDefault();
+    if(Number(start.value)>Number(end.value)){end.setCustomValidity('Choose an end year on or after the start year.');end.reportValidity();return;}
+    const range={start_year:Number(start.value),end_year:Number(end.value)},next=structuredClone(state);
+    if(!chosenId){Object.assign(next.panels.find(panel=>panel.id===editingPanelId)!,range);selector.close();commit(next,'Chart years updated.');return;}
+    const s=definition(data,chosenId),targetPanel=next.panels.find(panel=>panel.id===target.value);
+    const single: Panel={id:newPanelId(next),title:s.title,series_ids:[chosenId],axis:{mode:'native',base_year:null},conventions_acknowledged:false,...range};
+    if(targetPanel){
+      if(targetPanel.series_ids.includes(chosenId)){message('This indicator is already in that panel.');return;}
+      targetPanel.series_ids.push(chosenId);
+      Object.assign(targetPanel,range);
+      const fallback=structuredClone(state);fallback.panels.push(single);
+      selector.close();propose(next,fallback);
+    }else{next.panels.push(single);selector.close();commit(next);}
   });
   search.addEventListener('input', renderSelector);
 
@@ -130,6 +166,8 @@ async function boot(): Promise<void> {
     readout.replaceChildren(make('h3', '', `${year}${pinned ? ' · pinned' : ''}`));
     if(pinned) readout.append(button('×','Release selected year',()=>updateCursor(null,false)));
     for (const panel of state.panels) {
+      const range=panelYears(panel,state);
+      if(year<range.start_year||year>range.end_year)continue;
       const group = make('div', 'readout-group'); group.append(make('h4', '', panel.title));
       for (const id of panel.series_ids) {
         const s = definition(data, id), point = pointsFor(panel, id, data, year, year)[0];
@@ -147,22 +185,26 @@ async function boot(): Promise<void> {
       readout.style.top = `${Math.max(10, Math.min(position.y + 16, window.innerHeight - readout.offsetHeight - 14))}px`;
     } else { readout.style.left = ''; readout.style.top = ''; }
   }
-  function keyboard(event: KeyboardEvent): void {
-    const current = selectedYear ?? Math.min(state.end_year, Math.max(state.start_year, 1960));
-    const steps: Record<string, number> = { ArrowLeft: current - 1, ArrowRight: current + 1, Home: state.start_year, End: state.end_year };
-    if (event.key in steps) { event.preventDefault(); updateCursor(Math.max(state.start_year, Math.min(state.end_year, steps[event.key])), true); }
+  function keyboard(event: KeyboardEvent, panel: Panel): void {
+    const range=panelYears(panel,state),current=Math.min(range.end_year,Math.max(range.start_year,selectedYear ?? 1960));
+    const steps: Record<string, number> = { ArrowLeft: current - 1, ArrowRight: current + 1, Home: range.start_year, End: range.end_year };
+    if (event.key in steps) { event.preventDefault(); updateCursor(Math.max(range.start_year, Math.min(range.end_year, steps[event.key])), true); }
     if (event.key === 'Escape') { event.preventDefault(); updateCursor(null, false); }
   }
 
   function render(): void {
-    start.value = String(state.start_year); end.value = String(state.end_year);
     for (const [id, value] of [['toggle-events',state.show_events],['toggle-intervals',state.show_intervals]] as const) element(id).setAttribute('aria-pressed',String(value));
-    element('empty-atlas').hidden = state.panels.length !== 0;
+    const hasCharts = state.panels.length > 0;
+    for (const id of ['atlas-toolbar','display-controls','atlas-help']) element(id).hidden = !hasCharts;
+    element('empty-intro').hidden = hasCharts;
+    element('empty-atlas').dataset.hasCharts = String(hasCharts);
     panels.replaceChildren();
     for (const [index, panel] of state.panels.entries()) {
       const section = make('section', 'chart-panel'); section.dataset.panel = panel.id; section.setAttribute('aria-label', panel.title);
       const header = make('div', 'panel-header'); header.append(make('h2', '', `${String(index+1).padStart(2,'0')}  ${panel.title}`));
       const settings = make('div', 'panel-settings');
+      const range=panelYears(panel,state);
+      settings.append(button(`${range.start_year}–${range.end_year}`,`Change years for ${panel.title}`,()=>{selector.showModal();configure(null,panel.id);}));
       settings.append(button('↑',`Move ${panel.title} up`,()=>commit(movePanel(state,panel.id,-1)),index===0),button('↓',`Move ${panel.title} down`,()=>commit(movePanel(state,panel.id,1)),index===state.panels.length-1)); header.append(settings); section.append(header);
       const legend=make('div','panel-legend');
       for (const id of panel.series_ids) {
@@ -171,7 +213,9 @@ async function boot(): Promise<void> {
         item.append(swatch,make('span','series-title',s.title),button('i',`Information about ${s.title}`,()=>showInfo(id)));
         item.append(button('⇧',`Combine ${s.title} with panel above`,()=>{
           const next=removeSeries(state,panel.id,id),above=next.panels.find(p=>p.id===state.panels[index-1].id)!;
-          if (above.series_ids.includes(id)) {message('This indicator is already in the panel above.');return;} above.series_ids.push(id);propose(next);
+          if (above.series_ids.includes(id)) {message('This indicator is already in the panel above.');return;}
+          above.series_ids.push(id);const otherRange=panelYears(above,state);
+          above.start_year=Math.min(range.start_year,otherRange.start_year);above.end_year=Math.max(range.end_year,otherRange.end_year);propose(next);
         },index===0));
         item.append(button('⇩',`Separate ${s.title}`,()=>commit(separateSeries(state,panel.id,id,data)),panel.series_ids.length===1));
         item.append(button('×',`Remove ${s.title} from ${panel.title}`,()=>commit(removeSeries(state,panel.id,id))));legend.append(item);
@@ -182,17 +226,15 @@ async function boot(): Promise<void> {
       section.append(unit);
       const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('role','group');svg.setAttribute('aria-label',`${panel.title}, interactive annual chart`);svg.setAttribute('tabindex','0');
       section.append(svg);panels.append(section);drawChart(svg,panel,state,data,section.clientWidth);
-      const pick=(event:PointerEvent)=>Math.max(state.start_year,Math.min(state.end_year,Math.round(state.start_year+(event.clientX-svg.getBoundingClientRect().left-64)/(svg.clientWidth-88)*(state.end_year-state.start_year))));
+      const pick=(event:PointerEvent)=>Math.max(range.start_year,Math.min(range.end_year,Math.round(range.start_year+(event.clientX-svg.getBoundingClientRect().left-64)/(svg.clientWidth-88)*(range.end_year-range.start_year))));
       svg.addEventListener('pointermove',event=>{const e=event as PointerEvent;if((e.target as Element).hasAttribute('data-overlay')&&!pinned&&e.pointerType!=='touch')updateCursor(pick(e),false,{x:e.clientX,y:e.clientY});});
       svg.addEventListener('pointerdown',event=>{const e=event as PointerEvent;if(!(e.target as Element).hasAttribute('data-overlay'))return;const year=pick(e);updateCursor(year,!(pinned&&selectedYear===year),{x:e.clientX,y:e.clientY});});
-      svg.addEventListener('pointerleave',()=>{if(!pinned)updateCursor(null,false);});svg.addEventListener('keydown',keyboard);
+      svg.addEventListener('pointerleave',()=>{if(!pinned)updateCursor(null,false);});svg.addEventListener('keydown',event=>keyboard(event,panel));
     }
-    if (selectedYear!==null&&(selectedYear<state.start_year||selectedYear>state.end_year)) selectedYear=null;
+    if(!hasCharts || (selectedYear!==null&&!state.panels.some(panel=>{const range=panelYears(panel,state);return selectedYear!>=range.start_year&&selectedYear!<=range.end_year;}))){selectedYear=null;pinned=false;}
     updateCursor(selectedYear,pinned);
   }
-  function rangeChange(): void { commit({...state,start_year:Number(start.value),end_year:Number(end.value)},'Historical period updated.'); }
-  start.addEventListener('change',rangeChange);end.addEventListener('change',rangeChange);
-  element('reset-layout').addEventListener('click',()=>{selectedYear=null;pinned=false;commit(initialState(data),'Default layout restored.');});
+  element('reset-layout').addEventListener('click',()=>{selectedYear=null;pinned=false;commit(emptyState(data),'Timeline cleared.');element('add-indicator').focus();});
   for(const [id,key] of [['toggle-events','show_events'],['toggle-intervals','show_intervals']] as const) element(id).addEventListener('click',()=>commit({...state,[key]:!state[key]},'Display updated.'));
   element('share-layout').addEventListener('click',async()=>{
     const url=`${location.origin}${location.pathname}${location.search}#chart=${encodeState(state)}`;history.replaceState(null,'',url);
