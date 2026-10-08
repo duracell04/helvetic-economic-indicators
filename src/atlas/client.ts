@@ -196,7 +196,14 @@ async function boot(): Promise<void> {
     try{await navigator.clipboard.writeText(url);element('share-message').textContent='Link copied. It contains your layout, not the observations.';}catch{element('share-message').textContent='Copy this link to share the arrangement. It contains no observations.';}
   });
   window.addEventListener('hashchange',()=>{const result=restoreState(data,location.hash,null);state=result.state;render();save();if(result.message)message(result.message);});
-  new ResizeObserver(()=>{for(const panel of state.panels){const section=panels.querySelector<HTMLElement>(`[data-panel="${panel.id}"]`);const svg=section?.querySelector<SVGSVGElement>('svg');if(svg){drawChart(svg,panel,state,data,section!.clientWidth);drawCursor(svg,panel,state,data,selectedYear);}}}).observe(panels);
+  new ResizeObserver(()=>{
+    for(const panel of state.panels){
+      const section=panels.querySelector<HTMLElement>(`[data-panel="${panel.id}"]`);
+      const svg=section?.querySelector<SVGSVGElement>('svg');
+      // Hidden panels, including during navigation, have no drawable plot area.
+      if(svg && section!.clientWidth>88){drawChart(svg,panel,state,data,section!.clientWidth);drawCursor(svg,panel,state,data,selectedYear);}
+    }
+  }).observe(panels);
   render();if(restored.message)message(restored.message);workspace.dataset.ready='true';
 }
 boot().catch(error=>{element('atlas-status').textContent=error instanceof Error?error.message:'The chart workspace could not be loaded.';});

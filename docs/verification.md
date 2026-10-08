@@ -72,3 +72,5 @@ Live verification checked 74 page/asset/download URLs, 17 published datasets and
 Removed display indexing and optional original-value chart labels. All 59 unit/data/configuration cases and 24 desktop/mobile browser cases passed, with zero Astro/TypeScript errors or warnings. Production still has 35 pages, 555 checked internal references and 9,317 permitted observations. Statistical source records, canonical data and downloadable observations are unchanged.
 
 Checks verify that scale/base selectors and optional value labels are absent, chart geometry retains original values, incompatible quantities cannot share an axis, and former indexed saved/shared layouts migrate without losing indicators or colliding with existing panel IDs. The demo now has separate original-unit GDP, GDP-per-capita and population panels; the three-panel production default is preserved.
+
+Live navigation exposed a zero-width resize callback while the atlas is hidden. The observer now waits for a drawable plot area. A desktop/phone regression reproduces the earlier invalid SVG widths when panels are hidden and verifies error-free rendering after they become visible again.

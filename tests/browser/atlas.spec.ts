@@ -74,6 +74,7 @@ test('former indexed saved and shared layouts render only original units without
   const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('hei-atlas-demo-v2')!));expect(saved.show_raw).toBe(false);expect(saved.panels.every((p:{axis:{mode:string}})=>p.axis.mode==='native')).toBe(true);
 });
 test('synchronized cursor, missing values, pinning, keyboard, annotations and resizing',async({page},testInfo)=>{
+  const errors:string[]=[];page.on('console',message=>{if(message.type()==='error')errors.push(message.text());});
   await ready(page);
   const chart=panel(page,0).locator('svg');await chart.focus();await chart.press('Home');await expect(page.locator('#year-label')).toContainText('1946 · pinned');await chart.press('End');await expect(page.locator('#year-label')).toContainText('2025 · pinned');await chart.press('ArrowLeft');await expect(page.locator('#readout')).toContainText('revised');
   await chart.press('Escape');await expect(page.locator('#readout')).toBeHidden();
@@ -91,6 +92,9 @@ test('synchronized cursor, missing values, pinning, keyboard, annotations and re
   await page.locator('#end-year').fill('2026');await page.locator('#end-year').press('Tab');await expect(page.locator('[data-kind="forecast"]')).toHaveCount(6);
   await expect(page.locator('[data-statistical-break]')).toHaveCount(1);
   if(testInfo.project.name==='desktop'){await page.setViewportSize({width:1000,height:800});let b:{x:number;y:number}|null=null;await expect.poll(async()=>{b=await overlay.boundingBox();return Boolean(b);}).toBe(true);await page.mouse.move(b!.x+80,b!.y+40);await expect(page.locator('#readout')).toBeVisible();}
+  await page.evaluate(async()=>{document.getElementById('panels')!.style.display='none';await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));});
+  await page.evaluate(()=>{document.getElementById('panels')!.style.display='';});await expect(chart).toBeVisible();
+  expect(errors).toEqual([]);
   const dimensions=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,width:innerWidth}));expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.width);
   await page.screenshot({path:`.cache/evidence-${testInfo.project.name}.png`,fullPage:true});
 });
