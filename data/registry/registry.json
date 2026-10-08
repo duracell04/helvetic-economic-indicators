@@ -640,6 +640,26 @@
         "attribution": "Federal Finance Administration",
         "conditions": "No dataset-specific public redistribution grant has been established. Candidate only; obtain applicable permission before publishing observations or source bytes."
       }
+    },
+    {
+      "id": "six-smi-candidate",
+      "publisher": "SIX Swiss Exchange",
+      "title": "SMI price-return index — historical data candidate",
+      "landing_url": "https://www.six-group.com/en/market-data/indices/switzerland/equity/smi.html",
+      "data_url": null,
+      "source_identifier": "CH0009980894 / daily closing level candidate",
+      "audit_status": "candidate",
+      "definition": "SIX SMI price-return index closing-level candidate",
+      "coverage": null,
+      "revision_practice": "Retain the original source vintage and documented revisions before any import.",
+      "rights": {
+        "redistribution": "restricted",
+        "licence": "SIX licence required; no applicable agreement established",
+        "evidence_url": "https://www.six-group.com/en/market-data/indices/licensing.html",
+        "reviewed_on": "2026-10-08",
+        "attribution": "SIX Swiss Exchange",
+        "conditions": "SIX historical index data and use are subject to purpose-specific licensing. No agreement authorizing this project's public observations, source snapshots or downloadable outputs was established. Derived output permission must also be confirmed."
+      }
     }
   ],
   "series": [
@@ -1123,10 +1143,10 @@
       "title": "SMI price-return index",
       "verification": "candidate",
       "data_class": "real",
-      "definition": "Price index candidate; exact historical dataset and redistribution rights awaiting audit.",
+      "definition": "SIX SMI price-return daily closing index, ISIN CH0009980894; authorized historical dataset pending.",
       "unit": {
         "code": "index",
-        "label": "Source index points",
+        "label": "30 June 1988 = 1500",
         "dimension": "smi-index",
         "scale": 1
       },
@@ -1136,11 +1156,11 @@
       "maturity": null,
       "aggregation": "Preserve trading-date closes; annual endpoint returns are separate derived series.",
       "source_ids": [
-        "six"
+        "six-smi-candidate"
       ],
-      "source_identifier": null,
+      "source_identifier": "CH0009980894 / daily closing level candidate",
       "breaks": [],
-      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "usage_notes": "Candidate. Audit on 8 October 2026: Obtain an authorized SIX historical SMI closing-level dataset and a licence covering public website display and CSV/JSON redistribution; verify trading-date closes and original historical precision. No observations are published. See docs/source-audit/smi.md.",
       "measurement": "level",
       "price_basis": "not_applicable",
       "aggregation_kind": "native"

@@ -130,3 +130,7 @@ Remains candidate: Locate and retrieve the original SNB monthly historical long-
 ## 8 October 2026 — Three-month GMBF auction yield source audit
 
 Remains candidate: Establish reuse permission for the exact FFA auction workbook, then audit the three-month tranche selection, event-date identity, quotation and duplicate-auction handling. [Audit](source-audit/gmbf-3m.md).
+
+## 8 October 2026 — SMI price-return index source audit
+
+Remains candidate: Obtain an authorized SIX historical SMI closing-level dataset and a licence covering public website display and CSV/JSON redistribution; verify trading-date closes and original historical precision. [Audit](source-audit/smi.md).
