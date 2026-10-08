@@ -680,6 +680,26 @@
         "attribution": "SIX Swiss Exchange",
         "conditions": "SIX historical index data and use are subject to purpose-specific licensing. No agreement authorizing this project's public observations, source snapshots or downloadable outputs was established. Derived output permission must also be confirmed."
       }
+    },
+    {
+      "id": "six-smi-annual-return-candidate",
+      "publisher": "SIX Swiss Exchange",
+      "title": "SMI annual price return — historical data candidate",
+      "landing_url": "https://www.six-group.com/en/market-data/indices/switzerland/equity/smi.html",
+      "data_url": null,
+      "source_identifier": "CH0009980894 / annual close-to-close return candidate",
+      "audit_status": "candidate",
+      "definition": "SIX SMI price-return annual return candidate",
+      "coverage": null,
+      "revision_practice": "Retain the original source vintage and documented revisions before any import.",
+      "rights": {
+        "redistribution": "restricted",
+        "licence": "SIX licence required; no applicable agreement established",
+        "evidence_url": "https://www.six-group.com/en/market-data/indices/licensing.html",
+        "reviewed_on": "2026-10-08",
+        "attribution": "SIX Swiss Exchange",
+        "conditions": "SIX historical index data and use are subject to purpose-specific licensing. No agreement authorizing this project's public observations, source snapshots or downloadable outputs was established. Derived output permission must also be confirmed."
+      }
     }
   ],
   "series": [
@@ -1419,7 +1439,7 @@
       "title": "SMI annual price return",
       "verification": "candidate",
       "data_class": "real",
-      "definition": "Proposed annual companion to smi. Exact preparation convention requires source audit.",
+      "definition": "Annual close-to-close price return of SIX SMI; authorized historical inputs and derived-use permission pending.",
       "unit": {
         "code": "percent",
         "label": "Percent",
@@ -1430,13 +1450,13 @@
       "institutional_coverage": "SMI constituent equities",
       "instrument": "SMI",
       "maturity": null,
-      "aggregation": "Annual convention to be verified: annual change",
+      "aggregation": "Last trading-day close divided by prior year last trading-day close, minus one; full-year convention pending input verification.",
       "source_ids": [
-        "six"
+        "six-smi-annual-return-candidate"
       ],
-      "source_identifier": null,
+      "source_identifier": "CH0009980894 / annual close-to-close return candidate",
       "breaks": [],
-      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "usage_notes": "Candidate. Audit on 8 October 2026: Obtain an authorized SIX historical SMI closing-level dataset and a licence covering public derived annual returns and downloads; verify matching year-end trading closes. No observations are published. See docs/source-audit/smi-annual-return.md.",
       "measurement": "return",
       "price_basis": "not_applicable",
       "aggregation_kind": "annual_change"
