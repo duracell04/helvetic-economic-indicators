@@ -118,3 +118,7 @@ Remains candidate: Retrieve usable original FFA data and codelists; verify conso
 ## 8 October 2026 — Confederation gross debt source audit
 
 Remains candidate: Retrieve usable original FFA data and codelists; verify Confederation, debt valuation/consolidation and the FS/GFS debt definition and currency scale. [Audit](source-audit/confederation-debt.md).
+
+## 8 October 2026 — Confederation debt / GDP source audit
+
+Remains candidate: Retrieve usable original FFA data and codelists; verify Confederation debt and nominal-GDP denominator, debt valuation/consolidation and the matching annual nominal-GDP vintage and ratio convention. [Audit](source-audit/confederation-debt-ratio.md).
