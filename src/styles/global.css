@@ -20,3 +20,5 @@ dialog{border:1px solid var(--line);border-radius:14px;background:var(--white);c
 .empty-atlas button{margin-top:18px}.empty-atlas[data-has-charts=true]{padding:22px;margin-top:0}.empty-atlas[data-has-charts=true] button{margin-top:0}
 
 .year-range{display:flex;gap:16px;border:0;padding:0;margin:16px 0 0}.year-range legend{font-size:.8rem}.year-range label{flex:1}.year-range input{min-width:0}.range-help{font-size:.75rem}#chosen-indicator{margin-bottom:10px}#available-years{font-size:.8rem}#empty-atlas button{min-height:42px}
+.chart-scroll{max-width:100%;overflow-x:auto;overscroll-behavior-x:contain}.chart-scroll svg{touch-action:pan-x pan-y}#overlay-targets{display:grid;gap:8px}#overlay-targets button{text-align:left;border-radius:7px}.panel-settings{flex-wrap:wrap}
+@media(max-width:760px){.panel-legend{flex-wrap:wrap;overflow-x:visible}.series-chip{flex:1 1 100%;min-width:0}.series-title{flex:1;min-width:0;overflow-wrap:anywhere}.series-chip button{min-width:35px;padding:1px 4px}.axis-note::after{content:none}}

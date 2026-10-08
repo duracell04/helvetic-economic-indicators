@@ -1,5 +1,5 @@
 import type { AtlasData, ChartState, Panel } from './contracts.ts';
-import { available, availableYearRange, definition, emptyState, panelYears, validateState, compatible, removeSeries, separateSeries, movePanel, restoreState, encodeState, newPanelId } from './composition.ts';
+import { available, availableYearRange, definition, emptyState, panelYears, validateState, removeSeries, separateSeries, overlaySeries, movePanel, restoreState, encodeState, newPanelId } from './composition.ts';
 import { colorFor, formatValue, pointsFor } from './geometry.ts';
 import { drawChart, drawCursor } from './renderer.ts';
 
@@ -33,10 +33,8 @@ async function boot(): Promise<void> {
   const restored = restoreState(data, location.hash, stored);
   let state = restored.state;
   let selectedYear: number | null = null, pinned = false;
-  let pending: (() => void) | null = null;
-  let pendingFallback: ChartState | null = null;
   const panels = element('panels'), selector = element<HTMLDialogElement>('indicator-dialog');
-  const comparison = element<HTMLDialogElement>('comparison-dialog'), info = element<HTMLDialogElement>('info-dialog');
+  const overlay = element<HTMLDialogElement>('overlay-dialog'), info = element<HTMLDialogElement>('info-dialog');
   const readout = element('readout');
   const start = element<HTMLInputElement>('start-year'), end = element<HTMLInputElement>('end-year');
   const target = element<HTMLSelectElement>('add-target');
@@ -55,24 +53,17 @@ async function boot(): Promise<void> {
     try { state = validateState(next, data); save(); render(); message(announcement); }
     catch (error) { message(error instanceof Error ? error.message : 'This arrangement could not be applied.'); render(); }
   }
-  function propose(next: ChartState, fallback?: ChartState): void {
-    const problem = next.panels.find(panel => compatible(panel, data).kind !== 'compatible');
-    if (!problem) { commit(next); return; }
-    const result = compatible(problem, data);
-    if (result.kind === 'separate') { if (fallback) commit(fallback, result.reason + ' Added below instead.'); else message(result.reason); return; }
-    element('comparison-description').textContent = result.reason;
-    pendingFallback=fallback ?? null;
-    pending = () => {
-      problem.conventions_acknowledged = true;
-      commit(next);
-    };
-    comparison.showModal();
+  function chooseOverlay(source: Panel, ids = source.series_ids): void {
+    element('overlay-title').textContent = ids.length === 1 ? `Overlay ${definition(data,ids[0]).title}` : `Overlay ${source.title}`;
+    const listing = element('overlay-targets'); listing.replaceChildren();
+    for (const [index, destination] of state.panels.entries()) {
+      if (destination.id === source.id) continue;
+      listing.append(button(`${String(index+1).padStart(2,'0')}  ${destination.title}`,`Overlay on ${destination.title}`,()=>{
+        overlay.close(); commit(overlaySeries(state,source.id,destination.id,ids,data));
+      }));
+    }
+    overlay.showModal();
   }
-  element('approve-comparison').addEventListener('click', () => { comparison.close(); pending?.(); pending = null; pendingFallback=null; });
-  function cancelComparison():void { comparison.close();pending=null;const fallback=pendingFallback;pendingFallback=null;if(fallback)commit(fallback,'Indicator added in a separate panel.');else{render();message('Indicators kept in separate panels.');} }
-  element('keep-separate').addEventListener('click',cancelComparison);
-  comparison.querySelector('[data-close]')!.addEventListener('click',()=>{comparison.close();pending=null;pendingFallback=null;render();});
-  comparison.addEventListener('cancel',()=>{pending=null;pendingFallback=null;render();});
 
   function showInfo(id: string): void {
     const s = definition(data, id), content = element('info-content');
@@ -87,7 +78,7 @@ async function boot(): Promise<void> {
     }
     info.showModal();
   }
-  for (const dialog of [selector, info, element<HTMLDialogElement>('share-dialog')]) dialog.querySelector<HTMLButtonElement>('[data-close]')?.addEventListener('click', () => dialog.close());
+  for (const dialog of [selector, overlay, info, element<HTMLDialogElement>('share-dialog')]) dialog.querySelector<HTMLButtonElement>('[data-close]')?.addEventListener('click', () => dialog.close());
 
   function renderSelector(): void {
     const listing = element('indicator-list'); listing.replaceChildren();
@@ -149,8 +140,7 @@ async function boot(): Promise<void> {
       if(targetPanel.series_ids.includes(chosenId)){message('This indicator is already in that panel.');return;}
       targetPanel.series_ids.push(chosenId);
       Object.assign(targetPanel,range);
-      const fallback=structuredClone(state);fallback.panels.push(single);
-      selector.close();propose(next,fallback);
+      selector.close();commit(next);
     }else{next.panels.push(single);selector.close();commit(next);}
   });
   search.addEventListener('input', renderSelector);
@@ -205,28 +195,27 @@ async function boot(): Promise<void> {
       const settings = make('div', 'panel-settings');
       const range=panelYears(panel,state);
       settings.append(button(`${range.start_year}–${range.end_year}`,`Change years for ${panel.title}`,()=>{selector.showModal();configure(null,panel.id);}));
+      settings.append(button('Overlay',`Overlay chart ${panel.title}`,()=>chooseOverlay(panel),state.panels.length<2));
       settings.append(button('↑',`Move ${panel.title} up`,()=>commit(movePanel(state,panel.id,-1)),index===0),button('↓',`Move ${panel.title} down`,()=>commit(movePanel(state,panel.id,1)),index===state.panels.length-1)); header.append(settings); section.append(header);
       const legend=make('div','panel-legend');
       for (const id of panel.series_ids) {
         const s=definition(data,id),item=make('div','series-chip');item.dataset.indicator=id;
         const swatch=make('span','swatch');swatch.style.background=colorFor(data,id);swatch.setAttribute('aria-hidden','true');
         item.append(swatch,make('span','series-title',s.title),button('i',`Information about ${s.title}`,()=>showInfo(id)));
-        item.append(button('⇧',`Combine ${s.title} with panel above`,()=>{
-          const next=removeSeries(state,panel.id,id),above=next.panels.find(p=>p.id===state.panels[index-1].id)!;
-          if (above.series_ids.includes(id)) {message('This indicator is already in the panel above.');return;}
-          above.series_ids.push(id);const otherRange=panelYears(above,state);
-          above.start_year=Math.min(range.start_year,otherRange.start_year);above.end_year=Math.max(range.end_year,otherRange.end_year);propose(next);
-        },index===0));
+        item.append(button('↗',`Overlay ${s.title} on another chart`,()=>chooseOverlay(panel,[id]),state.panels.length<2));
         item.append(button('⇩',`Separate ${s.title}`,()=>commit(separateSeries(state,panel.id,id,data)),panel.series_ids.length===1));
         item.append(button('×',`Remove ${s.title} from ${panel.title}`,()=>commit(removeSeries(state,panel.id,id))));legend.append(item);
       }
       section.append(legend);
-      const unit=make('p','axis-note',`${definition(data,panel.series_ids[0]).unit.label} · annual observations`);
-      if (new Set(panel.series_ids.map(id=>definition(data,id).aggregation_kind)).size>1) unit.append(make('span','',' · Different annual conventions acknowledged'));
+      const unit=make('p','axis-note',`${[...new Set(panel.series_ids.map(id=>definition(data,id).unit.label))].join(' / ')} · annual observations`);
       section.append(unit);
       const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('role','group');svg.setAttribute('aria-label',`${panel.title}, interactive annual chart`);svg.setAttribute('tabindex','0');
-      section.append(svg);panels.append(section);drawChart(svg,panel,state,data,section.clientWidth);
-      const pick=(event:PointerEvent)=>Math.max(range.start_year,Math.min(range.end_year,Math.round(range.start_year+(event.clientX-svg.getBoundingClientRect().left-64)/(svg.clientWidth-88)*(range.end_year-range.start_year))));
+      const scroll=make('div','chart-scroll');scroll.append(svg);section.append(scroll);panels.append(section);drawChart(svg,panel,state,data,section.clientWidth);
+      const pick=(event:PointerEvent)=>{
+        const bounds=svg.getBoundingClientRect(),width=svg.viewBox.baseVal.width,left=Number(svg.dataset.plotLeft),right=Number(svg.dataset.plotRight);
+        const position=(event.clientX-bounds.left)*width/bounds.width;
+        return Math.max(range.start_year,Math.min(range.end_year,Math.round(range.start_year+(position-left)/(width-left-right)*(range.end_year-range.start_year))));
+      };
       svg.addEventListener('pointermove',event=>{const e=event as PointerEvent;if((e.target as Element).hasAttribute('data-overlay')&&!pinned&&e.pointerType!=='touch')updateCursor(pick(e),false,{x:e.clientX,y:e.clientY});});
       svg.addEventListener('pointerdown',event=>{const e=event as PointerEvent;if(!(e.target as Element).hasAttribute('data-overlay'))return;const year=pick(e);updateCursor(year,!(pinned&&selectedYear===year),{x:e.clientX,y:e.clientY});});
       svg.addEventListener('pointerleave',()=>{if(!pinned)updateCursor(null,false);});svg.addEventListener('keydown',event=>keyboard(event,panel));

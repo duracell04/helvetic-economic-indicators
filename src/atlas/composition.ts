@@ -12,18 +12,14 @@ export function available(data: AtlasData, id: string): boolean {
     (data.mode === 'demo' || s.data_class === 'real') &&
     data.observations.some(row => row.series_id === id && row.value !== null);
 }
-export function compatible(panel: Panel, data: AtlasData): { kind: 'compatible' | 'acknowledge' | 'separate'; reason: string } {
+/** Original quantities share a scale only when their units and price bases match. */
+export function axisKey(series: Series): string {
+  return JSON.stringify([series.unit.code, series.unit.dimension, series.unit.scale, series.price_basis,
+    series.unit.code === 'percent' ? 'percent' : series.measurement]);
+}
+export function compatible(panel: Panel, data: AtlasData): { kind: 'compatible' | 'separate'; reason: string } {
   const items = panel.series_ids.map(id => definition(data, id));
   if (items.some(s => s.frequency !== 'annual')) return { kind: 'separate', reason: 'This view uses annual observations. No frequency conversion is automatic.' };
-  if (items.length < 2) return { kind: 'compatible', reason: '' };
-  if (items.some(s => s.aggregation_kind === 'unknown' || s.price_basis === 'unknown')) return { kind: 'separate', reason: 'Measurement conventions need to be established before these series can be combined.' };
-  const bases = new Set(items.map(s => s.price_basis).filter(b => b !== 'not_applicable'));
-  if (bases.size > 1) return { kind: 'separate', reason: 'Nominal and real values need distinct panels or a documented price adjustment.' };
-  const first = items[0];
-  const unitsMatch = items.every(s => s.unit.code === first.unit.code && s.unit.dimension === first.unit.dimension && s.unit.scale === first.unit.scale);
-  const measurementMatch = first.unit.code === 'percent' || items.every(s => s.measurement === first.measurement);
-  if (!unitsMatch || !measurementMatch) return { kind: 'separate', reason: 'These quantities use different units or measurements. Keep them in separate synchronized panels.' };
-  if (new Set(items.map(s => s.aggregation_kind)).size > 1 && !panel.conventions_acknowledged) return { kind: 'acknowledge', reason: 'These annual measures use different conventions: ' + items.map(s => `${s.title}: ${s.aggregation_kind.replaceAll('_', ' ')}`).join('; ') + '. Combining does not convert or average them.' };
   return { kind: 'compatible', reason: '' };
 }
 
@@ -39,7 +35,11 @@ export function validateState(input: unknown, data: AtlasData, requireAvailable 
     if (panel.axis.mode !== 'indexed') return [panel];
     const groups: Panel[] = [];
     for (const id of panel.series_ids) {
-      const group = groups.find(p => compatible({ ...p, series_ids: [...p.series_ids, id] }, data).kind === 'compatible');
+      const item = definition(data, id);
+      const group = groups.find(p => p.series_ids.every(other => {
+        const previous = definition(data, other);
+        return axisKey(previous) === axisKey(item) && (p.conventions_acknowledged || previous.aggregation_kind === item.aggregation_kind);
+      }));
       if (group) { group.series_ids.push(id); continue; }
       let panelId = panel.id;
       if (groups.length) {
@@ -121,14 +121,19 @@ export function separateSeries(state: ChartState, panelId: string, id: string, d
 export function combineAbove(state: ChartState, panelId: string, id: string, data: AtlasData, options?: { acknowledge?: boolean }): ChartState {
   const position = state.panels.findIndex(p => p.id === panelId);
   if (position < 1) throw new Error('There is no panel above.');
-  const targetId = state.panels[position - 1].id;
-  const next = removeSeries(state, panelId, id);
-  const target = next.panels.find(p => p.id === targetId)!;
-  if (target.series_ids.includes(id)) throw new Error('This indicator is already in the panel above.');
-  target.series_ids.push(id);
-  const sourceRange=panelYears(state.panels[position],state),targetRange=panelYears(target,state);
-  target.start_year=Math.min(sourceRange.start_year,targetRange.start_year);target.end_year=Math.max(sourceRange.end_year,targetRange.end_year);
-  if (options?.acknowledge) target.conventions_acknowledged = true;
+  const next = overlaySeries(state, panelId, state.panels[position - 1].id, [id], data);
+  if (options?.acknowledge) next.panels.find(p => p.id === state.panels[position - 1].id)!.conventions_acknowledged = true;
+  return next;
+}
+/** Move one indicator or a whole chart onto any other chart, in either direction. */
+export function overlaySeries(state: ChartState, sourceId: string, targetId: string, ids: string[], data: AtlasData): ChartState {
+  const source = state.panels.find(p => p.id === sourceId), destination = state.panels.find(p => p.id === targetId);
+  if (!source || !destination || sourceId === targetId || !ids.length || ids.some(id => !source.series_ids.includes(id))) throw new Error('Choose another chart to overlay.');
+  const next = structuredClone(state), target = next.panels.find(p => p.id === targetId)!;
+  target.series_ids = [...new Set([...target.series_ids, ...ids])];
+  const a = panelYears(source, state), b = panelYears(destination, state);
+  target.start_year = Math.min(a.start_year, b.start_year); target.end_year = Math.max(a.end_year, b.end_year);
+  next.panels = next.panels.map(p => p.id === sourceId ? { ...p, series_ids: p.series_ids.filter(id => !ids.includes(id)) } : p).filter(p => p.series_ids.length);
   return validateState(next, data);
 }
 export function movePanel(state: ChartState, id: string, direction: -1 | 1): ChartState {

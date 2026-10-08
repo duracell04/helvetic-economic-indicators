@@ -9,3 +9,7 @@ The original XLSX is retained in `data/extractions/originals/ilo-unemployment.xl
 Workbook footnotes exclude diplomats/international officials after 2008. The [FSO comparison table](https://dam-api.bfs.admin.ch/hub/api/dam/assets/36346864/master) documents the 2017 weighting revision affecting 2009/2010 and the 2021 SLFS change. Keep these boundaries and the 2010 move to a continuous quarterly survey. ILO and SECO registered unemployment are distinct concepts.
 
 Tests regenerate every cell from the retained XLSX and compare every extracted/canonical value, period and checksum. Identity, bounds, duplicate-period, invalid-value and incompatible-unit checks reject bad imports. Quarterly data remain in catalogue/downloads; annual-only charts keep their frequency restriction.
+
+## Annual selection added on 8 October 2026
+
+The retained workbook also contains published annual means in `Annuel`, 2010–2025. These are now imported under the separate `ilo-unemployment-annual` identity and are available in the annual chart picker. The original quarterly selection and this historical verification record remain unchanged. See [annual source evidence](ilo-unemployment-annual.md).

@@ -107,7 +107,7 @@ test('original-unit composition, reorder, ranges and saved/shared layouts',async
   await expect(page.locator('#demo-banner')).toContainText('Synthetic demonstration');
   await expect(page.locator('.chart-panel select')).toHaveCount(0);await expect(page.locator('#toggle-raw')).toHaveCount(0);
   await page.locator('[data-indicator="demo-registered-unemployment-annual"]').getByRole('button',{name:'Separate Annual registered unemployment',exact:true}).click();await expect(page.locator('.chart-panel')).toHaveCount(6);
-  await page.locator('[data-indicator="demo-registered-unemployment-annual"]').getByRole('button',{name:'Combine Annual registered unemployment with panel above',exact:true}).click();await expect(page.locator('.chart-panel')).toHaveCount(5);
+  const destination=await panel(page,3).getAttribute('aria-label');await page.locator('[data-indicator="demo-registered-unemployment-annual"]').getByRole('button',{name:'Overlay Annual registered unemployment on another chart',exact:true}).click();await page.getByRole('button',{name:`Overlay on ${destination}`,exact:true}).click();await expect(page.locator('.chart-panel')).toHaveCount(5);
   await panel(page,0).getByRole('button',{name:/Move .* down/}).click();await expect(panel(page,0)).toContainText('Real GDP per capita');
   await panel(page,1).getByRole('button',{name:/Move .* up/}).click();
   await years(page,0,'1980','2020');
@@ -119,14 +119,19 @@ test('original-unit composition, reorder, ranges and saved/shared layouts',async
   await page.getByRole('button',{name:'Close share dialog'}).click();await page.getByRole('button',{name:'Reset',exact:true}).click();await expect(page.locator('.chart-panel')).toHaveCount(0);await expect(page.locator('#empty-intro')).toBeVisible();
   await page.goto(url);await expect(page.locator('.chart-panel')).toHaveCount(5);await expect(panel(page,0).getByRole('button',{name:/Change years for/})).toHaveText('1980–2020');
 });
-test('unlike units stay separate and differing annual conventions require acknowledgment',async({page})=>{
+test('any units and annual conventions can overlay without a blocking dialog',async({page})=>{
   await ready(page);
-  await page.locator('[data-indicator="demo-population"]').getByRole('button',{name:'Combine Population with panel above',exact:true}).click();
-  await expect(page.locator('#atlas-status')).toContainText('separate synchronized panels');await expect(page.locator('.chart-panel')).toHaveCount(5);await expect(page.locator('#comparison-dialog')).not.toBeVisible();
+  const first=await panel(page,0).getAttribute('aria-label');
+  await page.locator('[data-indicator="demo-population"]').getByRole('button',{name:'Overlay Population on another chart',exact:true}).click();
+  await page.getByRole('button',{name:`Overlay on ${first}`,exact:true}).click();
+  await expect(page.locator('.chart-panel')).toHaveCount(4);await expect(panel(page,0).locator('[data-unit-axis]')).toHaveCount(2);
   await add(page,'Annual CPI inflation');const targetId=await page.locator('.chart-panel').last().getAttribute('data-panel');
-  await add(page,'Annual SNB policy rate',targetId!);await expect(page.locator('#comparison-dialog')).toBeVisible();await expect(page.locator('#comparison-description')).toContainText('different conventions');await page.locator('#approve-comparison').click();
-  await expect(page.locator('.chart-panel').last()).toContainText('Different annual conventions acknowledged');
-  await add(page,'Population',targetId!);await expect(page.locator('#atlas-status')).toContainText('separate synchronized panels');await expect(page.locator('.chart-panel')).toHaveCount(7);
+  await add(page,'Annual SNB policy rate',targetId!);await expect(page.locator('.chart-panel')).toHaveCount(5);
+  await expect(page.locator('.chart-panel').last().locator('[data-unit-axis]')).toHaveCount(1);
+  await add(page,'Population',targetId!);await expect(page.locator('.chart-panel')).toHaveCount(5);
+  await expect(page.locator('.chart-panel').last().locator('[data-unit-axis]')).toHaveCount(2);
+  await page.locator('.chart-panel').last().locator('svg').focus();await page.locator('.chart-panel').last().locator('svg').press('Home');
+  await expect(page.locator('#readout')).toContainText('annual average');await expect(page.locator('#readout')).toContainText('end of period');
 });
 test('former indexed saved and shared layouts render only original units without removed controls',async({page})=>{
   const data=JSON.parse(await readFile('.cache/atlas-demo.json','utf8')) as AtlasData;
@@ -244,10 +249,11 @@ test('production nominal GDP renders original units, audited history, gaps and d
   await expect(page.locator('body')).toContainText('FSO OPEN-BY');
 });
 
-test('comparison cancellation keeps different conventions in a separate new panel',async({page})=>{
- await ready(page);
- await add(page,'Annual CPI inflation');const id=(await page.locator('.chart-panel').last().getAttribute('data-panel'))!;
- await add(page,'Annual SNB policy rate',id);await expect(page.locator('#comparison-dialog')).toBeVisible();await page.locator('#keep-separate').click();await expect(page.locator('.chart-panel')).toHaveCount(7);await expect(page.locator('.chart-panel').last()).toContainText('Annual SNB policy rate');
+test('overlay chooser cancellation keeps charts and series information intact',async({page})=>{
+ await ready(page);await add(page,'Annual CPI inflation');await add(page,'Annual SNB policy rate');
+ await page.locator('[data-indicator="demo-snb-policy-rate-annual"]').last().getByRole('button',{name:'Overlay Annual SNB policy rate on another chart'}).click();
+ await expect(page.locator('#overlay-dialog')).toBeVisible();await expect(page.locator('#overlay-targets button')).toHaveCount(6);
+ await page.getByRole('button',{name:'Close overlay selector'}).click();await expect(page.locator('.chart-panel')).toHaveCount(7);
  await page.locator('[data-indicator="demo-snb-policy-rate-annual"]').last().getByRole('button',{name:'Information about Annual SNB policy rate'}).click();await expect(page.locator('#info-dialog')).toContainText('Synthetic example');await page.getByRole('button',{name:'Close indicator information'}).click();
 });
 
@@ -302,4 +308,36 @@ test('every verified dataset is catalogued, downloadable and selectable at its s
   }else{await expect(button).toBeDisabled();await page.getByRole('button',{name:'Close indicator selector'}).click();}
   const dimensions=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,width:innerWidth}));expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.width);
  }
+});
+
+
+test('published annual unemployment overlays rates and any chart destination with original-unit axes',async({page},testInfo)=>{
+ const errors:string[]=[];page.on('pageerror',error=>errors.push(error.message));
+ await page.goto(productionURL);await expect(page.locator('#atlas')).toHaveAttribute('data-ready','true');await page.getByRole('button',{name:'Reset',exact:true}).click();
+ await add(page,'Annual three-month GMBF yield');const target=(await panel(page,0).getAttribute('data-panel'))!;
+ await add(page,'Annual ILO unemployment rate',target);await expect(page.locator('.chart-panel')).toHaveCount(1);
+ await expect(panel(page,0).locator('[data-unit-axis]')).toHaveCount(1);await years(page,0,'2010','2025');
+ await panel(page,0).locator('svg').focus();await panel(page,0).locator('svg').press('End');
+ await expect(page.locator('#readout .readout-row').filter({hasText:'Annual ILO unemployment rate'})).toContainText('4.84%');
+ await expect(page.locator('#readout .readout-row').filter({hasText:'Annual three-month GMBF yield'})).toBeVisible();await panel(page,0).locator('svg').press('Escape');
+ await page.screenshot({path:`.cache/evidence-unemployment-${testInfo.project.name}.png`,fullPage:true});
+ await add(page,'Nominal GDP');await add(page,'Population');
+ const lastTitle=(await panel(page,2).getAttribute('aria-label'))!;
+ await panel(page,0).getByRole('button',{name:/Overlay chart/}).click();await page.getByRole('button',{name:`Overlay on ${lastTitle}`,exact:true}).click();
+ await expect(page.locator('.chart-panel')).toHaveCount(2);await expect(panel(page,1).locator('[data-unit-axis]')).toHaveCount(2);
+ await panel(page,0).getByRole('button',{name:/Overlay chart/}).click();await page.getByRole('button',{name:`Overlay on ${lastTitle}`,exact:true}).click();
+ await expect(page.locator('.chart-panel')).toHaveCount(1);await expect(panel(page,0).locator('[data-unit-axis]')).toHaveCount(3);
+ await years(page,0,'2010','2025');await panel(page,0).locator('svg').focus();await panel(page,0).locator('svg').press('End');
+ await expect(panel(page,0).locator('[data-highlight][opacity="1"]')).toHaveCount(4);
+ await expect(page.locator('#readout')).toContainText('CHF millions');await expect(page.locator('#readout')).toContainText('Persons');await panel(page,0).locator('svg').press('Escape');
+ const overlay=panel(page,0).locator('[data-overlay]');const bounds=(await overlay.boundingBox())!;
+ const x=bounds.x+bounds.width*.5,y=bounds.y+40;
+ if(testInfo.project.name==='mobile')await page.touchscreen.tap(x,y);else await page.mouse.move(x,y);
+ await expect(page.locator('#readout h3')).toContainText('2018');await panel(page,0).locator('svg').press('Escape');
+ await page.getByRole('button',{name:'Share ↗',exact:true}).click();const url=await page.locator('#share-link').inputValue();await page.getByRole('button',{name:'Close share dialog'}).click();
+ await page.reload();await expect(panel(page,0).locator('[data-unit-axis]')).toHaveCount(3);
+ await page.goto(url);await expect(panel(page,0).locator('[data-unit-axis]')).toHaveCount(3);
+ await page.screenshot({path:`.cache/evidence-multiple-axes-${testInfo.project.name}.png`,fullPage:true});
+ const dimensions=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,width:innerWidth}));expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.width);expect(errors).toEqual([]);
+ const observations=await (await page.request.get(`${productionURL}data/ilo-unemployment-annual.json`)).json();expect(observations).toHaveLength(16);expect(observations[0].reference_period).toBe('2010');expect(observations.at(-1).reference_period).toBe('2025');expect(observations.at(-1).value).toBe(4.8406512295999997);
 });

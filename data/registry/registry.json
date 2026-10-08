@@ -322,6 +322,26 @@
       }
     },
     {
+      "id": "fso-ilo-annual",
+      "publisher": "Federal Statistical Office",
+      "title": "Annual ILO unemployment rate by sex, nationality and other characteristics",
+      "landing_url": "https://www.bfs.admin.ch/asset/en/36710104",
+      "data_url": "https://dam-api.bfs.admin.ch/hub/api/dam/assets/36710104/master",
+      "source_identifier": "T03.03.01.14; Annuel; total rate",
+      "audit_status": "verified",
+      "definition": "Published Swiss Labour Force Survey annual mean total ILO unemployment rate.",
+      "coverage": "2010–2025; complete published annual means",
+      "revision_practice": "Retained 18 August 2026 vintage; survey weighting and subsequent releases may revise observations.",
+      "rights": {
+        "redistribution": "permitted",
+        "licence": "FSO OPEN-BY",
+        "evidence_url": "https://www.bfs.admin.ch/bfs/en/home/bfs/bundesamt-statistik/nutzungsbedingungen.html",
+        "reviewed_on": "2026-10-08",
+        "attribution": "FSO – Swiss Labour Force Survey / ILO unemployment statistics, © FSO 2026.",
+        "conditions": "Open reuse with source attribution; identify transformations and preserve survey-definition changes."
+      }
+    },
+    {
       "id": "fso-cpi-2025",
       "publisher": "Federal Statistical Office",
       "title": "CPI (December 2025 = 100), detailed results since 1982, basket structure 2025",
@@ -911,6 +931,38 @@
         }
       ],
       "usage_notes": "Preserve gaps before 2010. This is the ILO survey concept, distinct from registered unemployment. Final denotes this retained published vintage, not immunity from later revisions. Native quarterly data are available in the catalogue and downloads."
+    },
+    {
+      "id": "ilo-unemployment-annual",
+      "title": "Annual ILO unemployment rate",
+      "verification": "verified",
+      "data_class": "real",
+      "definition": "Published annual mean total ILO unemployment rate, in percent of the Swiss Labour Force Survey labour force. These are original FSO annual observations.",
+      "unit": {
+        "code": "percent",
+        "label": "Percent",
+        "dimension": "percent",
+        "scale": 1
+      },
+      "measurement": "rate",
+      "price_basis": "not_applicable",
+      "aggregation_kind": "annual_average",
+      "frequency": "annual",
+      "institutional_coverage": "Permanent resident population in the FSO survey labour force",
+      "instrument": null,
+      "maturity": null,
+      "aggregation": "Publisher annual means from the Annuel worksheet; no internal averaging of quarterly values.",
+      "source_ids": [
+        "fso-ilo-annual"
+      ],
+      "source_identifier": "T03.03.01.14/annual/total/rate",
+      "breaks": [
+        {
+          "period": "2021",
+          "description": "Changes to the SLFS survey in 2021 create a documented comparability boundary."
+        }
+      ],
+      "usage_notes": "2010–2025 complete annual means, read without rounding from published FSO cells. No pre-2010 or partial-2026 annual estimates are generated. The ILO survey concept differs from SECO registered unemployment. Final denotes the retained 18 August 2026 vintage; later releases may revise history. See docs/source-audit/ilo-unemployment-annual.md."
     },
     {
       "id": "cpi",
@@ -1813,6 +1865,14 @@
       "sha256": "02906a5a1a7fba1dd87ec8a7d99a4ef0751538ae5577b1bc17b9a7dded1beb6f",
       "file": "data/raw/snb-historical-lombard-2026-10-08-02906a5a1a7fba1d.csv",
       "source_url": "https://www.snb.ch/public/publication/en/www-snb-ch/publications/statistical-publications/historical-time-series/2007/renditen_book/publications0_en/e_zinssaetze_u_renditen.book.pdf"
+    },
+    {
+      "id": "fso-ilo-annual-2026-10-08-4bb9be80c14479f6",
+      "source_id": "fso-ilo-annual",
+      "retrieved_on": "2026-10-08",
+      "sha256": "4bb9be80c14479f6340cacede6b413c429b198f9604973803cd22267d85eb35a",
+      "file": "data/raw/fso-ilo-annual-2026-10-08-4bb9be80c14479f6.csv",
+      "source_url": "https://dam-api.bfs.admin.ch/hub/api/dam/assets/36710104/master"
     }
   ]
 }

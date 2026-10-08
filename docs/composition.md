@@ -23,10 +23,10 @@ The empty workspace shows an Add indicator card with no chart controls. A compac
 ## Statistical compatibility
 
 - Available annual observations are selectable. Other frequencies and unavailable candidates are labelled and disabled; nothing is automatically aggregated.
-- A common original axis requires matching unit code, dimension, scale, price basis and known measurement conventions. Percentage measures may share a percent axis; indicator labels and contextual information retain their distinct meanings.
-- Unknown conventions or a mixture of nominal/real price bases require separate panels. No dual axes or frequency conversion are supplied.
-- Different annual aggregation kinds require explicit acknowledgment; the dialog explains each convention. Configured presets record this acknowledgment and display the distinction.
-- Differently measured level variables remain in separate synchronized panels. There is no display rebasing or scale selector. Former indexed saved/shared layouts are converted to original units and separated where their units cannot share an axis. Legacy `show_raw` flags are accepted for version 2 compatibility but always disabled; optional original-value chart labels have been removed.
+- Any available annual chart can overlay any other chart, in either direction. The picker’s Add to menu, a chart’s Overlay button and each indicator’s ↗ destination chooser support this. Moving a whole chart deduplicates indicators already present at the destination.
+- Matching unit code, dimension, scale, measurement and price basis share an original-value axis. Percentage measures may share a percent axis; labels, information and readouts preserve their distinct meanings and aggregation conventions.
+- Unlike units or price bases use separate labelled axes, each scaled only from its own original observations. Additional axes scroll inside the chart on narrow screens. No values are rebased or converted, and no frequency conversion is supplied.
+- Different annual conventions remain visible in information and inspection; they do not block overlays. Former indexed saved/shared layouts retain their original-unit migration into separate panels. Legacy `show_raw` and `conventions_acknowledged` fields remain accepted for version 2 compatibility; raw chart labels stay disabled.
 
 ## Rendering and inspection
 

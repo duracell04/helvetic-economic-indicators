@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createDemo, validateAtlas, productionAtlas } from '../scripts/lib/atlas-data.ts';
-import { initialState, emptyState, availableYearRange, panelYears, available, addSeries, removeSeries, separateSeries, combineAbove, movePanel, compatible, validateState, encodeState, decodeState, restoreState } from '../src/atlas/composition.ts';
+import { initialState, emptyState, availableYearRange, panelYears, available, addSeries, removeSeries, separateSeries, combineAbove, overlaySeries, movePanel, compatible, validateState, encodeState, decodeState, restoreState } from '../src/atlas/composition.ts';
 import { chartGeometry, pointsFor } from '../src/atlas/geometry.ts';
 
 const data = await createDemo(process.cwd());
@@ -58,16 +58,36 @@ test('composition adds, removes empty panels, separates, combines and reorders',
   assert.equal(movePanel(added,last.id,-1).panels.at(-2)!.id,last.id);
   assert.equal(removeSeries(added,last.id,'demo-confederation-10y-annual').panels.length,state.panels.length);
 });
-test('original axes require compatible units, aggregation, frequency and price basis',()=>{
+test('any annual quantities overlay with independent original-unit axes',()=>{
   const state=initialState(data,'reference'),panel=structuredClone(state.panels[0]);
-  panel.series_ids.push('demo-population');assert.equal(compatible(panel,data).kind,'separate');
-  const rates=structuredClone(state.panels.find(p=>p.id==='stability')!);rates.conventions_acknowledged=false;assert.equal(compatible(rates,data).kind,'acknowledge');
+  panel.series_ids.push('demo-population');assert.equal(compatible(panel,data).kind,'compatible');
+  const geometry=chartGeometry(panel,data,1946,2025,390);assert.equal(geometry.axes.length,2);
+  assert.ok(geometry.axes.every(axis=>axis.ids.length===1));
+  for(const series of geometry.series)for(const point of series.points)if(point.raw!==null){assert.equal(point.value,point.raw);assert.ok(series.axis.y(point.value)>=geometry.top&&series.axis.y(point.value)<=geometry.bottom);}
+  const rates=structuredClone(state.panels.find(p=>p.id==='stability')!);rates.conventions_acknowledged=false;assert.equal(compatible(rates,data).kind,'compatible');
+  assert.equal(chartGeometry(rates,data,1946,2025,900).axes.length,1);
   const invalid=structuredClone(state);invalid.panels[0].axis.base_year=1971;assert.throws(()=>validateState(invalid,data),/Native panels/);
   const period={...state,start_year:1980,end_year:2000};assert.ok(validateState(period,data).panels.every(p=>p.axis.mode==='native'&&p.axis.base_year===null));
   const changed=structuredClone(data);changed.registry.series.find(s=>s.id==='demo-real-gdp')!.price_basis='nominal';
-  panel.series_ids=['demo-real-gdp','demo-real-gdp-per-capita'];assert.equal(compatible(panel,changed).kind,'separate');
+  panel.series_ids=['demo-real-gdp','demo-real-gdp-per-capita'];assert.equal(compatible(panel,changed).kind,'compatible');
+  assert.equal(chartGeometry(panel,changed,1946,2025,900).axes.length,2);
   panel.series_ids=['demo-real-gdp','demo-population'];changed.registry.series.find(s=>s.id==='demo-population')!.frequency='monthly';assert.equal(compatible(panel,changed).kind,'separate');
-  const unequal=structuredClone(data);unequal.registry.series.find(s=>s.id===rates.series_ids[1])!.unit.scale=100;assert.equal(compatible(rates,unequal).kind,'separate');
+  const unequal=structuredClone(data);unequal.registry.series.find(s=>s.id===rates.series_ids[1])!.unit.scale=100;assert.equal(compatible(rates,unequal).kind,'compatible');
+  assert.equal(chartGeometry(rates,unequal,1946,2025,900).axes.length,2);
+});
+test('whole charts and individual indicators overlay on any destination and remain shareable',()=>{
+  const state=initialState(data,'reference'),first=state.panels[0],last=state.panels.at(-1)!;
+  const merged=overlaySeries(state,first.id,last.id,first.series_ids,data);
+  assert.equal(merged.panels.length,state.panels.length-1);assert.equal(merged.panels.at(-1)!.series_ids.at(-1),first.series_ids[0]);
+  const reversed=overlaySeries(state,last.id,first.id,[last.series_ids[0]],data);
+  assert.ok(reversed.panels[0].series_ids.includes(last.series_ids[0]));assert.deepEqual(decodeState(encodeState(reversed),data),reversed);
+  assert.throws(()=>overlaySeries(state,first.id,first.id,first.series_ids,data));
+  assert.throws(()=>overlaySeries(state,first.id,last.id,['absent'],data));
+  const duplicate=addSeries(state,first.series_ids[0],data);const combined=overlaySeries(duplicate,duplicate.panels.at(-1)!.id,first.id,first.series_ids,data);
+  assert.deepEqual(combined.panels.map(p=>p.series_ids),state.panels.map(p=>p.series_ids));
+  assert.equal(combined.panels[0].end_year,2026);assert.deepEqual(combined.panels.slice(1),state.panels.slice(1));
+  const multiple=structuredClone(first);multiple.series_ids=['demo-real-gdp','demo-real-gdp-per-capita','demo-population'];
+  const geometry=chartGeometry(multiple,data,1946,2025,390);assert.equal(geometry.axes.length,3);assert.ok(geometry.width>=geometry.left+geometry.right+220);
 });
 test('former indexed layouts restore in original units with incompatible quantities separated',()=>{
   const state=initialState(data,'reference');

@@ -1,5 +1,13 @@
 # Release notes
 
+## 2026-10-08 — Annual unemployment and unrestricted chart overlays
+
+- Added the FSO’s 16 published annual ILO unemployment rates for 2010–2025 from the checksum-verified retained workbook. Quarterly ILO data and SECO registered-unemployment candidates retain their separate identities.
+- Any available annual chart can overlay any other chart. A chart’s Overlay button moves all its indicators; each indicator’s ↗ chooser moves one line to any destination. The Add to menu accepts all charts.
+- Matching units share a scale; different units and price bases use separately labelled original-value axes. Additional axes scroll within the chart on phones, with all indicator labels and controls visible.
+- Retained observation-status styling, missing years, definition breaks, independent chart ranges, browser-storage keys and saved/shared layout compatibility. Publication still requires verified, permitted observations and deploys only checked production `dist/`.
+- Validation: 64 unit/data/configuration checks and 30 desktop/mobile browser cases passed, including unemployment/rate overlays, arbitrary destinations, three unit axes, original readouts, saved/shared restoration and annual downloads.
+
 ## 2026-10-08 — Empty workspaces and chart-specific years
 
 - New workspaces start without charts or timeline controls. An Add indicator card remains below the charts for the next addition; Reset clears the workspace.

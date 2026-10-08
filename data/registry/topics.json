@@ -20,6 +20,7 @@
         "real-gdp-growth",
         "registered-unemployment",
         "ilo-unemployment",
+        "ilo-unemployment-annual",
         "registered-unemployment-annual"
       ]
     },

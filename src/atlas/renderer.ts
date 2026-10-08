@@ -1,6 +1,6 @@
 import type { AtlasData, ChartState, Panel } from './contracts.ts';
 import { definition, panelYears } from './composition.ts';
-import { chartGeometry, colorFor, formatValue } from './geometry.ts';
+import { chartGeometry, colorFor, formatTick } from './geometry.ts';
 
 const NS = 'http://www.w3.org/2000/svg';
 export function svgElement(tag: string, attrs: Record<string, string | number> = {}, text?: string): SVGElement {
@@ -12,8 +12,12 @@ export function svgElement(tag: string, attrs: Record<string, string | number> =
 export function drawChart(svg: SVGSVGElement, panel: Panel, state: ChartState, data: AtlasData, width: number): void {
   const range = panelYears(panel,state);
   const g = chartGeometry(panel, data, range.start_year, range.end_year, width);
+  const availableWidth = width;
+  width = g.width;
   svg.replaceChildren();
   svg.setAttribute('viewBox', `0 0 ${width} ${g.height}`);
+  svg.style.width = width > availableWidth ? `${width}px` : '100%';
+  svg.dataset.plotLeft = String(g.left); svg.dataset.plotRight = String(g.right);
   svg.setAttribute('height', String(g.height));
   svg.dataset.panelId = panel.id;
   svg.append(svgElement('title', {}, `${panel.title}. ${range.start_year} to ${range.end_year}. Arrow keys inspect years.`));
@@ -34,10 +38,19 @@ export function drawChart(svg: SVGSVGElement, panel: Panel, state: ChartState, d
       svg.append(svgElement('text', { x: g.x(a.start_year), y: 17, 'text-anchor': 'middle', fill: '#67645e', 'font-size': 10, 'data-event-label': a.id }, `${a.start_year} · ${a.label}`));
     }
   }
-  for (const tick of g.y.ticks(5)) {
-    const yy = g.y(tick);
-    plot.append(svgElement('line', { x1: g.left, x2: width - g.right, y1: yy, y2: yy, stroke: tick === 0 ? '#777268' : '#d9d5cc', 'stroke-width': tick === 0 ? 1.2 : .8 }));
-    svg.append(svgElement('text', { x: g.left - 10, y: yy + 4, 'text-anchor': 'end', fill: '#67645e', 'font-size': 11 }, formatValue(tick)));
+  for (const [index, axis] of g.axes.entries()) {
+    const direction = axis.side === 'left' ? -1 : 1;
+    const color = axis.ids.length === 1 ? colorFor(data, axis.ids[0]) : '#67645e';
+    const group = svgElement('g', { 'data-unit-axis': axis.key, 'data-axis-series': axis.ids.join(' '), 'aria-label': axis.label });
+    group.append(svgElement('line', { x1: axis.position, x2: axis.position, y1: g.top, y2: g.bottom, stroke: color, opacity: .45 }));
+    for (const tick of axis.y.ticks(5)) {
+      const yy = axis.y(tick);
+      if (index === 0) plot.append(svgElement('line', { x1: g.left, x2: width - g.right, y1: yy, y2: yy, stroke: tick === 0 ? '#777268' : '#d9d5cc', 'stroke-width': tick === 0 ? 1.2 : .8 }));
+      group.append(svgElement('text', { x: axis.position + direction * 8, y: yy + 4, 'text-anchor': direction < 0 ? 'end' : 'start', fill: color, 'font-size': 11 }, formatTick(tick)));
+    }
+    const labelX = axis.position + direction * 53, labelY = (g.top + g.bottom) / 2;
+    group.append(svgElement('text', { x: labelX, y: labelY, transform: `rotate(${direction * 90} ${labelX} ${labelY})`, 'text-anchor': 'middle', fill: color, 'font-size': 10 }, axis.label));
+    svg.append(group);
   }
   const ticks = g.x.ticks(width < 600 ? 4 : 10).filter(t => Number.isInteger(t));
   for (const tick of ticks) {
@@ -47,14 +60,14 @@ export function drawChart(svg: SVGSVGElement, panel: Panel, state: ChartState, d
   for (const segment of g.paths) {
     const color = colorFor(data, segment.id);
     plot.append(svgElement('path', { d: segment.path, fill: 'none', stroke: color, 'stroke-width': 2.35, 'stroke-linejoin': 'round', 'stroke-linecap': 'round', 'stroke-dasharray': segment.kind === 'forecast' ? '8 5' : segment.kind === 'reconstructed' ? '2 4' : 'none', 'data-series-id': segment.id, 'data-kind': segment.kind }));
-    if (segment.points.length === 1) plot.append(svgElement('circle', { cx: g.x(segment.points[0].year), cy: g.y(segment.points[0].value!), r: 2.5, fill: color }));
+    if (segment.points.length === 1) plot.append(svgElement('circle', { cx: g.x(segment.points[0].year), cy: g.series.find(s => s.id === segment.id)!.axis.y(segment.points[0].value!), r: 2.5, fill: color }));
   }
   for (const s of g.series) {
     for (const point of s.points) {
       if (point.value === null) continue;
       const status=point.observation!.revision_status;
-      if (status === 'revised') plot.append(svgElement('rect',{x:g.x(point.year)-3,y:g.y(point.value)-3,width:6,height:6,fill:colorFor(data,s.id),'data-status-marker':status}));
-      else if (point.observation!.value_kind === 'forecast' || status === 'provisional') plot.append(svgElement('circle', {cx:g.x(point.year),cy:g.y(point.value),r:3,fill:'#fffefa',stroke:colorFor(data,s.id),'stroke-width':1.5,'data-status-marker':status}));
+      if (status === 'revised') plot.append(svgElement('rect',{x:g.x(point.year)-3,y:s.axis.y(point.value)-3,width:6,height:6,fill:colorFor(data,s.id),'data-status-marker':status}));
+      else if (point.observation!.value_kind === 'forecast' || status === 'provisional') plot.append(svgElement('circle', {cx:g.x(point.year),cy:s.axis.y(point.value),r:3,fill:'#fffefa',stroke:colorFor(data,s.id),'stroke-width':1.5,'data-status-marker':status}));
       if (point.breakBefore) {
         const marker = svgElement('path', { d: `M${g.x(point.year)-4},${g.top}l4,6l4,-6`, fill: colorFor(data,s.id), 'data-statistical-break': s.id });
         marker.append(svgElement('title', {}, definition(data, s.id).breaks.find(b => Number(b.period.slice(0,4)) === point.year)!.description)); plot.append(marker);
@@ -81,6 +94,6 @@ export function drawCursor(svg: SVGSVGElement, panel: Panel, state: ChartState, 
     const dot = svg.querySelector<SVGCircleElement>(`[data-highlight="${s.id}"]`)!;
     const point = s.points.find(p => p.year === year);
     dot.setAttribute('opacity', point?.value != null ? '1' : '0');
-    if (point?.value != null) { dot.setAttribute('cx', String(g.x(point.year))); dot.setAttribute('cy', String(g.y(point.value))); }
+    if (point?.value != null) { dot.setAttribute('cx', String(g.x(point.year))); dot.setAttribute('cy', String(s.axis.y(point.value))); }
   }
 }
