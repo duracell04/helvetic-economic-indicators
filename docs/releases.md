@@ -114,3 +114,7 @@ Remains candidate: Obtain an auditable national annual SECO/FSO rate table and i
 ## 8 October 2026 — General-government gross debt source audit
 
 Remains candidate: Retrieve usable original FFA data and codelists; verify consolidated general government, debt valuation/consolidation and the FS/GFS debt definition and currency scale. [Audit](source-audit/general-government-debt.md).
+
+## 8 October 2026 — Confederation gross debt source audit
+
+Remains candidate: Retrieve usable original FFA data and codelists; verify Confederation, debt valuation/consolidation and the FS/GFS debt definition and currency scale. [Audit](source-audit/confederation-debt.md).
