@@ -11,16 +11,16 @@ const navigation = [['Overview', ''], ['Series', 'series/'], ['Methodology', 'me
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <title>{title} · Helvetic Economic Indicators</title>
+    <title>{title} · Swiss Economic Atlas</title>
     <link rel="icon" type="image/svg+xml" href={href('favicon.svg')} />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     {!Astro.props.atlas && <header class="masthead">
-      <a class="brand" href={href()} aria-label="Helvetic Economic Indicators home"><span class="cross" aria-hidden="true">+</span><span>Helvetic<br /><small>Economic Indicators</small></span></a>
+      <a class="brand" href={href()} aria-label="Swiss Economic Atlas home"><span class="cross" aria-hidden="true">+</span><span>Swiss<br /><small>Economic Atlas</small></span></a>
       <nav aria-label="Main navigation">{navigation.map(([label, route]) => <a href={href(route)} aria-current={Astro.url.pathname.replace(/\/$/, '') === href(route).replace(/\/$/, '') ? 'page' : undefined}>{label}</a>)}</nav>
     </header>}
     <main id="main" tabindex="-1"><slot /></main>
-    <footer><a href={href()}>Helvetic Economic Indicators</a><nav aria-label="Supporting information"><a href={href('series/')}>Indicators & topics</a> · <a href={href('methodology/')}>Methodology</a> · <a href={href('downloads/')}>Data</a></nav></footer>
+    <footer><a href={href()}>Swiss Economic Atlas</a><nav aria-label="Supporting information"><a href={href('series/')}>Indicators & topics</a> · <a href={href('methodology/')}>Methodology</a> · <a href={href('downloads/')}>Data</a></nav></footer>
   </body>
 </html>

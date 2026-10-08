@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import { href } from '../lib/catalogue';
 ---
 <Layout title="Economic atlas" atlas>
-  <header class="atlas-heading"><div><h1>Helvetic Economic Indicators</h1><p>Swiss economic history on one timeline. Combine, separate and rearrange the indicators.</p></div><span class="atlas-badge">Economic atlas<br />Annual view</span></header>
+  <header class="atlas-heading"><div><h1>Swiss Economic Atlas</h1><p>Swiss economic history on one timeline. Combine, separate and rearrange the indicators.</p></div><span class="atlas-badge">Economic atlas<br />Annual view</span></header>
   <div id="atlas" data-url={href('data/atlas.json')}>
     <aside id="demo-banner" class="demo-banner" hidden>Synthetic demonstration — not Swiss historical observations</aside>
     <div class="atlas-toolbar" aria-label="Chart composition controls">

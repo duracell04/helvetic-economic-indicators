@@ -1,13 +1,13 @@
 import { readdir, readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
+import { resolveSiteConfig } from '../site.config.mjs';
 
 const root = path.resolve('dist');
 async function htmlFiles(directory: string): Promise<string[]> {
   const entries = await readdir(directory, { withFileTypes: true });
   return (await Promise.all(entries.map(entry => entry.isDirectory() ? htmlFiles(path.join(directory, entry.name)) : entry.name.endsWith('.html') ? [path.join(directory, entry.name)] : []))).flat();
 }
-const [owner, repo] = process.env.GITHUB_REPOSITORY?.split('/') ?? [];
-const base = (process.env.SITE_BASE ?? (repo === `${owner}.github.io` ? '/' : `/${repo ?? 'helvetic-economic-indicators'}/`)).replace(/\/$/, '') + '/';
+const { base } = resolveSiteConfig();
 const pages = await htmlFiles(root);
 let checked = 0;
 for (const page of pages) {

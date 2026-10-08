@@ -1,4 +1,4 @@
-# Helvetic Economic Indicators
+# Swiss Economic Atlas
 
 A lightweight interactive atlas for exploring Swiss economic history on one synchronized timeline. Indicators, topics, calculations and chart arrangements are independent, versioned records. Astro, TypeScript and npm; static GitHub Pages hosting; no backend or database.
 
@@ -13,7 +13,7 @@ npm ci
 npm run dev:demo
 ```
 
-Open `http://localhost:4321/helvetic-economic-indicators/`. The demonstration defaults to 1946–2025 with deliberate gaps, different starting dates, reconstructions, forecasts, revised/provisional observations and illustrative annotations. Every demo page displaying observations identifies them as synthetic.
+Open `http://localhost:4321/swiss-economic-atlas/`. The demonstration defaults to 1946–2025 with deliberate gaps, different starting dates, reconstructions, forecasts, revised/provisional observations and illustrative annotations. Every demo page displaying observations identifies them as synthetic.
 
 Use **Add indicator** to search by topic or name. Choose a new panel or an existing one. Each indicator has information, combine-above, separate-below and remove controls; panel arrows reorder the timeline. Compare compatible original units or explicitly choose **Index to 100** with a positive common base. The default three-panel arrangement fixes **1960 = 100**, independently of the displayed range.
 
@@ -84,9 +84,9 @@ Further verified Swiss-data acquisition, native-frequency charts, additional cha
 
 ## GitHub Pages
 
-The repository is hosted at [duracell04/helvetic-economic-indicators](https://github.com/duracell04/helvetic-economic-indicators), with **Settings → Pages → GitHub Actions** enabled. Pushes to `main` run checks including the demo browser suite, then deploy **only `dist/` production artifacts**. Pull requests validate without deploying.
+The repository is hosted at [duracell04/swiss-economic-atlas](https://github.com/duracell04/swiss-economic-atlas), with **Settings → Pages → GitHub Actions** enabled. Pushes to `main` run checks including the demo browser suite, then deploy **only `dist/` production artifacts**. Pull requests validate without deploying.
 
-The owner and repository name from `GITHUB_REPOSITORY` determine `https://<owner>.github.io/helvetic-economic-indicators/`; account sites use `/`. Optional local overrides are `SITE_URL` and `SITE_BASE` (use identical settings for build/path checks). The configuration follows [Astro's official deployment guide](https://docs.astro.build/en/guides/deploy/github/). No custom domain is configured. The [production website](https://duracell04.github.io/helvetic-economic-indicators/) publishes committed, validated observations; the synthetic demonstration remains a local preview.
+The owner and repository name from `GITHUB_REPOSITORY` determine `https://<owner>.github.io/swiss-economic-atlas/`; account sites use `/`. Optional local overrides are `SITE_URL` and `SITE_BASE` (use identical settings for build/path checks). The configuration follows [Astro's official deployment guide](https://docs.astro.build/en/guides/deploy/github/). No custom domain is configured. The repository was renamed from `helvetic-economic-indicators`; GitHub redirects repository links, but the old Pages website address does not redirect. Update bookmarks and shared URLs to `/swiss-economic-atlas/`, retaining any `#chart=` fragment. The [production website](https://duracell04.github.io/swiss-economic-atlas/) publishes committed, validated observations; the synthetic demonstration remains a local preview.
 
 ## Licences
 

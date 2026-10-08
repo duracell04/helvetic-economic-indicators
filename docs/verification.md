@@ -52,3 +52,13 @@ Current production checksums:
 
 - `manifest.json`: `dcd85fba1af4cd844e18633a602183efea75290b02f20fb4e85af5fcf7b945e2`
 - `atlas.json`: `303187beb3b10ef1e9693d84d68579d419d6ce87828f2282090d5190f13d31d6`
+
+## Swiss Economic Atlas migration preparation — 8 October 2026
+
+Prepared from `main` commit `48b78824864f13921d189951a33d01d503534be2` in an isolated checkout. Earlier data pull requests had already been merged before this migration began. No data, source attribution, licence, statistical identifier or browser-storage key was changed.
+
+With `GITHUB_REPOSITORY=duracell04/swiss-economic-atlas`, a clean `npm ci` installation and `npm run check:all` passed using Node 24: 58 unit/data/configuration cases, zero Astro/TypeScript diagnostics, 35 production pages, 555 internal references and 22 desktop/mobile browser cases. Production contains 9,317 permitted observations and no synthetic definitions. The isolated demo remains outside production `dist/`.
+
+Configuration tests cover both repository names, account-site roots, local defaults and explicit site/base overrides. Browser checks cover the new branding, navigation, existing `hei-atlas-production-v2` saved layouts, shared-layout restoration and phone overflow. The same repository-derived configuration allows the prepared commit to validate under the former name before the GitHub rename and subsequent deployment at `/swiss-economic-atlas/`.
+
+Historical verification entries above describe their original release state and URLs. The new project website is https://duracell04.github.io/swiss-economic-atlas/; GitHub redirects renamed repository links, but the former Pages website address does not redirect.

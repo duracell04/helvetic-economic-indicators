@@ -2,6 +2,8 @@ import {test,expect,type Page} from '@playwright/test';
 import {readFile} from 'node:fs/promises';
 import type {AtlasData} from '../../src/atlas/contracts.ts';
 import {initialState} from '../../src/atlas/composition.ts';
+import {resolveSiteConfig} from '../../site.config.mjs';
+const productionURL=`http://127.0.0.1:4323${resolveSiteConfig().base}`;
 const ready=async(page:Page)=>{await page.goto('./');await expect(page.locator('#atlas')).toHaveAttribute('data-ready','true');};
 const panel=(page:Page,index:number)=>page.locator('.chart-panel').nth(index);
 const add=async(page:Page,title:string,target='')=>{
@@ -10,6 +12,26 @@ const add=async(page:Page,title:string,target='')=>{
   await page.locator('#add-target').selectOption(target);
   await page.locator(`button[aria-label="Add ${title}"]:not([disabled])`).first().click();
 };
+test('production branding, saved layouts and navigation follow the configured Pages path',async({page},testInfo)=>{
+  await page.goto(productionURL);await expect(page.locator('#atlas')).toHaveAttribute('data-ready','true');
+  await expect(page.getByRole('heading',{name:'Swiss Economic Atlas',exact:true})).toBeVisible();
+  await expect(page).toHaveTitle('Economic atlas · Swiss Economic Atlas');
+  await page.locator('#start-year').fill('1980');await page.locator('#start-year').press('Tab');
+  expect(await page.evaluate(()=>localStorage.getItem('hei-atlas-production-v2'))).not.toBeNull();
+  await page.reload();await expect(page.locator('#start-year')).toHaveValue('1980');
+  await page.getByRole('button',{name:'Share ↗',exact:true}).click();
+  const shared=await page.locator('#share-link').inputValue();expect(shared.startsWith(productionURL+'#chart=')).toBe(true);
+  await page.getByRole('button',{name:'Close share dialog'}).click();await page.getByRole('button',{name:'Reset',exact:true}).click();
+  await page.goto(shared);await expect(page.locator('#start-year')).toHaveValue('1980');
+  await page.getByRole('link',{name:'Indicators & topics',exact:true}).click();
+  await expect(page).toHaveURL(productionURL+'series/');
+  const navigation=page.getByRole('navigation',{name:'Main navigation'});
+  await navigation.getByRole('link',{name:'Methodology',exact:true}).click();await expect(page).toHaveURL(productionURL+'methodology/');
+  await navigation.getByRole('link',{name:'Downloads',exact:true}).click();await expect(page).toHaveURL(productionURL+'downloads/');
+  await page.getByRole('link',{name:'Swiss Economic Atlas home',exact:true}).click();await expect(page).toHaveURL(productionURL);
+  const dimensions=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,width:innerWidth}));expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.width);
+  await page.screenshot({path:`.cache/evidence-branding-${testInfo.project.name}.png`,fullPage:true});
+});
 test('composition, indexing, reorder, ranges and saved/shared layouts',async({page})=>{
   await ready(page);await expect(page.locator('.chart-panel')).toHaveCount(3);
   await expect(page.locator('#demo-banner')).toContainText('Synthetic demonstration');await expect(page.getByRole('combobox',{name:'Preset',exact:true})).toHaveCount(0);
@@ -76,7 +98,7 @@ test('invalid shared layouts recover; new energy definitions render without code
   await page.locator('#add-indicator').click();await page.locator('#indicator-search').fill('energy');await expect(page.locator('#indicator-list')).toContainText('Energy');
 });
 test('production renders yields, debt and distinct 2026 statuses',async({page},testInfo)=>{
-  await page.goto('http://127.0.0.1:4323/helvetic-economic-indicators/');await expect(page.locator('#atlas')).toHaveAttribute('data-ready','true');await expect(page.locator('#demo-banner')).toBeHidden();await expect(page.locator('.chart-panel')).toHaveCount(3);await expect(page.locator('#empty-atlas')).toBeHidden();
+  await page.goto(productionURL);await expect(page.locator('#atlas')).toHaveAttribute('data-ready','true');await expect(page.locator('#demo-banner')).toBeHidden();await expect(page.locator('.chart-panel')).toHaveCount(3);await expect(page.locator('#empty-atlas')).toBeHidden();
   await expect(panel(page,0)).toContainText('2026 partial year');
   const chart=panel(page,0).locator('svg');await chart.focus();await chart.press('End');
   await expect(page.locator('#readout')).toContainText('Jan–Aug 2026 (8 months)');await expect(page.locator('#readout')).toContainText('Jan–Sep 2026 (9 months)');await expect(page.locator('#readout')).toContainText('provisional');await expect(page.locator('#readout')).toContainText('No observation');
@@ -91,7 +113,7 @@ test('production renders yields, debt and distinct 2026 statuses',async({page},t
     await expect(page.getByRole('button',{name:`Add ${title}`,exact:true}).first()).toBeEnabled();
   }
   await page.getByRole('button',{name:'Close indicator selector'}).click();
-  const response=await page.request.get('http://127.0.0.1:4323/helvetic-economic-indicators/data/atlas.json');const data=await response.json();expect(data.mode).toBe('production');
+  const response=await page.request.get(`${productionURL}data/atlas.json`);const data=await response.json();expect(data.mode).toBe('production');
   const yieldIds=['confederation-10y-annual','gmbf-3m-annual','confederation-10y-minus-gmbf-3m'];
   expect(data.observations.filter((o:{series_id:string})=>yieldIds.includes(o.series_id))).toHaveLength(174);
   expect(data.observations.filter((o:{series_id:string})=>o.series_id==='general-government-debt-ratio')).toHaveLength(81);
@@ -101,7 +123,7 @@ test('production renders yields, debt and distinct 2026 statuses',async({page},t
 });
 
 test('production nominal GDP renders audited history, gaps, indexing and downloads',async({page},testInfo)=>{
-  const origin='http://127.0.0.1:4323/helvetic-economic-indicators/';
+  const origin=productionURL;
   await page.goto(origin);await expect(page.locator('#atlas')).toHaveAttribute('data-ready','true');
   await add(page,'Nominal GDP');
   const gdp=page.locator('.chart-panel').filter({has:page.locator('[data-indicator="nominal-gdp"]')});
@@ -160,7 +182,7 @@ test('demo storage cannot restore into production on the same origin',async({pag
 
 
 test('production published real growth is selectable with metadata and downloadable observations',async({page})=>{
- const origin='http://127.0.0.1:4323/helvetic-economic-indicators/';
+ const origin=productionURL;
  await page.goto(origin);await expect(page.locator('#atlas')).toHaveAttribute('data-ready','true');
  await add(page,'Real GDP growth');
  const growth=page.locator('.chart-panel').filter({has:page.locator('[data-indicator="real-gdp-growth"]')});
@@ -177,7 +199,7 @@ test('production published real growth is selectable with metadata and downloada
 
 test('every verified dataset is catalogued, downloadable and selectable at its supported frequency',async({page})=>{
  test.setTimeout(120000);
- const origin='http://127.0.0.1:4323/helvetic-economic-indicators/';
+ const origin=productionURL;
  const data=await (await page.request.get(`${origin}data/atlas.json`)).json() as AtlasData;
  const baseline=new Set(['confederation-10y-annual','gmbf-3m-annual','confederation-10y-minus-gmbf-3m','general-government-debt-ratio','nominal-gdp','real-gdp-growth']);
  for(const series of data.registry.series.filter(s=>s.verification==='verified'&&!baseline.has(s.id))){

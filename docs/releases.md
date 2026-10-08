@@ -1,5 +1,12 @@
 # Release notes
 
+## 2026-10-08 — Swiss Economic Atlas migration
+
+- Rename the project branding and repository references to Swiss Economic Atlas / `swiss-economic-atlas`.
+- Share the site/base configuration across Astro, publication checks, the browser-test server and Playwright. Both the former and new repository names derive their own Pages paths; local previews default to `/swiss-economic-atlas/`.
+- Preserve all economic observations, source attribution, licences, identifiers and saved/shared chart formats. Production deployment retains the same validation gates and uploads only `dist/`.
+- The new website address is https://duracell04.github.io/swiss-economic-atlas/. Repository links redirect after renaming, while the former Pages address does not. Existing shared fragments can be retained on the new address.
+
 ## 2026-10-08 — Nominal GDP
 
 - Added 78 annual FSO current-price GDP values for 1948–2025 in CHF millions, preserving published numeric precision and original source bytes.
