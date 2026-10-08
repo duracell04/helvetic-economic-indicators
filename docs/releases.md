@@ -122,3 +122,7 @@ Remains candidate: Retrieve usable original FFA data and codelists; verify Confe
 ## 8 October 2026 — Confederation debt / GDP source audit
 
 Remains candidate: Retrieve usable original FFA data and codelists; verify Confederation debt and nominal-GDP denominator, debt valuation/consolidation and the matching annual nominal-GDP vintage and ratio convention. [Audit](source-audit/confederation-debt-ratio.md).
+
+## 8 October 2026 — Historical long-term Confederation yield source audit
+
+Remains candidate: Locate and retrieve the original SNB monthly historical long-term yield table; verify its exact series identity, method transitions, native periods and source-specific reuse terms. [Audit](source-audit/confederation-long-yield.md).

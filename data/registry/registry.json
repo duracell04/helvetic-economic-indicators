@@ -600,6 +600,26 @@
         "attribution": "Federal Finance Administration",
         "conditions": "The exact FS/GFS main-aggregates catalogue record labels the linked data OPEN. Preserve source attribution. This permission does not settle debt definitions or grant rights to unrelated FFA resources."
       }
+    },
+    {
+      "id": "snb-historical-long-yield-candidate",
+      "publisher": "Swiss National Bank",
+      "title": "Historical Confederation yield — monthly companion pending",
+      "landing_url": "https://www.snb.ch/public/publication/en/www-snb-ch/publications/statistical-publications/historical-time-series/2007/renditen_book/publications0_en/e_zinssaetze_u_renditen.book.pdf",
+      "data_url": null,
+      "source_identifier": "Historical time series 4 / historical yield / monthly companion pending",
+      "audit_status": "candidate",
+      "definition": "Historical coupon-bond yield measure distinct from a fixed-maturity fitted spot rate.",
+      "coverage": null,
+      "revision_practice": "Retain the original source vintage and documented revisions before any import.",
+      "rights": {
+        "redistribution": "permitted",
+        "licence": "SNB historical figures: reproduction with source reference",
+        "evidence_url": "https://www.snb.ch/public/publication/en/www-snb-ch/publications/statistical-publications/historical-time-series/2007/renditen_book/publications0_en/e_zinssaetze_u_renditen.book.pdf",
+        "reviewed_on": "2026-10-08",
+        "attribution": "Swiss National Bank",
+        "conditions": "The 2007 book permits reproducing its figures with attribution. A separate monthly companion must be identified and its applicable terms verified before import; no monthly source file has been retained."
+      }
     }
   ],
   "series": [
@@ -924,12 +944,11 @@
       "maturity": "Source-defined",
       "aggregation": "Preserve original observation convention.",
       "source_ids": [
-        "snb",
-        "history"
+        "snb-historical-long-yield-candidate"
       ],
-      "source_identifier": null,
+      "source_identifier": "Historical time series 4 / historical yield / monthly companion pending",
       "breaks": [],
-      "usage_notes": "Candidate only. No verified observations or coverage claims. Dataset-specific usage terms are inherited from the audited source records.",
+      "usage_notes": "Candidate. Audit on 8 October 2026: Locate and retrieve the original SNB monthly historical long-term yield table; verify its exact series identity, method transitions, native periods and source-specific reuse terms. No observations are published. See docs/source-audit/confederation-long-yield.md.",
       "measurement": "yield",
       "price_basis": "not_applicable",
       "aggregation_kind": "native"
