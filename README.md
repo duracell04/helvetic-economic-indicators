@@ -15,7 +15,7 @@ npm run dev:demo
 
 Open `http://localhost:4321/swiss-economic-atlas/`. The demonstration defaults to 1946–2025 with deliberate gaps, different starting dates, reconstructions, forecasts, revised/provisional observations and illustrative annotations. Every demo page displaying observations identifies them as synthetic.
 
-Use **Add indicator** to search by topic or name. Choose a new panel or an existing one. Each indicator has information, combine-above, separate-below and remove controls; panel arrows reorder the timeline. Compare compatible original units or explicitly choose **Index to 100** with a positive common base. The default three-panel arrangement fixes **1960 = 100**, independently of the displayed range.
+Use **Add indicator** to search by topic or name. Choose a new panel or an existing one. Each indicator has information, combine-above, separate-below and remove controls; panel arrows reorder the timeline. Charts always use original units. Indicators with different units stay in separate synchronized panels; compatible units can share a panel.
 
 Hover to inspect every panel at the same year. Click/tap to pin; Left/Right step, Home/End select endpoints, Escape releases. Pinned readouts scroll on phones. Save layouts locally or share configuration-only links. Demo and production have separate versioned browser storage.
 
@@ -78,7 +78,7 @@ The final `demo` command demonstrates the local importer in a separate ignored f
 
 ## Initial presets and later milestones
 
-The production default arrangement shows government yields, their spread and broad government gross debt / GDP in three separate panels. Add nominal GDP through **Add indicator**; its native display uses CHF millions, and its verified positive 1960 value supports explicit indexing. Reset returns to this arrangement. The local synthetic demonstration retains the original three-panel macro layout. The previous financing arrangement, original reference and six-panel overview remain in the registry for saved layouts and later data additions. The toolbar has no preset selector; visitors compose their own arrangement directly.
+The production default arrangement shows government yields, their spread and broad government gross debt / GDP in three separate panels. Add nominal GDP through **Add indicator**; its native display uses CHF millions, and its verified positive 1960 value supports explicit indexing. Reset returns to this arrangement. The local synthetic demonstration uses separate original-unit panels for GDP, GDP per capita and population, followed by macro stability and monetary policy. The previous financing arrangement, original reference and six-panel overview remain in the registry for saved layouts and later data additions. The toolbar has no preset selector; visitors compose their own arrangement directly.
 
 Further verified Swiss-data acquisition, native-frequency charts, additional chart types and Relationships/correlation analysis remain later milestones.
 

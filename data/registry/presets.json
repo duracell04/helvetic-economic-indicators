@@ -13,14 +13,25 @@
         "panels": [
           {
             "id": "output",
-            "title": "Output & population",
+            "title": "Real GDP per capita",
             "series_ids": [
-              "real-gdp-per-capita",
+              "real-gdp-per-capita"
+            ],
+            "axis": {
+              "mode": "native",
+              "base_year": null
+            },
+            "conventions_acknowledged": true
+          },
+          {
+            "id": "output-population",
+            "title": "Population",
+            "series_ids": [
               "population"
             ],
             "axis": {
-              "mode": "indexed",
-              "base_year": 1960
+              "mode": "native",
+              "base_year": null
             },
             "conventions_acknowledged": true
           },
@@ -107,15 +118,37 @@
         "panels": [
           {
             "id": "levels",
-            "title": "Long-run levels",
+            "title": "Real GDP",
             "series_ids": [
-              "real-gdp",
-              "real-gdp-per-capita",
+              "real-gdp"
+            ],
+            "axis": {
+              "mode": "native",
+              "base_year": null
+            },
+            "conventions_acknowledged": true
+          },
+          {
+            "id": "levels-real-gdp-per-capita",
+            "title": "Real GDP per capita",
+            "series_ids": [
+              "real-gdp-per-capita"
+            ],
+            "axis": {
+              "mode": "native",
+              "base_year": null
+            },
+            "conventions_acknowledged": true
+          },
+          {
+            "id": "levels-population",
+            "title": "Population",
+            "series_ids": [
               "population"
             ],
             "axis": {
-              "mode": "indexed",
-              "base_year": 1960
+              "mode": "native",
+              "base_year": null
             },
             "conventions_acknowledged": true
           },

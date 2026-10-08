@@ -113,7 +113,7 @@ test('CLI retains the canonical CSV default and rejects an unknown importer befo
   await run(process.execPath, args);assert.equal((await validate(fixture.root)).observations.length, 3);
 });
 
-test('production GDP preserves empty years, reconstruction boundaries and explicit 1960 indexing', async () => {
+test('production GDP preserves original values, empty years and reconstruction boundaries', async () => {
   const data = await productionAtlas(process.cwd());assert.equal(available(data, 'nominal-gdp'), true);
   const state = addSeries(initialState(data), 'nominal-gdp', data);const panel = state.panels.at(-1)!;
   const points = pointsFor(panel, 'nominal-gdp', data, 1946, 2026);
@@ -121,8 +121,7 @@ test('production GDP preserves empty years, reconstruction boundaries and explic
   const chart = chartGeometry(panel, data, 1946, 2026, 900);
   assert.deepEqual(chart.paths.map(p => p.kind), ['reconstructed', 'observed']);
   assert.ok(!chart.paths.some(p => p.points.some(p => p.year === 1994) && p.points.some(p => p.year === 1995)));
-  panel.axis = { mode: 'indexed', base_year: 1960 };
-  assert.equal(pointsFor(panel, 'nominal-gdp', data, 1960, 1960)[0].value, 100);
+  assert.equal(pointsFor(panel, 'nominal-gdp', data, 1960, 1960)[0].value, data.observations.find(o=>o.series_id==='nominal-gdp'&&o.reference_period==='1960')!.value);
   assert.ok(data.topics.find(t => t.id === 'output')!.series_ids.includes('nominal-gdp'));
   assert.ok(data.topics.find(t => t.id === 'public-finances')!.series_ids.includes('nominal-gdp'));
 });

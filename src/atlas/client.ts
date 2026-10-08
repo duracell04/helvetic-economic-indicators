@@ -47,13 +47,8 @@ async function boot(): Promise<void> {
     const result = compatible(problem, data);
     if (result.kind === 'separate') { if (fallback) commit(fallback, result.reason + ' Added below instead.'); else message(result.reason); return; }
     element('comparison-description').textContent = result.reason;
-    element('comparison-title').textContent = result.kind === 'index' ? 'Compare with a common index' : 'Different annual conventions';
-    element('comparison-base').hidden = result.kind !== 'index';
-    element<HTMLInputElement>('comparison-year').value = '1960';
-    element('approve-comparison').textContent = result.kind === 'index' ? 'Index and combine' : 'Combine with these conventions';
     pendingFallback=fallback ?? null;
     pending = () => {
-      if (result.kind === 'index') problem.axis = { mode: 'indexed', base_year: Number(element<HTMLInputElement>('comparison-year').value) };
       problem.conventions_acknowledged = true;
       commit(next);
     };
@@ -134,7 +129,6 @@ async function boot(): Promise<void> {
         const row = make('div', 'readout-row');
         const label = make('span', '', s.title); label.style.color = colorFor(data,id);
         row.append(label, make('strong', '', formatValue(point.raw, s.unit.label)));
-        if (point.value !== null && panel.axis.mode === 'indexed') row.append(make('small', '', `Index ${panel.axis.base_year} = 100: ${formatValue(point.value)}`));
         if (point.observation) row.append(make('small', '', `${point.observation.value_kind} · ${point.observation.revision_status} · ${s.aggregation_kind.replaceAll('_',' ')}`));
         for (const note of s.breaks.filter(note => note.period === String(year))) row.append(make('small', '', note.description));
         group.append(row);
@@ -158,21 +152,13 @@ async function boot(): Promise<void> {
   function render(): void {
     start.value = String(state.start_year); end.value = String(state.end_year);
     inspect.min = String(state.start_year); inspect.max = String(state.end_year); inspect.value = String(selectedYear ?? Math.min(state.end_year, Math.max(state.start_year,1960)));
-    for (const [id, value] of [['toggle-events',state.show_events],['toggle-intervals',state.show_intervals],['toggle-raw',state.show_raw]] as const) element(id).setAttribute('aria-pressed',String(value));
+    for (const [id, value] of [['toggle-events',state.show_events],['toggle-intervals',state.show_intervals]] as const) element(id).setAttribute('aria-pressed',String(value));
     element('empty-atlas').hidden = state.panels.length !== 0;
     panels.replaceChildren();
     for (const [index, panel] of state.panels.entries()) {
       const section = make('section', 'chart-panel'); section.dataset.panel = panel.id; section.setAttribute('aria-label', panel.title);
       const header = make('div', 'panel-header'); header.append(make('h2', '', `${String(index+1).padStart(2,'0')}  ${panel.title}`));
       const settings = make('div', 'panel-settings');
-      const mode = make('select'); mode.setAttribute('aria-label', `Scale for ${panel.title}`);
-      for (const [value, text] of [['native','Original units'],['indexed','Index to 100']]) { const option=make('option','',text); option.value=value; option.disabled=value==='indexed'&&panel.series_ids.some(id=>definition(data,id).measurement!=='level'); mode.append(option); }
-      mode.value = panel.axis.mode;
-      mode.addEventListener('change', () => { const next=structuredClone(state); next.panels[index].axis={mode:mode.value as 'native'|'indexed',base_year:mode.value==='indexed'?1960:null}; propose(next); }); settings.append(mode);
-      if (panel.axis.mode === 'indexed') {
-        const base=make('input'); base.type='number';base.min='1800';base.max='2199';base.value=String(panel.axis.base_year);base.setAttribute('aria-label',`Base year for ${panel.title}`);
-        base.addEventListener('change',()=>{const next=structuredClone(state);next.panels[index].axis.base_year=Number(base.value);commit(next);});settings.append(base);
-      }
       settings.append(button('↑',`Move ${panel.title} up`,()=>commit(movePanel(state,panel.id,-1)),index===0),button('↓',`Move ${panel.title} down`,()=>commit(movePanel(state,panel.id,1)),index===state.panels.length-1)); header.append(settings); section.append(header);
       const legend=make('div','panel-legend');
       for (const id of panel.series_ids) {
@@ -187,7 +173,7 @@ async function boot(): Promise<void> {
         item.append(button('×',`Remove ${s.title} from ${panel.title}`,()=>commit(removeSeries(state,panel.id,id))));legend.append(item);
       }
       section.append(legend);
-      const unit=make('p','axis-note',panel.axis.mode==='indexed'?`Index · ${panel.axis.base_year} = 100`:`${definition(data,panel.series_ids[0]).unit.label} · annual observations`);
+      const unit=make('p','axis-note',`${definition(data,panel.series_ids[0]).unit.label} · annual observations`);
       if (new Set(panel.series_ids.map(id=>definition(data,id).aggregation_kind)).size>1) unit.append(make('span','',' · Different annual conventions acknowledged'));
       section.append(unit);
       const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('role','group');svg.setAttribute('aria-label',`${panel.title}, interactive annual chart`);svg.setAttribute('tabindex','0');
@@ -200,10 +186,10 @@ async function boot(): Promise<void> {
     if (selectedYear!==null&&(selectedYear<state.start_year||selectedYear>state.end_year)) selectedYear=null;
     updateCursor(selectedYear,pinned);
   }
-  function rangeChange(): void { commit({...state,start_year:Number(start.value),end_year:Number(end.value)},'Historical period updated. Index base years are unchanged.'); }
+  function rangeChange(): void { commit({...state,start_year:Number(start.value),end_year:Number(end.value)},'Historical period updated.'); }
   start.addEventListener('change',rangeChange);end.addEventListener('change',rangeChange);
   element('reset-layout').addEventListener('click',()=>{selectedYear=null;pinned=false;commit(initialState(data),'Default layout restored.');});
-  for(const [id,key] of [['toggle-events','show_events'],['toggle-intervals','show_intervals'],['toggle-raw','show_raw']] as const) element(id).addEventListener('click',()=>commit({...state,[key]:!state[key]},'Display updated.'));
+  for(const [id,key] of [['toggle-events','show_events'],['toggle-intervals','show_intervals']] as const) element(id).addEventListener('click',()=>commit({...state,[key]:!state[key]},'Display updated.'));
   element('share-layout').addEventListener('click',async()=>{
     const url=`${location.origin}${location.pathname}${location.search}#chart=${encodeState(state)}`;history.replaceState(null,'',url);
     element<HTMLInputElement>('share-link').value=url;element<HTMLDialogElement>('share-dialog').showModal();

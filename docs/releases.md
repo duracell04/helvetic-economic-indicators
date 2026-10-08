@@ -1,5 +1,12 @@
 # Release notes
 
+## 2026-10-08 — Original-unit charts only
+
+- Removed the Original units / Index to 100 selector, base-year controls and optional Original-value labels control and rendering.
+- Charts and inspection always use published original values. Indicators with incompatible units remain in separate synchronized panels.
+- Former indexed saved/shared layouts migrate to original-unit panels without losing indicators. Existing version 2 layouts and browser-storage keys remain readable; former optional value-label flags are ignored.
+- Updated demonstration presets, composition documentation and checks. Economic observations, sources, redistribution safeguards and downloads are unchanged.
+
 ## 2026-10-08 — Swiss Economic Atlas migration
 
 - Rename the project branding and repository references to Swiss Economic Atlas / `swiss-economic-atlas`.

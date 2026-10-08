@@ -2,6 +2,8 @@ import { z } from 'zod';
 import { id, SCHEMA_VERSION, type Registry, type Observation } from '../../scripts/lib/schema.ts';
 
 const year = z.number().int().min(1800).max(2199);
+// Former v2 indexed axes / show_raw flags remain parseable only for saved-layout migration.
+// validateState converts them to original units and disables optional value labels.
 export const panelSchema = z.object({
   id, title: z.string().min(1), series_ids: z.array(id).min(1),
   axis: z.object({ mode: z.enum(['native', 'indexed']), base_year: year.nullable() }).strict(),

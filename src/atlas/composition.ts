@@ -12,21 +12,17 @@ export function available(data: AtlasData, id: string): boolean {
     (data.mode === 'demo' || s.data_class === 'real') &&
     data.observations.some(row => row.series_id === id && row.value !== null);
 }
-export function compatible(panel: Panel, data: AtlasData): { kind: 'compatible' | 'acknowledge' | 'index' | 'separate'; reason: string } {
+export function compatible(panel: Panel, data: AtlasData): { kind: 'compatible' | 'acknowledge' | 'separate'; reason: string } {
   const items = panel.series_ids.map(id => definition(data, id));
   if (items.some(s => s.frequency !== 'annual')) return { kind: 'separate', reason: 'This view uses annual observations. No frequency conversion is automatic.' };
-  if (items.length < 2 && panel.axis.mode === 'native') return { kind: 'compatible', reason: '' };
+  if (items.length < 2) return { kind: 'compatible', reason: '' };
   if (items.some(s => s.aggregation_kind === 'unknown' || s.price_basis === 'unknown')) return { kind: 'separate', reason: 'Measurement conventions need to be established before these series can be combined.' };
   const bases = new Set(items.map(s => s.price_basis).filter(b => b !== 'not_applicable'));
   if (bases.size > 1) return { kind: 'separate', reason: 'Nominal and real values need distinct panels or a documented price adjustment.' };
-  if (panel.axis.mode === 'indexed') {
-    if (items.some(s => s.measurement !== 'level')) return { kind: 'separate', reason: 'Indexing compares level variables, not rates, yields or returns.' };
-  } else {
-    const first = items[0];
-    const unitsMatch = items.every(s => s.unit.code === first.unit.code && s.unit.dimension === first.unit.dimension && s.unit.scale === first.unit.scale);
-    const measurementMatch = first.unit.code === 'percent' || items.every(s => s.measurement === first.measurement);
-    if (!unitsMatch || !measurementMatch) return items.every(s => s.measurement === 'level') ? { kind: 'index', reason: 'These level variables use different units. Explicitly index them to a common year, or keep them separate.' + (new Set(items.map(s=>s.aggregation_kind)).size > 1 ? ' Annual conventions also differ: ' + items.map(s=>`${s.title}: ${s.aggregation_kind.replaceAll("_"," ")}`).join('; ') + '. Indexing preserves these conventions; confirm this comparison explicitly.' : '') } : { kind: 'separate', reason: 'These quantities use different units or measurements. Keep them in separate synchronized panels.' };
-  }
+  const first = items[0];
+  const unitsMatch = items.every(s => s.unit.code === first.unit.code && s.unit.dimension === first.unit.dimension && s.unit.scale === first.unit.scale);
+  const measurementMatch = first.unit.code === 'percent' || items.every(s => s.measurement === first.measurement);
+  if (!unitsMatch || !measurementMatch) return { kind: 'separate', reason: 'These quantities use different units or measurements. Keep them in separate synchronized panels.' };
   if (new Set(items.map(s => s.aggregation_kind)).size > 1 && !panel.conventions_acknowledged) return { kind: 'acknowledge', reason: 'These annual measures use different conventions: ' + items.map(s => `${s.title}: ${s.aggregation_kind.replaceAll('_', ' ')}`).join('; ') + '. Combining does not convert or average them.' };
   return { kind: 'compatible', reason: '' };
 }
@@ -35,22 +31,38 @@ export function validateState(input: unknown, data: AtlasData, requireAvailable 
   const state = stateSchema.parse(input);
   const unique = (values: string[], name: string) => { if (new Set(values).size !== values.length) throw new Error(`Duplicate ${name}`); };
   unique(state.panels.map(p => p.id), 'panel ID');
+  for (const panel of state.panels) unique(panel.series_ids, 'indicator within panel');
+  // Accept former v2 links/storage, but never render indexed values or optional raw labels.
+  state.show_raw = false;
+  const reserved = new Set(state.panels.map(p => p.id));
+  state.panels = state.panels.flatMap(panel => {
+    if (panel.axis.mode !== 'indexed') return [panel];
+    const groups: Panel[] = [];
+    for (const id of panel.series_ids) {
+      const group = groups.find(p => compatible({ ...p, series_ids: [...p.series_ids, id] }, data).kind === 'compatible');
+      if (group) { group.series_ids.push(id); continue; }
+      let panelId = panel.id;
+      if (groups.length) {
+        let suffix = 1;
+        while (reserved.has(`panel-${suffix}`)) suffix++;
+        panelId = `panel-${suffix}`; reserved.add(panelId);
+      }
+      groups.push({ ...panel, id: panelId, title: groups.length ? definition(data, id).title : panel.title,
+        series_ids: [id], axis: { mode: 'native', base_year: null } });
+    }
+    return groups;
+  });
   if (!data.presets.some(p => p.id === state.preset_id)) throw new Error('This chart preset is unavailable.');
   unique(state.annotation_ids, 'annotation');
   for (const id of state.annotation_ids) if (!data.annotations.some(a => a.id === id)) throw new Error(`Unknown annotation: ${id}`);
   for (const panel of state.panels) {
     unique(panel.series_ids, 'indicator within panel');
     if (panel.axis.mode === 'native' && panel.axis.base_year !== null) throw new Error('Native panels must not specify an index base');
-    if (panel.axis.mode === 'indexed' && panel.axis.base_year === null) throw new Error('Select an index base year');
     const result = compatible(panel, data);
     if (result.kind !== 'compatible') throw new Error(result.reason);
     for (const id of panel.series_ids) {
       definition(data, id);
       if (requireAvailable && !available(data, id)) throw new Error(`${id}: annual observations are unavailable in this view.`);
-      if (requireAvailable && panel.axis.mode === 'indexed') {
-        const base = data.observations.find(o => o.series_id === id && o.reference_period === String(panel.axis.base_year));
-        if (base?.value == null || base.value <= 0) throw new Error(`${definition(data, id).title}: no positive observation in base year ${panel.axis.base_year}.`);
-      }
     }
   }
   return state;
@@ -90,7 +102,7 @@ export function separateSeries(state: ChartState, panelId: string, id: string, d
   next.panels.splice(index + 1, 0, { id: newPanelId(next), title: definition(data, id).title, series_ids: [id], axis: { mode: 'native', base_year: null }, conventions_acknowledged: false });
   return validateState(next, data);
 }
-export function combineAbove(state: ChartState, panelId: string, id: string, data: AtlasData, options?: { index?: number; acknowledge?: boolean }): ChartState {
+export function combineAbove(state: ChartState, panelId: string, id: string, data: AtlasData, options?: { acknowledge?: boolean }): ChartState {
   const position = state.panels.findIndex(p => p.id === panelId);
   if (position < 1) throw new Error('There is no panel above.');
   const targetId = state.panels[position - 1].id;
@@ -98,7 +110,6 @@ export function combineAbove(state: ChartState, panelId: string, id: string, dat
   const target = next.panels.find(p => p.id === targetId)!;
   if (target.series_ids.includes(id)) throw new Error('This indicator is already in the panel above.');
   target.series_ids.push(id);
-  if (options?.index !== undefined) target.axis = { mode: 'indexed', base_year: options.index };
   if (options?.acknowledge) target.conventions_acknowledged = true;
   return validateState(next, data);
 }

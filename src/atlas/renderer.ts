@@ -59,13 +59,7 @@ export function drawChart(svg: SVGSVGElement, panel: Panel, state: ChartState, d
         marker.append(svgElement('title', {}, definition(data, s.id).breaks.find(b => Number(b.period.slice(0,4)) === point.year)!.description)); plot.append(marker);
       }
     }
-    if (state.show_raw) {
-      const latest = s.points.findLast(p => p.value !== null);
-      if (latest) {
-        const label = svgElement('text', { x: Math.min(g.x(latest.year), width - g.right) - 5, y: Math.max(g.top + 10, g.y(latest.value!) - 8), 'text-anchor': 'end', fill: colorFor(data,s.id), 'font-size': 10, 'data-raw-label': s.id }, formatValue(latest.raw, definition(data, s.id).unit.label));
-        label.append(svgElement('title', {}, `Original value in ${latest.year}; displayed index base is unchanged.`)); plot.append(label);
-      }
-    }
+
   }
   if (!g.series.some(s => s.points.some(p => p.value !== null))) svg.append(svgElement('text', { x: width / 2, y: 115, 'text-anchor': 'middle', fill: '#67645e', 'font-size': 13 }, 'No observations in the selected period'));
   const cursor = svgElement('line', { x1: 0, x2: 0, y1: g.top, y2: g.bottom, stroke: '#161616', 'stroke-width': 1, opacity: 0, 'data-cursor': panel.id, 'pointer-events': 'none' });

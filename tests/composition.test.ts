@@ -20,31 +20,49 @@ test('new sector, indicator and preset are metadata additions', () => {
 });
 test('composition adds, removes empty panels, separates, combines and reorders',()=>{
   const state=initialState(data,'reference');
-  const separated=separateSeries(state,state.panels[0].id,'demo-population',data);
-  assert.equal(separated.panels.length,4);
-  const combined=combineAbove(separated,separated.panels[1].id,'demo-population',data,{index:1960,acknowledge:true});
+  const rates=state.panels.find(p=>p.id==='stability')!;
+  const separated=separateSeries(state,rates.id,'demo-registered-unemployment-annual',data);
+  assert.equal(separated.panels.length,state.panels.length+1);
+  const newPanel=separated.panels.find(p=>p.series_ids.length===1&&p.series_ids[0]==='demo-registered-unemployment-annual')!;
+  const combined=combineAbove(separated,newPanel.id,'demo-registered-unemployment-annual',data,{acknowledge:true});
   assert.deepEqual(combined,state);
   const added=addSeries(state,'demo-confederation-10y-annual',data);
-  assert.equal(added.panels.length,4);
-  assert.equal(movePanel(added,added.panels[3].id,-1).panels[2].id,added.panels[3].id);
-  assert.equal(removeSeries(added,added.panels[3].id,'demo-confederation-10y-annual').panels.length,3);
+  assert.equal(added.panels.length,state.panels.length+1);
+  const last=added.panels.at(-1)!;
+  assert.equal(movePanel(added,last.id,-1).panels.at(-2)!.id,last.id);
+  assert.equal(removeSeries(added,last.id,'demo-confederation-10y-annual').panels.length,state.panels.length);
 });
-test('units, aggregation, frequency, price basis and positive index bases are explicit',()=>{
-  const state=initialState(data,'reference'), panel=structuredClone(state.panels[0]);
-  panel.axis={mode:'native',base_year:null};assert.equal(compatible(panel,data).kind,'index');
-  const rates=structuredClone(state.panels[1]);rates.conventions_acknowledged=false;assert.equal(compatible(rates,data).kind,'acknowledge');
-  const invalid=structuredClone(state);invalid.panels[0].axis.base_year=1971;assert.throws(()=>validateState(invalid,data),/positive observation/);
-  const period={...state,start_year:1980,end_year:2000};assert.equal(validateState(period,data).panels[0].axis.base_year,1960);
-  const changed=structuredClone(data);changed.registry.series.find(s=>s.id==='demo-real-gdp')!.price_basis='nominal';assert.equal(compatible(state.panels[0],changed).kind,'separate');
-  changed.registry.series.find(s=>s.id==='demo-population')!.frequency='monthly';assert.equal(compatible(state.panels[0],changed).kind,'separate');
+test('original axes require compatible units, aggregation, frequency and price basis',()=>{
+  const state=initialState(data,'reference'),panel=structuredClone(state.panels[0]);
+  panel.series_ids.push('demo-population');assert.equal(compatible(panel,data).kind,'separate');
+  const rates=structuredClone(state.panels.find(p=>p.id==='stability')!);rates.conventions_acknowledged=false;assert.equal(compatible(rates,data).kind,'acknowledge');
+  const invalid=structuredClone(state);invalid.panels[0].axis.base_year=1971;assert.throws(()=>validateState(invalid,data),/Native panels/);
+  const period={...state,start_year:1980,end_year:2000};assert.ok(validateState(period,data).panels.every(p=>p.axis.mode==='native'&&p.axis.base_year===null));
+  const changed=structuredClone(data);changed.registry.series.find(s=>s.id==='demo-real-gdp')!.price_basis='nominal';
+  panel.series_ids=['demo-real-gdp','demo-real-gdp-per-capita'];assert.equal(compatible(panel,changed).kind,'separate');
+  panel.series_ids=['demo-real-gdp','demo-population'];changed.registry.series.find(s=>s.id==='demo-population')!.frequency='monthly';assert.equal(compatible(panel,changed).kind,'separate');
   const unequal=structuredClone(data);unequal.registry.series.find(s=>s.id===rates.series_ids[1])!.unit.scale=100;assert.equal(compatible(rates,unequal).kind,'separate');
+});
+test('former indexed layouts restore in original units with incompatible quantities separated',()=>{
+  const state=initialState(data,'reference');
+  const old={...state,show_raw:true,panels:[{...state.panels[0],series_ids:['demo-real-gdp','demo-real-gdp-per-capita','demo-population'],axis:{mode:'indexed' as const,base_year:1960}},...state.panels.slice(3)]};
+  const restored=restoreState(data,'',JSON.stringify(old)).state;
+  assert.equal(restored.panels.length,5);assert.equal(restored.show_raw,false);
+  assert.ok(restored.panels.every(p=>p.axis.mode==='native'&&p.axis.base_year===null));
+  assert.deepEqual(restored.panels.slice(0,3).map(p=>p.series_ids),[['demo-real-gdp'],['demo-real-gdp-per-capita'],['demo-population']]);
+  assert.deepEqual(decodeState(encodeState(old),data),restored);
+  for(const panel of restored.panels)for(const id of panel.series_ids){
+    const point=pointsFor(panel,id,data,1960,1960)[0];assert.equal(point.value,point.raw);
+  }
+  const collided={...old,panels:[...old.panels,{...state.panels.at(-1)!,id:'panel-1'}]};
+  const migrated=validateState(collided,data);assert.equal(new Set(migrated.panels.map(p=>p.id)).size,migrated.panels.length);
 });
 test('geometry keeps absent years, break boundaries and status segments',()=>{
   const state=initialState(data,'reference');
-  const points=pointsFor(state.panels[0],'demo-real-gdp-per-capita',data,1970,1972);
+  const points=pointsFor(state.panels[1],'demo-real-gdp-per-capita',data,1970,1972);
   assert.equal(points[1].value,null);
-  const paths=chartGeometry(state.panels[0],data,1970,1972,900).paths.filter(p=>p.id==='demo-real-gdp-per-capita');assert.equal(paths.length,2);
-  const policy=chartGeometry(state.panels[2],data,1946,2026,900);
+  const paths=chartGeometry(state.panels[1],data,1970,1972,900).paths.filter(p=>p.id==='demo-real-gdp-per-capita');assert.equal(paths.length,2);
+  const policy=chartGeometry(state.panels.find(p=>p.id==='policy')!,data,1946,2026,900);
   assert.ok(policy.paths.some(p=>p.kind==='forecast'));assert.ok(policy.paths.some(p=>p.kind==='reconstructed'));
   assert.ok(policy.series[0].points.find(p=>p.year===1999)!.breakBefore);
   assert.ok(!policy.paths.some(p=>p.points.some(p=>p.year===1998)&&p.points.some(p=>p.year===1999)));
