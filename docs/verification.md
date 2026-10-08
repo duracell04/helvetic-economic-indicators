@@ -74,3 +74,9 @@ Removed display indexing and optional original-value chart labels. All 59 unit/d
 Checks verify that scale/base selectors and optional value labels are absent, chart geometry retains original values, incompatible quantities cannot share an axis, and former indexed saved/shared layouts migrate without losing indicators or colliding with existing panel IDs. The demo now has separate original-unit GDP, GDP-per-capita and population panels; the three-panel production default is preserved.
 
 Live navigation exposed a zero-width resize callback while the atlas is hidden. The observer now waits for a drawable plot area. A desktop/phone regression reproduces the earlier invalid SVG widths when panels are hidden and verifies error-free rendering after they become visible again.
+
+## Compact atlas feedback — 8 October 2026
+
+Removed the axes-fit note and separate year-inspection row. Chart hover/tap inspection, pinning, keyboard year selection and readout dismissal remain available. Update messages now appear as small bottom-right status toasts, fade after two seconds and clear automatically; repeated actions replace the message and restart its duration without shifting the panels.
+
+All 59 unit/data/configuration cases and 26 desktop/mobile browser cases passed. Browser checks cover toast placement, expiry, replacement, stable panel position and retained keyboard/touch inspection. Astro/TypeScript reported zero errors or warnings, and production safeguards still verify 9,317 permitted observations with no synthetic series.

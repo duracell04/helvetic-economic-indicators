@@ -33,6 +33,25 @@ test('production branding, saved layouts and navigation follow the configured Pa
   const dimensions=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,width:innerWidth}));expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.width);
   await page.screenshot({path:`.cache/evidence-branding-${testInfo.project.name}.png`,fullPage:true});
 });
+test('compact status toasts expire without shifting charts; the inspection row is absent',async({page},testInfo)=>{
+  await ready(page);await page.clock.install();
+  await expect(page.locator('.inspect-controls')).toHaveCount(0);await expect(page.locator('#inspect-year')).toHaveCount(0);
+  await expect(page.getByText('Axes fit the displayed years.',{exact:true})).toHaveCount(0);
+  await expect(page.getByText('Hover or tap a year',{exact:true})).toHaveCount(0);
+  const toast=page.getByRole('status',{includeHidden:true}),before=(await panel(page,0).boundingBox())!;
+  await expect(toast).toBeHidden();await page.locator('#toggle-events').click();
+  await expect(toast).toHaveText('Display updated.');await expect(toast).toBeVisible();await expect(toast).toHaveCSS('position','fixed');
+  const bounds=(await toast.boundingBox())!,viewport=page.viewportSize()!;
+  expect(viewport.width-bounds.x-bounds.width).toBeCloseTo(16,0);expect(viewport.height-bounds.y-bounds.height).toBeCloseTo(16,0);expect(bounds.width).toBeLessThanOrEqual(320);
+  expect((await panel(page,0).boundingBox())!.y).toBe(before.y);
+  await page.screenshot({path:`.cache/evidence-toast-${testInfo.project.name}.png`});
+  await page.clock.fastForward(1500);await expect(toast).toBeVisible();
+  await page.getByRole('button',{name:'Reset',exact:true}).click();await expect(toast).toHaveText('Default layout restored.');
+  await page.clock.fastForward(1500);await expect(toast).toBeVisible();
+  await page.clock.fastForward(700);await expect(toast).toBeHidden();await expect(toast).toBeEmpty();
+  const chart=panel(page,0).locator('svg');await chart.focus();await chart.press('Home');await expect(page.locator('#readout h3')).toContainText('1946 · pinned');
+  await chart.press('Escape');await expect(page.locator('#readout')).toBeHidden();
+});
 test('original-unit composition, reorder, ranges and saved/shared layouts',async({page})=>{
   await ready(page);await expect(page.locator('.chart-panel')).toHaveCount(5);
   await expect(page.locator('#demo-banner')).toContainText('Synthetic demonstration');
@@ -76,15 +95,15 @@ test('former indexed saved and shared layouts render only original units without
 test('synchronized cursor, missing values, pinning, keyboard, annotations and resizing',async({page},testInfo)=>{
   const errors:string[]=[];page.on('console',message=>{if(message.type()==='error')errors.push(message.text());});
   await ready(page);
-  const chart=panel(page,0).locator('svg');await chart.focus();await chart.press('Home');await expect(page.locator('#year-label')).toContainText('1946 · pinned');await chart.press('End');await expect(page.locator('#year-label')).toContainText('2025 · pinned');await chart.press('ArrowLeft');await expect(page.locator('#readout')).toContainText('revised');
+  const chart=panel(page,0).locator('svg');await chart.focus();await chart.press('Home');await expect(page.locator('#readout h3')).toContainText('1946 · pinned');await chart.press('End');await expect(page.locator('#readout h3')).toContainText('2025 · pinned');await chart.press('ArrowLeft');await expect(page.locator('#readout')).toContainText('revised');
   await chart.press('Escape');await expect(page.locator('#readout')).toBeHidden();
   const overlay=panel(page,0).locator('[data-overlay]');const bounds=(await overlay.boundingBox())!;
   const x=bounds.x+bounds.width*(1971-1946)/(2025-1946),y=bounds.y+50;
   if(testInfo.project.name==='mobile')await page.touchscreen.tap(x,y);else await page.mouse.move(x,y);
-  await expect(page.locator('#year-label')).toContainText('1971');await expect(page.locator('#readout')).toContainText('No observation');await expect(page.locator('#readout')).not.toContainText('Index');
+  await expect(page.locator('#readout h3')).toContainText('1971');await expect(page.locator('#readout')).toContainText('No observation');await expect(page.locator('#readout')).not.toContainText('Index');
   for(const line of await page.locator('[data-cursor]').all())await expect(line).toHaveAttribute('opacity','.6');
-  if(testInfo.project.name==='desktop'){await page.mouse.click(x,y);await page.mouse.move(x+50,y);await expect(page.locator('#year-label')).toContainText('1971 · pinned');}
-  await page.locator('#release-year').click();
+  if(testInfo.project.name==='desktop'){await page.mouse.click(x,y);await page.mouse.move(x+50,y);await expect(page.locator('#readout h3')).toContainText('1971 · pinned');}
+  await page.getByRole('button',{name:'Release selected year',exact:true}).click();
   await expect(page.locator('[data-annotation]')).toHaveCount(10);
   await page.locator('#toggle-events').click();await expect(page.locator('[data-event-label]')).toHaveCount(0);
   await page.locator('#toggle-intervals').click();await expect(page.locator('[data-annotation]')).toHaveCount(0);
@@ -148,7 +167,7 @@ test('production nominal GDP renders original units, audited history, gaps and d
   await chart.press('ArrowRight');await chart.press('ArrowRight');
   await expect(page.locator('#readout')).toContainText('CHF millions');
   await expect(page.locator('#readout')).toContainText('reconstructed');
-  await chart.press('End');await expect(page.locator('#year-label')).toContainText('2026');
+  await chart.press('End');await expect(page.locator('#readout h3')).toContainText('2026');
   const gdpReadout=page.locator('#readout .readout-row').filter({hasText:'Nominal GDP'});
   await expect(gdpReadout).toContainText('No observation');await chart.press('Escape');
   await expect(gdp.getByRole('combobox')).toHaveCount(0);

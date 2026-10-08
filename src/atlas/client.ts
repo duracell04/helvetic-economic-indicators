@@ -10,6 +10,17 @@ const make = <K extends keyof HTMLElementTagNameMap>(tag: K, className = '', tex
 const button = (text: string, label: string, action: () => void, disabled = false): HTMLButtonElement => {
   const node = make('button', '', text); node.type = 'button'; node.setAttribute('aria-label', label); node.title = label; node.disabled = disabled; node.addEventListener('click', action); return node;
 };
+let toastTimer: ReturnType<typeof setTimeout> | undefined;
+let clearToastTimer: ReturnType<typeof setTimeout> | undefined;
+function message(text: string): void {
+  clearTimeout(toastTimer); clearTimeout(clearToastTimer);
+  const status = element('atlas-status');
+  status.textContent = text; status.dataset.visible = 'true';
+  toastTimer = setTimeout(() => {
+    status.dataset.visible = 'false';
+    clearToastTimer = setTimeout(() => { status.textContent = ''; }, 200);
+  }, 2000);
+}
 
 async function boot(): Promise<void> {
   const workspace = element('atlas');
@@ -26,11 +37,10 @@ async function boot(): Promise<void> {
   let pendingFallback: ChartState | null = null;
   const panels = element('panels'), selector = element<HTMLDialogElement>('indicator-dialog');
   const comparison = element<HTMLDialogElement>('comparison-dialog'), info = element<HTMLDialogElement>('info-dialog');
-  const readout = element('readout'), inspect = element<HTMLInputElement>('inspect-year');
+  const readout = element('readout');
   const start = element<HTMLInputElement>('start-year'), end = element<HTMLInputElement>('end-year');
   const target = element<HTMLSelectElement>('add-target');
   const search = element<HTMLInputElement>('indicator-search');
-  const message = (text: string) => { element('atlas-status').textContent = text; };
   element('demo-banner').hidden = data.mode !== 'demo';
 
   function save(): void {
@@ -111,9 +121,6 @@ async function boot(): Promise<void> {
 
   function updateCursor(year: number | null, isPinned = pinned, position?: { x: number; y: number }): void {
     selectedYear = year; pinned = isPinned;
-    element('year-label').textContent = year === null ? 'Hover or tap a year' : `${year}${pinned ? ' · pinned' : ''}`;
-    element<HTMLButtonElement>('release-year').disabled = !pinned;
-    if (year !== null) inspect.value = String(year);
     for (const panel of state.panels) {
       const svg = panels.querySelector<SVGSVGElement>(`svg[data-panel-id="${panel.id}"]`);
       if (svg) drawCursor(svg, panel, state, data, year);
@@ -146,12 +153,9 @@ async function boot(): Promise<void> {
     if (event.key in steps) { event.preventDefault(); updateCursor(Math.max(state.start_year, Math.min(state.end_year, steps[event.key])), true); }
     if (event.key === 'Escape') { event.preventDefault(); updateCursor(null, false); }
   }
-  inspect.addEventListener('input', () => updateCursor(Number(inspect.value), true)); inspect.addEventListener('keydown', keyboard);
-  element('release-year').addEventListener('click', () => updateCursor(null, false));
 
   function render(): void {
     start.value = String(state.start_year); end.value = String(state.end_year);
-    inspect.min = String(state.start_year); inspect.max = String(state.end_year); inspect.value = String(selectedYear ?? Math.min(state.end_year, Math.max(state.start_year,1960)));
     for (const [id, value] of [['toggle-events',state.show_events],['toggle-intervals',state.show_intervals]] as const) element(id).setAttribute('aria-pressed',String(value));
     element('empty-atlas').hidden = state.panels.length !== 0;
     panels.replaceChildren();
@@ -206,4 +210,4 @@ async function boot(): Promise<void> {
   }).observe(panels);
   render();if(restored.message)message(restored.message);workspace.dataset.ready='true';
 }
-boot().catch(error=>{element('atlas-status').textContent=error instanceof Error?error.message:'The chart workspace could not be loaded.';});
+boot().catch(error=>{message(error instanceof Error?error.message:'The chart workspace could not be loaded.');});

@@ -32,6 +32,8 @@ One responsive SVG renderer consumes panel configuration and observation metadat
 
 Hover selects the same calendar year across panels. Clicking/tapping pins it; arrows step years, Home/End reach endpoints, Escape releases. Readouts include original values, observation kind, revision status and annual convention. Touch interaction permits normal vertical page scrolling; a pinned anchored readout can scroll independently.
 
+There is no separate inspection slider or axes-fit note. Update messages appear in a compact bottom-right live-status toast, fade after two seconds, and occupy no space in the chart layout. A new message replaces the previous one and restarts its duration.
+
 Annotations live in `annotations.json`. Published events/intervals require verified real references and source URLs. Synthetic examples use “Illustrative event” and “Illustrative contraction”; no reference-file recession claims are imported.
 
 ## Extensibility evidence
